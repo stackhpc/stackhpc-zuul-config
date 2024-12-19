@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - generate-zuul-manifest
+    - role: upload-logs
+      zuul_log_url: "http://localhost:8000"
