@@ -21,19 +21,19 @@
     start:
       github:
         check: 'in_progress'
-        comment: false
+        comment: true
     success:
       github:
         check: 'success'
-        comment: false
+        comment: true
     failure:
       github:
         check: 'failure'
-        comment: false
+        comment: true
     dequeue:
       github:
         check: 'cancelled'
-        comment: false
+        comment: true
 
 - pipeline:
     name: gate
