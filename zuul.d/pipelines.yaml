@@ -56,10 +56,12 @@
       github:
         - event: pull_request_review
           action: submitted
-          state: approved
+          state:
+            - approved
         - event: pull_request_review
           action: dismissed
-          state: request_changes
+          state:
+            - request_changes
         - event: check_run
           action: rerequested
           check: '.*/gate:.*'
