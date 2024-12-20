@@ -57,11 +57,11 @@
         - event: pull_request_review
           action: submitted
           state:
-            - approved
+            - 'approved'
         - event: pull_request_review
           action: dismissed
           state:
-            - request_changes
+            - 'request_changes'
         - event: check_run
           action: rerequested
           check: '.*/gate:.*'
