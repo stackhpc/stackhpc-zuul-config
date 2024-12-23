@@ -3,3 +3,4 @@
   roles:
     - add-build-sshkey
     - prepare-workspace-git
+    - package-update-cache
