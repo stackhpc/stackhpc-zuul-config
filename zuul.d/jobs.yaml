@@ -17,6 +17,7 @@
       - playbooks/base/post-logs.yaml
     roles:
       - zuul: zuul/zuul-jobs
+      - zuul: stackhpc/stackhpc-zuul-config
     timeout: 1800
     nodeset:
       nodes:
