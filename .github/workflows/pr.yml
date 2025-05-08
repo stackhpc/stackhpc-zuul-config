@@ -1,0 +1,31 @@
+---
+name: On Pull Request
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  deploy-zuul:
+
+    runs-on: self-hosted
+
+    env:
+      ANSIBLE_FORCE_COLOR: True
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Generate kubeconfig
+      env:
+        KUBE: ${{secrets.KUBE}}
+        OS_CLOUD: "smslab-stackhpc-ci"
+      run: |
+        mkdir -p ~/.kube
+        echo "$KUBE" > ~/.kube/config
+
+    - name: Run playbook
+      run: >
+        ansible-playbook -i ansible/inventory ansible/run.yml
+
