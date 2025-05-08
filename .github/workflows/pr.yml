@@ -1,0 +1,27 @@
+---
+name: On Pull Request
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  run-ansible:
+
+    runs-on: ubuntu-latest
+
+    env:
+      ANSIBLE_FORCE_COLOR: True
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install pip dependencies
+      run: |
+        pip install -r test-requirements.txt
+
+    - name: Run playbook
+      run: >
+        ansible-playbook -i ansible/inventory ansible/run.yml
+

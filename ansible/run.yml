@@ -1,0 +1,12 @@
+---
+- name: Ensure Zuul is configured
+  gather_facts: false
+  hosts: localhost
+
+  tasks:
+    - name: Ensure Zuul namespace is created
+      kubernetes.core.k8s:
+        name: zuul
+        api_version: v1
+        kind: Namespace
+        state: present
