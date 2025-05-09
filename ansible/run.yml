@@ -56,3 +56,10 @@
         namespace: "zuul"
         state: present
 
+    - name: Ensure Gateway API CRDs
+      kubernetes.core.k8s:
+        namespace: "zuul"
+        src: "{{ zuul_operator_gateway_api_crd_url }}"
+        state: present
+      when: zuul_operator_gateway_api_crd_url | length > 0
+
