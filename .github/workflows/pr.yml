@@ -27,5 +27,5 @@ jobs:
 
     - name: Run playbook
       run: >
-        ansible-playbook -i ansible/inventory ansible/run.yml
+        ansible-playbook -i ansible/inventory ansible/run.yml --check --diff
 

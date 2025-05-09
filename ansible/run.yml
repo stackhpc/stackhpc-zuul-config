@@ -10,3 +10,33 @@
         api_version: v1
         kind: Namespace
         state: present
+
+    - name: Ensure CRDs
+      kubernetes.core.k8s:
+        definition: "{{ zuul_operator_crd }}"
+        namespace: "zuul"
+        state: present
+
+    - name: Ensure RBAC
+      kubernetes.core.k8s:
+        namespace: "zuul"
+        definition: "{{ zuul_operator_rbac }}"
+        state: present
+
+    - name: Ensure Operator
+      kubernetes.core.k8s:
+        definition: "{{ zuul_operator_operator }}"
+        namespace: "zuul"
+        state: present
+
+    - name: Ensure Secrets
+      kubernetes.core.k8s:
+        namespace: "zuul"
+        state: present
+      loop: "{{ zuul_operator_secrets }}"
+
+    - name: Ensure additional config
+      kubernetes.core.k8s:
+        namespace: "zuul"
+        state: present
+      loop: "{{ zuul_operator_additional }}"
