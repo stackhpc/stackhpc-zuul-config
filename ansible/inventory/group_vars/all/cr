@@ -1,0 +1,34 @@
+---
+zuul_operator_cr: |
+  apiVersion: operator.zuul-ci.org/v1alpha2
+  kind: Zuul
+  metadata:
+    name: zuul
+  spec:
+    executor:
+      count: 1
+      sshkey:
+        secretName: zuul-sshkey
+    scheduler:
+      config:
+        secretName: zuul-tenant-config
+    launcher:
+      config:
+        secretName: zuul-nodepool-config
+    web:
+      count: 1
+    connections:
+      github:
+        driver: github
+        secretName: zuul-github
+        server: github.com
+      opendev:
+        driver: git
+        baseurl: https://opendev.org
+      stackhpc:
+        driver: git
+        baseurl: https://github.com/stackhpc
+        canonical_hostname: github.stackhpc.com
+    externalConfig:
+      openstack:
+        secretName: zuul-clouds-yaml

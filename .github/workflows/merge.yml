@@ -1,0 +1,40 @@
+---
+name: Apply Zuul configuration
+
+on:
+  push:
+    branches:
+      master
+
+jobs:
+  deploy-zuul:
+
+    runs-on: self-hosted
+
+    env:
+      ANSIBLE_FORCE_COLOR: True
+      ANSIBLE_VAULT_PASSWORD_FILE: .vault.txt
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set Ansible Vault password file
+      run: |
+        echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > $ANSIBLE_VAULT_PASSWORD_FILE
+
+    - name: Generate kubeconfig
+      env:
+        KUBE: ${{secrets.KUBE}}
+        OS_CLOUD: "smslab-stackhpc-ci"
+      run: |
+        mkdir -p ~/.kube
+        echo "$KUBE" > ~/.kube/config
+
+    - name: Run playbook
+      run: >
+        ansible-playbook -i ansible/inventory ansible/run.yml
+
+    - name: Remove credentials
+      run: |
+        rm -f ~/.kube/config .vault.txt
+
