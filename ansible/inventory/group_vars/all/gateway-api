@@ -1,0 +1,24 @@
+---
+zuul_operator_gateway_api_crd_url: "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml"
+zuul_operator_gateway_api_gateways:
+  - name: zuul-web-gateway
+    spec:
+      gatewayClassName: envoy
+      listeners:
+        - name: zuul-web-gateway-https
+          protocol: TLS
+          port: 443
+          tls:
+            mode: Passthrough
+
+zuul_operator_gateway_api_httproutes:
+  - name: zuul-web-gateway-route
+    spec:
+      parentRefs:
+        - name: zuul-web-gateway
+      hostnames:
+        - "zuul.stackhpc.com"
+      rules:
+        - backendRefs:
+          - name: zuul-web
+            port: 8080

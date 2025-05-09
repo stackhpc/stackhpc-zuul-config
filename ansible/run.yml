@@ -56,3 +56,40 @@
         namespace: "zuul"
         state: present
 
+    - name: Ensure Gateway API CRDs
+      kubernetes.core.k8s:
+        namespace: "zuul"
+        src: "{{ zuul_operator_gateway_api_crd_url }}"
+        state: present
+      when: zuul_operator_gateway_api_crd_url | length > 0
+      tags: gateway-api
+
+    - name: Ensure Gateway API Gateways
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: gateway.networking.k8s.io/v1
+          kind: Gateway
+          metadata:
+            name: "{{ item.name }}"
+          spec: "{{ item.spec }}"
+        namespace: "zuul"
+        state: present
+      loop: "{{ zuul_operator_gateway_api_gateways }}"
+      loop_control:
+        label: "{{ item.name }}"
+      tags: gateway-api
+
+    - name: Ensure Gateway API HTTPRoutes
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: gateway.networking.k8s.io/v1
+          kind: HTTPRoute
+          metadata:
+            name: "{{ item.name }}"
+          spec: "{{ item.spec }}"
+        namespace: "zuul"
+        state: present
+      loop: "{{ zuul_operator_gateway_api_httproutes }}"
+      loop_control:
+        label: "{{ item.name }}"
+      tags: gateway-api
