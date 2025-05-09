@@ -50,3 +50,9 @@
         state: present
       loop: "{{ zuul_operator_additional }}"
 
+    - name: Ensure Zuul CR
+      kubernetes.core.k8s:
+        definition: "{{ zuul_operator_cr }}"
+        namespace: "zuul"
+        state: present
+
