@@ -1,0 +1,192 @@
+---
+zuul_operator_crd: |
+  apiVersion: apiextensions.k8s.io/v1
+  kind: CustomResourceDefinition
+  metadata:
+    name: zuuls.operator.zuul-ci.org
+  spec:
+    group: operator.zuul-ci.org
+    names:
+      kind: Zuul
+      listKind: ZuulList
+      plural: zuuls
+      singular: zuul
+      shortNames:
+        - zuul
+    scope: Namespaced
+    versions:
+      - name: v1alpha1
+        served: false
+        storage: false
+        schema:
+          openAPIV3Schema:
+            type: object
+      - name: v1alpha2
+        served: true
+        storage: true
+        schema:
+          openAPIV3Schema:
+            type: object
+            properties:
+              spec:
+                type: object
+                properties:
+                  imagePrefix:
+                    type: string
+                  imagePullSecrets:
+                    type: array
+                    items:
+                      type: string
+                  zuulImageVersion:
+                    type: string
+                  zuulPreviewImageVersion:
+                    type: string
+                  zuulRegistryImageVersion:
+                    type: string
+                  nodepoolImageVersion:
+                    type: string
+                  database:
+                    type: object
+                    properties:
+                      secretName:
+                        type: string
+                      allowUnsafeConfig:
+                        type: boolean
+                        default: false
+                  zookeeper:
+                    type: object
+                    properties:
+                      hosts:
+                        type: string
+                      secretName:
+                        type: string
+                      storageClassName:
+                        type: string
+                  env:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        value:
+                          type: string
+                  scheduler:
+                    type: object
+                    properties:
+                      config:
+                        type: object
+                        properties:
+                          secretName:
+                            type: string
+                      count:
+                        type: integer
+                        default: 1
+                        minimum: 1
+                      storageClassName:
+                        type: string
+                  launcher:
+                    type: object
+                    properties:
+                      config:
+                        type: object
+                        properties:
+                          secretName:
+                            type: string
+                  executor:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        default: 1
+                        minimum: 1
+                      sshkey:
+                        type: object
+                        properties:
+                          secretName:
+                            type: string
+                      terminationGracePeriodSeconds:
+                        type: integer
+                        default: 21600
+                        minimum: 0
+                  merger:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      git_user_email:
+                        type: string
+                      git_user_name:
+                        type: string
+                  web:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        default: 1
+                      status_url:
+                        type: string
+                  fingergw:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        default: 1
+                  connections:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  externalConfig:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  jobVolumes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        context:
+                          type: string
+                          pattern: ^(trusted|untrusted)$
+                        access:
+                          type: string
+                          pattern: ^(rw|ro)$
+                        path:
+                          type: string
+                        volume:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            hostPath:
+                              type: object
+                              properties:
+                                path:
+                                  type: string
+                                type:
+                                  type: string
+                  preview:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        default: 0
+                  registry:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        default: 0
+                      volumeSize:
+                        type: string
+                        default: "80G"
+                      tls:
+                        type: object
+                        properties:
+                          secretName:
+                            type: string
+                      config:
+                        type: object
+                        properties:
+                          secretName:
+                            type: string
+                      storageClassName:
+                        type: string
