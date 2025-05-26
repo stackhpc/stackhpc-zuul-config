@@ -22,6 +22,10 @@ jobs:
       run: |
         echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > $ANSIBLE_VAULT_PASSWORD_FILE
 
+    - name: Install dependencies
+      run: >
+        curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
     - name: Generate kubeconfig
       env:
         KUBE: ${{secrets.KUBE}}
