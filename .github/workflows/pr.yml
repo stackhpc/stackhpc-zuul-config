@@ -4,7 +4,6 @@ name: On Pull Request
 on:
   workflow_dispatch:
   pull_request:
-    types: [opened, reopened]
 
 jobs:
   deploy-zuul:
@@ -36,7 +35,7 @@ jobs:
 
     - name: Run playbook
       run: >
-        ansible-playbook -i ansible/inventory ansible/run.yml --check --diff
+        ansible-playbook -i ansible/inventory ansible/run.yml --check --diff -vvv
 
     - name: Remove credentials
       run: |

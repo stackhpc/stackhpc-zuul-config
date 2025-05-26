@@ -56,6 +56,25 @@
         namespace: "zuul"
         state: present
 
+    - name: Download Contour CRDs
+      ansible.builtin.get_url:
+        url: https://projectcontour.io/quickstart/contour.yaml
+        dest: /tmp/ansible_zuul_contour.yaml
+        mode: '0664'
+      check_mode: false
+
+    - name: Ensure Contour namespace
+      kubernetes.core.k8s:
+        name: projectcontour
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Ensure Contour CRDs
+      kubernetes.core.k8s:
+        src: /tmp/ansible_zuul_contour.yaml
+        state: present
+
     - name: Ensure Gateway API CRDs
       kubernetes.core.k8s:
         namespace: "zuul"
