@@ -8,7 +8,7 @@ zuul_operator_gateway_api_gatewayclasses:
 zuul_operator_gateway_api_gateways:
   - name: zuul-web-gateway
     spec:
-      gatewayClassName: envoy
+      gatewayClassName: contour
       listeners:
         - name: zuul-web-gateway-https
           protocol: TLS
