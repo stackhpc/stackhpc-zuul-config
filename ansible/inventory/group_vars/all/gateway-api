@@ -1,6 +1,6 @@
 ---
 zuul_operator_gateway_api_crd_url: "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml"
-zuul_operator_contour_crd_url: "https://projectcontour.io/quickstart/contour.yaml"
+zuul_operator_contour_provisioner_crd_url: "https://projectcontour.io/quickstart/contour-gateway-provisioner.yaml"
 zuul_operator_gateway_api_gatewayclasses:
   - name: contour
     spec:

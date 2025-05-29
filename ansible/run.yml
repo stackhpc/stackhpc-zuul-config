@@ -63,9 +63,9 @@
         kind: Namespace
         state: present
 
-    - name: Ensure Contour CRDs
+    - name: Ensure Contour Provisioner CRDs
       kubernetes.core.k8s:
-        src: "{{ zuul_operator_contour_crd_url }}"
+        src: "{{ zuul_operator_contour_provisioner_crd_url }}"
         state: present
 
     - name: Ensure Gateway API CRDs
