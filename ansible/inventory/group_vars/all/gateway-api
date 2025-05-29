@@ -6,24 +6,36 @@ zuul_operator_gateway_api_gatewayclasses:
     spec:
       controllerName: projectcontour.io/gateway-controller
 zuul_operator_gateway_api_gateways:
-  - name: zuul-web-gateway
+  - name: contour
     spec:
       gatewayClassName: contour
       listeners:
-        - name: zuul-web-gateway-https
-          protocol: TLS
-          port: 443
-          tls:
-            mode: Passthrough
+        - name: http
+          protocol: HTTP
+          port: 80
+          allowedRoutes:
+            namespaces:
+              from: All
 
 zuul_operator_gateway_api_httproutes:
   - name: zuul-web-gateway-route
+    namespace: zuul
+    labels:
+      app: zuul
     spec:
       parentRefs:
-        - name: zuul-web-gateway
+        - group: gateway.networking.k8s.io
+          kind: Gateway
+          name: contour
+          namespace: projectcontour
       hostnames:
-        - "zuul.stackhpc.com"
+        - "zuul.infra.stackhpc.com"
       rules:
+        - matches:
+          - path:
+              type: PathPrefix
+              value: /
         - backendRefs:
-          - name: zuul-web
+          - kind: Service
+            name: zuul-web
             port: 8080
