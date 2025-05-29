@@ -83,7 +83,6 @@
           kind: GatewayClass
           metadata:
             name: "{{ item.name }}"
-          namespace: "projectcontour"
           spec: "{{ item.spec }}"
       loop: "{{ zuul_operator_gateway_api_gatewayclasses }}"
       loop_control:
