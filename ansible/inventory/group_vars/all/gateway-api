@@ -38,4 +38,4 @@ zuul_operator_gateway_api_httproutes:
         - backendRefs:
           - kind: Service
             name: zuul-web
-            port: 8080
+            port: 9000
