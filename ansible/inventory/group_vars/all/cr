@@ -17,6 +17,7 @@ zuul_operator_cr: |
         secretName: zuul-nodepool-config
     web:
       count: 1
+      status_url: http://zuul.compute.sms-lab.cloud
     connections:
       github:
         driver: github
