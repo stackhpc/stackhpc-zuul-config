@@ -29,7 +29,7 @@ zuul_operator_gateway_api_httproutes:
           name: contour
           namespace: projectcontour
       hostnames:
-        - "zuul.infra.stackhpc.com"
+        - "zuul.compute.sms-lab.cloud"
       rules:
         - matches:
           - path:
