@@ -17,5 +17,5 @@ zuul_operator_operator: |
         serviceAccountName: zuul-operator
         containers:
           - name: operator
-            image: "quay.io/zuul-ci/zuul-operator"
+            image: "quay.io/mnasiadka/zuul-operator"
             imagePullPolicy: "IfNotPresent"
