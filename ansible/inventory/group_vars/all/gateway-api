@@ -30,6 +30,7 @@ zuul_operator_gateway_api_httproutes:
           namespace: projectcontour
       hostnames:
         - "zuul.compute.sms-lab.cloud"
+        - "zuultest.ddns.net"
       rules:
         - matches:
           - path:
