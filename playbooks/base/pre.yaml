@@ -1,6 +1,10 @@
 ---
-- hosts: all
+- name: Create job header and inventory
+  hosts: localhost
   roles:
+    - role: emit-job-header
+      zuul_log_path_shard_build: true
+    - log-inventory
     - add-build-sshkey
-    - prepare-workspace
-    - prepare-workspace-git
+    - start-zuul-console
+    - ensure-output-dirs

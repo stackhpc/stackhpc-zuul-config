@@ -1,0 +1,23 @@
+- hosts: all
+  roles:
+    - fetch-output
+    - merge-output-to-logs
+  tasks:
+    - name: Gather debug info on job fail
+      when: not (zuul_success | bool)
+      block:
+        - name: Get df disk usage
+          raw: timeout -k 5 90 df
+          failed_when: false
+
+        - name: Get df inode usage
+          raw: timeout -k 5 90 df -i
+          failed_when: false
+
+        - name: Get l2 networking
+          raw: timeout -k 5 90 ip link
+          failed_when: false
+
+        - name: Get l3 networking
+          raw: timeout -k 5 90 ip addr
+          failed_when: false
