@@ -5,6 +5,15 @@
     - role: emit-job-header
       zuul_log_path_shard_build: true
     - log-inventory
+
+- name: Setup Zuul environment
+  hosts: all
+  pre_tasks:
+    - name: Gather network facts
+      setup:
+        gather_subset: 'network'
+
+  roles:
     - add-build-sshkey
     - start-zuul-console
     - ensure-output-dirs
