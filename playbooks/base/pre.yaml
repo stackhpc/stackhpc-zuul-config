@@ -17,3 +17,9 @@
     - add-build-sshkey
     - start-zuul-console
     - ensure-output-dirs
+
+- name: Prepare workspace and configure mirrors
+  hosts: all
+  roles:
+    - validate-host
+    - prepare-workspace-git
