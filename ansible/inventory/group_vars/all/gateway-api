@@ -7,15 +7,23 @@ zuul_operator_gateway_api_gatewayclasses:
       controllerName: projectcontour.io/gateway-controller
 zuul_operator_gateway_api_gateways:
   - name: contour
+    annotations:
+      cert-manager.io/issuer: letsencrypt
     spec:
       gatewayClassName: contour
       listeners:
-        - name: http
-          protocol: HTTP
-          port: 80
+        - name: https
+          hostname: "zuul.compute.sms-lab.cloud"
+          protocol: HTTPS
+          port: 443
           allowedRoutes:
             namespaces:
               from: All
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: zuul-compute-sms-lab-cloud-tls
+                kind: Secret
 
 zuul_operator_gateway_api_httproutes:
   - name: zuul-web-gateway-route
