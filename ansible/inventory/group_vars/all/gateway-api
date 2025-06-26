@@ -30,7 +30,6 @@ zuul_operator_gateway_api_httproutes:
           namespace: projectcontour
       hostnames:
         - "zuul.compute.sms-lab.cloud"
-        - "zuultest.ddns.net"
       rules:
         - matches:
           - path:
@@ -40,3 +39,19 @@ zuul_operator_gateway_api_httproutes:
           - kind: Service
             name: zuul-web
             port: 9000
+
+zuul_operator_cert_manager_issuers:
+  - name: letsencrypt
+    spec:
+      acme:
+        email: michal@stackhpc.com
+        server: https://acme-staging-v02.api.letsencrypt.org/directory
+        privateKeySecretRef:
+          name: issuer-account-key
+        solvers:
+        - http01:
+            gatewayHTTPRoute:
+              parentRefs:
+                - name: contour
+                  namespace: projectcontour
+                  kind: Gateway
