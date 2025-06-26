@@ -63,6 +63,20 @@
         kind: Namespace
         state: present
 
+    - name: Ensure Cert Manager issuers
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: v1
+          kind: ClusterIssuer
+          metadata:
+            name: "{{ item.name }}"
+            namespace: "{{ item.namespace | default('projectcontour') }}"
+          spec: "{{ item.spec }}"
+        state: present
+      loop: "{{ zuul_operator_cert_manager_issuers }}"
+      loop_control:
+        label: "{{ item.name }}"
+
     - name: Ensure Contour Provisioner CRDs
       kubernetes.core.k8s:
         src: "{{ zuul_operator_contour_provisioner_crd_url }}"
