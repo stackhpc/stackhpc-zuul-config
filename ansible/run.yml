@@ -67,7 +67,21 @@
       kubernetes.core.k8s:
         definition:
           apiVersion: v1
-          kind: ClusterIssuer
+          kind: Issuer
+          metadata:
+            name: "{{ item.name }}"
+            namespace: "{{ item.namespace | default('projectcontour') }}"
+          spec: "{{ item.spec }}"
+        state: present
+      loop: "{{ zuul_operator_cert_manager_issuers }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Ensure Cert Manager issuers
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: v1
+          kind: Issuer
           metadata:
             name: "{{ item.name }}"
             namespace: "{{ item.namespace | default('projectcontour') }}"
