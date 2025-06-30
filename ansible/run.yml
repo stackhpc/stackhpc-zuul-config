@@ -4,6 +4,21 @@
   hosts: localhost
 
   tasks:
+    - name: Ensure PXC namespace
+      kubernetes.core.k8s:
+        name: pxc
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Ensure PXC bundle
+      kubernetes.core.k8s:
+        namespace: "zuul"
+        src: "{{ zuul_operator_pxc_bundle_url }}"
+        state: present
+      when: zuul_operator_pxc_bundle_url | length > 0
+      tags: pxc
+
     - name: Ensure Zuul namespace
       kubernetes.core.k8s:
         name: zuul
