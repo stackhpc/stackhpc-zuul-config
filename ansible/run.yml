@@ -6,21 +6,15 @@
   tasks:
     - name: Ensure PXC CRDs
       kubernetes.core.k8s:
+        namespace: zuul
         src: "{{ zuul_operator_pxc_crd_url }}"
         state: present
       when: zuul_operator_pxc_crd_url | length > 0
       tags: pxc
 
-    - name: Ensure PXC namespace
-      kubernetes.core.k8s:
-        name: pxc
-        api_version: v1
-        kind: Namespace
-        state: present
-
     - name: Ensure PXC bundle
       kubernetes.core.k8s:
-        namespace: "pxc"
+        namespace: "zuul"
         src: "{{ zuul_operator_pxc_bundle_url }}"
         state: present
       when: zuul_operator_pxc_bundle_url | length > 0
