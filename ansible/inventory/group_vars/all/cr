@@ -3,7 +3,7 @@ zuul_operator_cr: |
   apiVersion: operator.zuul-ci.org/v1alpha2
   kind: Zuul
   metadata:
-    name: zuul
+    name: stackhpc-zuul
   spec:
     imagePrefix: quay.io/mnasiadka
     executor:
