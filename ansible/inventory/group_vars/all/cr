@@ -18,7 +18,7 @@ zuul_operator_cr: |
         secretName: zuul-nodepool-config
     web:
       count: 1
-      root: https://zuul.compute.sms-lab.cloud
+      root: https://zuul.stackhpc.com
     connections:
       github:
         driver: github

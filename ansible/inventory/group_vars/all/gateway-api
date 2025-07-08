@@ -19,7 +19,7 @@ zuul_operator_gateway_api_gateways:
             namespaces:
               from: All
         - name: https
-          hostname: "zuul.compute.sms-lab.cloud"
+          hostname: "zuul.stackhpc.com"
           protocol: HTTPS
           port: 443
           allowedRoutes:
@@ -28,7 +28,7 @@ zuul_operator_gateway_api_gateways:
           tls:
             mode: Terminate
             certificateRefs:
-              - name: zuul-compute-sms-lab-cloud-tls
+              - name: zuul-stackhpc-com-tls
                 kind: Secret
 
 zuul_operator_gateway_api_httproutes:
@@ -43,7 +43,7 @@ zuul_operator_gateway_api_httproutes:
           name: contour
           namespace: projectcontour
       hostnames:
-        - "zuul.compute.sms-lab.cloud"
+        - "zuul.stackhpc.com"
       rules:
         - matches:
           - path:
@@ -58,7 +58,7 @@ zuul_operator_cert_manager_issuers:
   - name: letsencrypt
     spec:
       acme:
-        email: michal@stackhpc.com
+        email: ci@stackhpc.com
         server: https://acme-v02.api.letsencrypt.org/directory
         privateKeySecretRef:
           name: issuer-account-key
