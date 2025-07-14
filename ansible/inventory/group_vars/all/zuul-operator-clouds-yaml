@@ -1,0 +1,18 @@
+---
+zuul_operator_clouds_yaml:
+  clouds:
+    smslab:
+      auth:
+        auth_url: https://api.sms-lab.cloud:5000
+        application_credential_id: "{{ zuul_operator_clouds_yaml_appcred_id }}"
+        application_credential_secret: "{{ zuul_operator_clouds_yaml_appcred_secret }}"
+      regions:
+        - name: "RegionOne"
+          values:
+            networks:
+              - name: "zuul"
+                routes_externally: true
+      region_name: "RegionOne"
+      interface: "public"
+      identity_api_version: 3
+      auth_type: "v3applicationcredential"
