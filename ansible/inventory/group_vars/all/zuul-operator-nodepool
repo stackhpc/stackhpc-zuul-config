@@ -1,0 +1,44 @@
+zuul_operator_nodepool_yaml:
+  labels:
+    - name: ubuntu-jammy
+
+  providers:
+    - name: smslab-openstack
+      driver: openstack
+      cloud: smslab
+      region-name: 'RegionOne'
+      rate: 1.0
+      boot-timeout: 180
+      launch-timeout: 300
+      launch-retries: 3
+      cloud-images:
+        - name: ubuntu-jammy
+          image-name: "Ubuntu-22.04"
+          username: "zuul"
+      pools:
+        - name: main
+          auto-floating-ip: False
+          max-servers: 10
+          networks:
+            - "zuul"
+          security-groups:
+            - "nodepool"
+          labels:
+            - name: ubuntu-jammy
+              console-log: True
+              cloud-image: ubuntu-jammy
+              flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: "{{ zuul_operator_nodepool_ssh_authorized_keys }}"
+                    sudo: ALL=(ALL) NOPASSWD:ALL

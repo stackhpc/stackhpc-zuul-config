@@ -1,0 +1,15 @@
+---
+zuul_operator_tenant_config:
+  - tenant:
+      name: stackhpc
+      exclude-unprotected-branches: true
+      source:
+        github:
+          untrusted-projects:
+            - stackhpc/ansible-collection-cephadm
+        opendev:
+          untrusted-projects:
+            - zuul/zuul-jobs
+        stackhpc:
+          config-projects:
+            - stackhpc-zuul-config
