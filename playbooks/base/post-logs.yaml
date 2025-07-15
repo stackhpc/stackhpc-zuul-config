@@ -3,5 +3,8 @@
   gather_facts: False
   roles:
     - generate-zuul-manifest
-    - role: upload-logs
-      zuul_log_url: "http://zuul.compute.sms-lab.cloud:8000"
+    - role: upload-logs-swift
+      zuul_log_cloud_config: "{{ lookup('ansible.builtin.vars', 'zuul_cloud_smslab') }}"
+      zuul_log_container: zuul_stackhpc
+      zuul_log_delete_after: "{{ '30d' | community.general.to_seconds }}"
+      zuul_log_partition: true
