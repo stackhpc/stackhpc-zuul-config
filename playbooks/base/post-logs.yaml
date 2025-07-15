@@ -4,11 +4,12 @@
   tasks:
     - debug:
         var: zuul_s3
-  roles:
-    - generate-zuul-manifest
-    - role: upload-logs-s3
-      zuul_log_bucket: "zuul-stackhpc"
-      zuul_log_aws_access_key: "{{ zuul_s3.access_key }}"
-      zuul_log_aws_secret_key: "{{ zuul_s3.secret_key }}"
-      upload_logs_s3_endpoint: "https://api.sms-lab.cloud:6780"
-      
+    - include_role:
+        name: generate-zuul-manifest
+    - include_role:
+        name: upload-logs-s3
+      vars:
+        zuul_log_bucket: "zuul-stackhpc"
+        zuul_log_aws_access_key: "{{ zuul_s3.access_key }}"
+        zuul_log_aws_secret_key: "{{ zuul_s3.secret_key }}"
+        upload_logs_s3_endpoint: "https://api.sms-lab.cloud:6780"
