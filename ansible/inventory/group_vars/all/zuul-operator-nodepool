@@ -40,5 +40,5 @@ zuul_operator_nodepool_yaml:
                     groups: users,adm,sudo
                     shell: /bin/bash
                     lock_passwd: true
-                    ssh_authorized_keys: "{{ zuul_operator_nodepool_ssh_authorized_keys }}"
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
