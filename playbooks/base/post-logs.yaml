@@ -1,6 +1,9 @@
 ---
 - hosts: localhost
   gather_facts: False
+  tasks:
+    - debug:
+        var: zuul_s3
   roles:
     - generate-zuul-manifest
     - role: upload-logs-s3
