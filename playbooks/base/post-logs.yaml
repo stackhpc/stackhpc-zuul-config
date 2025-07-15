@@ -3,8 +3,9 @@
   gather_facts: False
   roles:
     - generate-zuul-manifest
-    - role: upload-logs-swift
-      zuul_log_cloud_config: "{{ lookup('ansible.builtin.vars', 'zuul_cloud_smslab') }}"
-      zuul_log_container: zuul_stackhpc
-      zuul_log_delete_after: "{{ '30d' | community.general.to_seconds }}"
-      zuul_log_partition: true
+    - role: upload-logs-s3
+      zuul_log_bucket: "zuul-stackhpc"
+      zuul_log_aws_access_key: "{{ zuul_s3.access_key }}"
+      zuul_log_aws_secret_key: "{{ zuul_s3.secret_key }}"
+      upload_logs_s3_endpoint: "https://api.sms-lab.cloud:6780"
+      
