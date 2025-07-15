@@ -2,8 +2,6 @@
 - hosts: localhost
   gather_facts: False
   tasks:
-    - debug:
-        var: zuul_s3
     - include_role:
         name: generate-zuul-manifest
     - include_role:
