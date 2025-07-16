@@ -2,14 +2,6 @@
 - hosts: localhost
   gather_facts: False
   tasks:
-    - debug:
-        msg: "{{ zuul_s3.access_key }}"
-    - debug:
-        msg: "{{ zuul_s3.access_key | trim }}"
-    - debug:
-        msg: "{{ zuul_s3.secret_key }}"
-    - debug:
-        msg: "{{ zuul_s3.secret_key | trim }}"
     - include_role:
         name: generate-zuul-manifest
     - include_role:
