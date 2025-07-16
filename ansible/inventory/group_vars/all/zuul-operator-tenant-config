@@ -14,6 +14,7 @@ zuul_operator_tenant_config:
         github:
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
+            - stackhpc/stackhpc-kayobe-config
         opendev:
           untrusted-projects:
             - zuul/zuul-jobs:
