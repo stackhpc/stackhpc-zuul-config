@@ -1,6 +1,10 @@
 zuul_operator_nodepool_yaml:
   labels:
     - name: ubuntu-jammy
+    - name: ubuntu-noble
+    - name: rocky-9
+    - name: ubuntu-noble-aufn
+    - name: rocky-9-aufn
 
   providers:
     - name: smslab-openstack
@@ -15,6 +19,18 @@ zuul_operator_nodepool_yaml:
         - name: ubuntu-jammy
           image-name: "Ubuntu-22.04"
           username: "zuul"
+        - name: ubuntu-noble
+          image-name: "Ubuntu-24.04"
+          username: "zuul"
+        - name: rocky-9
+          image-name: "Rocky9"
+          username: "zuul"
+        - name: ubuntu-noble-aufn
+          image-name: "Ubuntu-24.04"
+          username: "zuul"
+        - name: rocky-9-aufn
+          image-name: "Rocky9"
+          username: "zuul"
       pools:
         - name: main
           auto-floating-ip: False
@@ -28,6 +44,78 @@ zuul_operator_nodepool_yaml:
               console-log: True
               cloud-image: ubuntu-jammy
               flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+            - name: ubuntu-noble
+              console-log: True
+              cloud-image: ubuntu-noble
+              flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+            - name: rocky-9
+              console-log: True
+              cloud-image: rocky-9
+              flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+            - name: ubuntu-noble-aufn
+              console-log: True
+              cloud-image: ubuntu-noble-aufn
+              flavor-name: general.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+            - name: rocky-9-aufn
+              console-log: True
+              cloud-image: rocky-9-aufn
+              flavor-name: general.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
