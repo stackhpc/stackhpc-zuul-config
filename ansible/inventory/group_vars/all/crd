@@ -126,6 +126,8 @@ zuul_operator_crd: |
                         default: 1
                       status_url:
                         type: string
+                      root:
+                        type: string
                   fingergw:
                     type: object
                     properties:
