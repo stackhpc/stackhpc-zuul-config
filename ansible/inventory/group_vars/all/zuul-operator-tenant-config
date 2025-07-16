@@ -9,7 +9,7 @@ zuul_operator_tenant_config:
             - stackhpc/ansible-collection-cephadm
         opendev:
           untrusted-projects:
-            - zuul/zuul-jobs
+            - zuul/zuul-jobs:
               shadow: stackhpc-zuul-config
         stackhpc:
           config-projects:
