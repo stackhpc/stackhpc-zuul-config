@@ -10,6 +10,7 @@ zuul_operator_tenant_config:
         opendev:
           untrusted-projects:
             - zuul/zuul-jobs
+              shadow: stackhpc-zuul-config
         stackhpc:
           config-projects:
             - stackhpc-zuul-config
