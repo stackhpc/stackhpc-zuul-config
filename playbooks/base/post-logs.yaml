@@ -7,7 +7,7 @@
     - include_role:
         name: upload-logs-s3
       vars:
-        zuul_log_bucket: "stackhpc-zuul"
-        zuul_log_aws_access_key: "{{ zuul_s3.access_key | trim }}"
-        zuul_log_aws_secret_key: "{{ zuul_s3.secret_key | trim }}"
-        upload_logs_s3_endpoint: "https://api.sms-lab.cloud:6780"
+        zuul_log_bucket: "{{ zuul_s3.bucket }}"
+        zuul_log_aws_access_key: "{{ zuul_s3.access_key }}"
+        zuul_log_aws_secret_key: "{{ zuul_s3.secret_key }}"
+        upload_logs_s3_endpoint: "{{ zuul_s3.endpoint }}"
