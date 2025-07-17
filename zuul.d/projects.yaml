@@ -7,7 +7,6 @@
 
 - project:
     name: stackhpc-zuul-config
-    default-branch: main
     check:
       jobs:
         - noop
