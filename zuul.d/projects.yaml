@@ -9,7 +9,7 @@
     name: stackhpc-zuul-config
     check:
       jobs:
-        - noop
+        - base-test
     gate:
       jobs:
-        - noop
+        - base-test
