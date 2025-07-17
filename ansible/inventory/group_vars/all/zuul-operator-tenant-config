@@ -25,7 +25,7 @@ zuul_operator_tenant_config:
             - openstack/kayobe
             - openstack/openstack-zuul-jobs
             - zuul/zuul-jobs:
-              shadow: stackhpc-zuul-config
+                shadow: stackhpc-zuul-config
         stackhpc:
           config-projects:
             - stackhpc-zuul-config
