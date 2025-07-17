@@ -7,10 +7,10 @@
 
 - project:
     name: stackhpc-zuul-config
-    default-branch: main
+    default-branch: master
     check:
       jobs:
-        - noop
+        - base
     gate:
       jobs:
-        - noop
+        - base
