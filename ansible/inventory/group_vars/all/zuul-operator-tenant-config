@@ -23,6 +23,8 @@ zuul_operator_tenant_config:
             - openstack/devstack
             - openstack/kolla-ansible
             - openstack/kayobe
+            - openstack/openstack-zuul-jobs
+              shadow: stackhpc-zuul-config
             - zuul/zuul-jobs:
               shadow: stackhpc-zuul-config
         stackhpc:
