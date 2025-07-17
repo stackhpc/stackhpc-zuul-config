@@ -5,7 +5,6 @@ zuul_operator_cr: |
   metadata:
     name: stackhpc-zuul
   spec:
-    imagePrefix: quay.io/mnasiadka
     executor:
       count: 1
       sshkey:
