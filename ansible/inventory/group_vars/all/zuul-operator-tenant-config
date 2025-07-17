@@ -20,10 +20,19 @@ zuul_operator_tenant_config:
             - stackhpc/stackhpc-kayobe-config
         opendev:
           untrusted-projects:
+            - openstack/cinder
             - openstack/devstack
-            - openstack/kolla-ansible
+            - openstack/glance
             - openstack/kayobe
+            - openstack/keystone
+            - openstack/kolla-ansible
+            - openstack/neutron
+            - openstack/nova
             - openstack/openstack-zuul-jobs
+            - openstack/os-test-images
+            - openstack/placement
+            - openstack/requirements
+            - openstack/swift
             - zuul/zuul-jobs:
                 shadow: stackhpc-zuul-config
         stackhpc:
