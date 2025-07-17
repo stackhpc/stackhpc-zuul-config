@@ -3,6 +3,9 @@ zuul_operator_tenant_config:
   - authorization-rule:
       name: stackhpc-admin
       conditions:
+        zuul_uid: "alex@stackhpc.com"
+        zuul_uid: "bartosz@stackhpc.com"
+        zuul_uid: "jack@stackhpc.com"
         zuul_uid: "michal@stackhpc.com"
         
   - tenant:
