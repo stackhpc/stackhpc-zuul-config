@@ -10,7 +10,6 @@ zuul_operator_tenant_config:
       admin-rules:
         - stackhpc-admin
       exclude-unprotected-branches: true
-      web-root: "http://zuul.stackhpc.com/t/stackhpc/"
       source:
         github:
           untrusted-projects:
