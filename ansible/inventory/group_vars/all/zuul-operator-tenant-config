@@ -51,7 +51,20 @@ zuul_operator_tenant_config:
                 - openstack/ansible-collection-kolla
                 - openstack/automaton
                 - openstack/debtcollector
+                - openstack/devstack
                 - openstack/futurist
+                - openstack/monasca-agent
+                - openstack/monasca-api
+                - openstack/monasca-common
+                - openstack/monasca-grafana-datasource
+                - openstack/monasca-notification
+                - openstack/monasca-persister
+                - openstack/monasca-statsd
+                - openstack/monasca-thresh
+                - openstack/monasca-transform
+                - openstack/monasca-ui
+                - openstack/neutron
+                - openstack/neutron-lib
                 - openstack/osprofiler
                 - openstack/oslo.cache
                 - openstack/oslo.concurrency
@@ -72,14 +85,22 @@ zuul_operator_tenant_config:
                 - openstack/oslo.versionedobjects
                 - openstack/oslo.vmware
                 - openstack/oslotest
+                - openstack/ovsdbapp
                 - openstack/pbr
                 - openstack/pycadf
+                - openstack/python-monascaclient
+                - openstack/releases
                 - openstack/requirements
-                - openstack/stevedor
+                - openstack/stevedore
                 - openstack/taskflow
+                - openstack/tempest
                 - openstack/tenks
                 - openstack/tooz
                 - zuul/nodepool
+                - x/group-based-policy
+                - x/group-based-policy-automation
+                - x/group-based-policy-ui
+                - x/python-group-based-policy-client
         stackhpc:
           config-projects:
             - stackhpc-zuul-config
