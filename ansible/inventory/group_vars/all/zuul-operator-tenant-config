@@ -33,11 +33,19 @@ zuul_operator_tenant_config:
               projects:
                 - openstack/openstack-zuul-jobs
                 - openstack/project-config
-                - openstack/kayobe
-                - openstack/kayobe-config
-                - openstack/kayobe-config-dev
-                - openstack/kolla
-                - openstack/kolla-ansible
+                - openstack/kayobe:
+                    include-branches: &upstream_branches
+                      - master
+                      - stable/2025.1
+                      - stable/2024.1
+                - openstack/kayobe-config:
+                    include-branches: *upstream_branches
+                - openstack/kayobe-config-dev:
+                    include-branches: *upstream_branches
+                - openstack/kolla:
+                    include-branches: *upstream_branches
+                - openstack/kolla-ansible:
+                    include-branches: *upstream_branches
             - include: []
               projects:
                 - openstack/ansible-collection-kolla
