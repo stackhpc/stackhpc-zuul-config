@@ -16,11 +16,6 @@ zuul_operator_tenant_config:
       source:
         github:
           untrusted-projects:
-            - stackhpc/a-universe-from-nothing:
-                include-branches:
-                  - stable/2025.1
-                  - stable/2024.2
-                  - stable/2024.1
             - stackhpc/ansible-collection-cephadm
             - stackhpc/stackhpc-kayobe-config:
                 include-branches: &downstream_branches
