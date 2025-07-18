@@ -29,7 +29,9 @@ zuul_operator_tenant_config:
                   - job
                   - nodeset
             - zuul/zuul-jobs:
-                shadow: stackhpc-zuul-config
+                shadow:
+                  - opendev/base-jobs
+                  - stackhpc-zuul-config
                 include:
                   - job
             - openstack/openstack-zuul-jobs:
