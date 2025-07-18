@@ -59,6 +59,8 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
             - include: []
               projects:
+                - airship/airshipctl
+                - airship/airshipui
                 - airship/deckhand
                 - airship/divingbell
                 - airship/docs
