@@ -22,6 +22,9 @@ zuul_operator_tenant_config:
           untrusted-projects:
             - openstack/ansible-collection-kolla
             - openstack/kayobe
+            - openstack/kayobe-config
+            - openstack/kayobe-config-dev
+            - openstack/kolla
             - openstack/kolla-ansible
             - openstack/openstack-zuul-jobs
             - openstack/requirements
