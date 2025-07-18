@@ -39,6 +39,7 @@ zuul_operator_tenant_config:
                   - nodeset
             - include:
                 - job
+                - nodeset
               projects:
                 - openstack/project-config
                 - openstack/kayobe:
