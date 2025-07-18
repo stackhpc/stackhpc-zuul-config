@@ -40,6 +40,7 @@ zuul_operator_tenant_config:
                 - openstack/kolla-ansible
             - include: []
               projects:
+                - openstack/ansible-collection-kolla
                 - openstack/requirements
                 - openstack/tenks
                 - zuul/nodepool
