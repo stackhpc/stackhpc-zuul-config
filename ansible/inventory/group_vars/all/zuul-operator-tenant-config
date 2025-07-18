@@ -61,10 +61,22 @@ zuul_operator_tenant_config:
               projects:
                 - airship/airshipctl
                 - airship/airshipui
+                - airship/armada
+                - airship/charts
                 - airship/deckhand
                 - airship/divingbell
                 - airship/docs
+                - airship/drydock
+                - airship/election
                 - airship/governance
+                - airship/pegleg
+                - airship/porthole
+                - airship/promenade
+                - airship/shipyard
+                - airship/specs
+                - airship/spyglass
+                - airship/spyglass-plugin-xls
+                - airship/treasuremap
                 - opendev/irc-meetings
                 - opendev/publications
                 - opendev/system-config
