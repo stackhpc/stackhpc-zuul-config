@@ -31,7 +31,7 @@ zuul_operator_tenant_config:
             - include:
                 - job
               projects:
-                - openstack/zuul-jobs
+                - openstack/openstack-zuul-jobs
                 - openstack/project-config
                 - openstack/kayobe
                 - openstack/kayobe-config
