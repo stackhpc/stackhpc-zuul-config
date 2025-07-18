@@ -48,11 +48,26 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
             - include: []
               projects:
+                - opendev/system-config
                 - openstack/ansible-collection-kolla
                 - openstack/automaton
+                - openstack/ceilometer
+                - openstack/ceilometermiddleware
+                - openstack/cinder
                 - openstack/debtcollector
                 - openstack/devstack
                 - openstack/futurist
+                - openstack/glance
+                - openstack/glance_store
+                - openstack/heat
+                - openstack/heat-cfntools
+                - openstack/heat-templates
+                - openstack/horizon
+                - openstack/keystone
+                - openstack/keystoneauth
+                - openstack/keystonemiddleware
+                - openstack/manila
+                - openstack/manila-ui
                 - openstack/monasca-agent
                 - openstack/monasca-api
                 - openstack/monasca-common
@@ -65,6 +80,14 @@ zuul_operator_tenant_config:
                 - openstack/monasca-ui
                 - openstack/neutron
                 - openstack/neutron-lib
+                - openstack/nova
+                - openstack/octavia
+                - openstack/os-apply-config
+                - openstack/os-brick
+                - openstack/os-client-config
+                - openstack/os-collect-config
+                - openstack/os-refresh-config
+                - openstack/osc-lib
                 - openstack/osprofiler
                 - openstack/oslo.cache
                 - openstack/oslo.concurrency
@@ -87,15 +110,19 @@ zuul_operator_tenant_config:
                 - openstack/oslotest
                 - openstack/ovsdbapp
                 - openstack/pbr
+                - openstack/placement
                 - openstack/pycadf
                 - openstack/python-monascaclient
                 - openstack/releases
                 - openstack/requirements
                 - openstack/stevedore
+                - openstack/swift
                 - openstack/taskflow
                 - openstack/tempest
                 - openstack/tenks
                 - openstack/tooz
+                - openstack/tripleo-ci
+                - openstack/zaqar
                 - zuul/nodepool
                 - x/group-based-policy
                 - x/group-based-policy-automation
