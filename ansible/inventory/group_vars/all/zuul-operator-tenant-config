@@ -20,6 +20,7 @@ zuul_operator_tenant_config:
             - stackhpc/stackhpc-kayobe-config
         opendev:
           untrusted-projects:
+            - opendev/base-jobs
             - openstack/ansible-collection-kolla
             - openstack/kayobe
             - openstack/kayobe-config
@@ -27,8 +28,10 @@ zuul_operator_tenant_config:
             - openstack/kolla
             - openstack/kolla-ansible
             - openstack/openstack-zuul-jobs
+            - openstack/project-config
             - openstack/requirements
             - openstack/tenks
+            - zuul/nodepool
             - zuul/zuul-jobs:
                 shadow: stackhpc-zuul-config
         stackhpc:
