@@ -48,21 +48,32 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
             - include: []
               projects:
+                - airship/deckhand
+                - airship/docs
+                - opendev/irc-meetings
+                - opendev/publications
                 - opendev/system-config
                 - openstack/ansible-collection-kolla
+                - openstack/api-site
                 - openstack/automaton
                 - openstack/ceilometer
                 - openstack/ceilometermiddleware
                 - openstack/cinder
+                - openstack/contributor-guide
                 - openstack/debtcollector
                 - openstack/devstack
+                - openstack/election
                 - openstack/futurist
                 - openstack/glance
                 - openstack/glance_store
+                - openstack/governance
+                - openstack/governance-sigs
+                - openstack/governance-website
                 - openstack/heat
                 - openstack/heat-cfntools
                 - openstack/heat-templates
                 - openstack/horizon
+                - openstack/ideas
                 - openstack/keystone
                 - openstack/keystoneauth
                 - openstack/keystonemiddleware
@@ -88,6 +99,8 @@ zuul_operator_tenant_config:
                 - openstack/os-collect-config
                 - openstack/os-refresh-config
                 - openstack/osc-lib
+                - openstack/openstack-manuals
+                - openstack/ossa
                 - openstack/osprofiler
                 - openstack/oslo.cache
                 - openstack/oslo.concurrency
@@ -115,6 +128,8 @@ zuul_operator_tenant_config:
                 - openstack/python-monascaclient
                 - openstack/releases
                 - openstack/requirements
+                - openstack/service-types-authority
+                - openstack/stackviz
                 - openstack/stevedore
                 - openstack/swift
                 - openstack/taskflow
@@ -123,6 +138,10 @@ zuul_operator_tenant_config:
                 - openstack/tooz
                 - openstack/tripleo-ci
                 - openstack/zaqar
+                - starlingx/docs
+                - starlingx/election
+                - starlingx/governance
+                - starlingx/specs
                 - zuul/nodepool
                 - x/group-based-policy
                 - x/group-based-policy-automation
