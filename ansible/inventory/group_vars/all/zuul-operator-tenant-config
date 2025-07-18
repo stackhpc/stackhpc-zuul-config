@@ -16,8 +16,12 @@ zuul_operator_tenant_config:
       source:
         github:
           untrusted-projects:
+            - stackhpc/a-universe-from-nothing
             - stackhpc/ansible-collection-cephadm
-            - stackhpc/stackhpc-kayobe-config
+            - stackhpc/stackhpc-kayobe-config:
+                include-branches: &downstream_branches
+                  - stackhpc/2025.1
+                  - stackhpc/2024.1
         opendev:
           untrusted-projects:
             - opendev/base-jobs:
@@ -53,6 +57,7 @@ zuul_operator_tenant_config:
             - include: []
               projects:
                 - airship/deckhand
+                - airship/divingbell
                 - airship/docs
                 - airship/governance
                 - opendev/irc-meetings
@@ -133,6 +138,7 @@ zuul_operator_tenant_config:
                 - openstack/python-monascaclient
                 - openstack/releases
                 - openstack/requirements
+                - openstack/security-doc
                 - openstack/service-types-authority
                 - openstack/stackviz
                 - openstack/stevedore
