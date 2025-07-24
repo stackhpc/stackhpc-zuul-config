@@ -3,8 +3,8 @@ zuul_operator_nodepool_yaml:
     - name: ubuntu-jammy
     - name: ubuntu-noble
     - name: rocky-9
-    - name: ubuntu-noble-aufn
-    - name: rocky-9-aufn
+    - name: ubuntu-noble-tenks
+    - name: rocky-9-tenks
 
   providers:
     - name: smslab-openstack
@@ -25,10 +25,10 @@ zuul_operator_nodepool_yaml:
         - name: rocky-9
           image-name: "Rocky9"
           username: "zuul"
-        - name: ubuntu-noble-aufn
+        - name: ubuntu-noble-tenks
           image-name: "Ubuntu-24.04"
           username: "zuul"
-        - name: rocky-9-aufn
+        - name: rocky-9-tenks
           image-name: "Rocky9"
           username: "zuul"
       pools:
@@ -94,9 +94,10 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
-            - name: ubuntu-noble-aufn
+            - name: ubuntu-noble-tenks
+              boot-from-volume: true
               console-log: True
-              cloud-image: ubuntu-noble-aufn
+              cloud-image: ubuntu-noble-tenks
               flavor-name: general.v1.medium
               key-name: zuul-ci
               userdata: |-
@@ -112,9 +113,11 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
-            - name: rocky-9-aufn
+              volume-size: 100
+            - name: rocky-9-tenks
+              boot-from-volume: true
               console-log: True
-              cloud-image: rocky-9-aufn
+              cloud-image: rocky-9-tenks
               flavor-name: general.v1.medium
               key-name: zuul-ci
               userdata: |-
@@ -130,3 +133,4 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
