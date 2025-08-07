@@ -41,3 +41,7 @@
           label: ubuntu-jammy
     secrets:
       - zuul_s3
+
+- job:
+    name: base-test
+    parent: base
