@@ -54,6 +54,62 @@
         comment: false
 
 - pipeline:
+    name: check-review
+    description: |
+      Newly uploaded patchsets enter this pipeline after getting an
+      initial review to allow for secrets usage.
+    manager: independent
+    post-review: true
+    trigger:
+      github:
+        # Run this pipeline on new/changed pull requests
+        - event: pull_request
+          action:
+            - opened
+            - changed
+            - reopened
+        # Run in response to a pull request comment "recheck"
+        - event: pull_request
+          action: comment
+          comment: (?i)^\s*recheck\s*$
+        # When using the checks API to report results, failed runs
+        # will have a "re-run" button which emits this event.
+        - event: check_run
+          action: rerequested
+          check: .*/check:.*
+    start:
+      github:
+        check: 'in_progress'
+        comment: false
+        # It is recommended to use the checks API for consistency with
+        # other common CI tools that integrate with Github.  Results
+        # will appear on the "checks" tab of PR and changes.  There is
+        # generally no need to have Zuul leave comments when using the
+        # checks API.
+        #
+        # The older status API appears inline with the PR and can be
+        # enabled by uncommenting the "status:" in the various
+        # sections below.  You should choose one or the other
+        # depending on project preferences.
+        #
+        #status: 'pending'
+        #comment: false
+    success:
+      github:
+        check: 'success'
+        comment: false
+        #status: 'success'
+    failure:
+      github:
+        check: 'failure'
+        comment: false
+        #status: 'failure'
+    dequeue:
+      github:
+        check: cancelled
+        comment: false
+
+- pipeline:
     name: gate
     description: |
       Changes that have been approved by core developers are enqueued
