@@ -60,6 +60,12 @@
       initial review to allow for secrets usage.
     manager: independent
     post-review: true
+    require:
+      github:
+        review:
+          # Require an approval from user with write access (e.g. core-reviewer)
+          - permission: write
+            type: approved
     trigger:
       github:
         # Run this pipeline on new/changed pull requests
