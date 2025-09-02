@@ -68,10 +68,14 @@
             type: approved
     trigger:
       github:
-        # Run this pipeline on new/changed pull requests
+        # Run this pipeline on approved pull requests
+        - event: pull_request_review
+          action: submitted
+          state:
+            - approved
+        # Run this pipeline on changed pull requests
         - event: pull_request
           action:
-            - opened
             - changed
             - reopened
         # Run in response to a pull request comment "recheck"
