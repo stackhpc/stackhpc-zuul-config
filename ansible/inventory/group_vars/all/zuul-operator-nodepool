@@ -5,6 +5,7 @@ zuul_operator_nodepool_yaml:
     - name: rocky-9
     - name: ubuntu-noble-tenks
     - name: rocky-9-tenks
+    - name: kubernetes-runner-pod-jammy
 
   providers:
     - name: smslab-openstack
@@ -134,3 +135,18 @@ zuul_operator_nodepool_yaml:
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
               volume-size: 100
+    - name: smslab-kubernetes
+      driver: kubernetes
+      pools:
+        - name: main
+          max-servers: 10
+          labels:
+            - name: kubernetes-runner-pod-jammy
+              type: pod
+              spec:
+                containers:
+                  - name: runner-ubuntu-jammy
+                    image: ubuntu:jammy
+                    imagePullPolicy: IfNotPresent
+                    command: ["/bin/sh", "-c"]
+                    args: ["sleep infinity"]
