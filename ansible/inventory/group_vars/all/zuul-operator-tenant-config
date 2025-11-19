@@ -6,7 +6,8 @@ zuul_operator_tenant_config:
         - zuul_uid: "alex@stackhpc.com"
         - zuul_uid: "bartosz@stackhpc.com"
         - zuul_uid: "jack@stackhpc.com"
-        - zuul_uid: "michal@stackhpc.com"
+        # Michal Nasiadka
+        - zuul_uid: "109068399179727592063"
         - zuul_uid: "piotr@stackhpc.com"
         
   - tenant:
