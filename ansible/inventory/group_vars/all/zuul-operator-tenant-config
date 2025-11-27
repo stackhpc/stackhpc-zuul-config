@@ -28,6 +28,9 @@ zuul_operator_tenant_config:
                 shadow: stackhpc-zuul-config
                 include:
                   - job
+            - opendev/zuul-providers:
+                shadow: stackhpc-zuul-config
+                include:
                   - nodeset
             - zuul/zuul-jobs:
                 shadow:
@@ -39,7 +42,6 @@ zuul_operator_tenant_config:
                 shadow: stackhpc-zuul-config
                 include:
                   - job
-                  - nodeset
             - include:
                 - job
                 - nodeset
