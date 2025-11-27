@@ -19,9 +19,7 @@ zuul_operator_tenant_config:
           config-projects:
             - stackhpc/stackhpc-zuul-config
           untrusted-projects:
-            - stackhpc/stackhpc-zuul-config:
-                include:
-                  - nodeset
+            - stackhpc/stackhpc-zuul-extra-config
             - stackhpc/ansible-collection-cephadm
             - stackhpc/stackhpc-kayobe-config:
                 include-branches: &downstream_branches
