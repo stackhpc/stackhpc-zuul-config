@@ -54,7 +54,6 @@ zuul_operator_tenant_config:
                     include-branches: &upstream_branches
                       - master
                       - stable/2025.1
-                      - stable/2024.1
                 - openstack/kayobe-config:
                     include-branches: *upstream_branches
                 - openstack/kayobe-config-dev:
