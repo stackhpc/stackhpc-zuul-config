@@ -15,11 +15,13 @@ zuul_operator_tenant_config:
         - stackhpc-admin
       exclude-unprotected-branches: true
       source:
-        github:
+        stackhpc:
           config-projects:
-            - stackhpc/stackhpc-zuul-config
+            - stackhpc-zuul-config
           untrusted-projects:
-            - stackhpc/stackhpc-zuul-extra-config
+            - stackhpc-zuul-extra-config
+        github:
+          untrusted-projects:
             - stackhpc/ansible-collection-cephadm
             - stackhpc/stackhpc-kayobe-config:
                 include-branches: &downstream_branches
@@ -28,17 +30,19 @@ zuul_operator_tenant_config:
         opendev:
           untrusted-projects:
             - opendev/base-jobs:
-                shadow: stackhpc/stackhpc-zuul-config
+                shadow:
+                  - stackhpc-zuul-config
                 include:
                   - job
             - zuul/zuul-jobs:
                 shadow:
                   - opendev/base-jobs
-                  - stackhpc/stackhpc-zuul-config
+                  - stackhpc-zuul-config
                 include:
                   - job
             - openstack/openstack-zuul-jobs:
-                shadow: stackhpc/stackhpc-zuul-config
+                shadow:
+                  - stackhpc-zuul-config
                 include:
                   - job
             - include:
