@@ -28,17 +28,17 @@ zuul_operator_tenant_config:
         opendev:
           untrusted-projects:
             - opendev/base-jobs:
-                shadow: stackhpc-zuul-config
+                shadow: stackhpc/stackhpc-zuul-config
                 include:
                   - job
             - zuul/zuul-jobs:
                 shadow:
                   - opendev/base-jobs
-                  - stackhpc-zuul-config
+                  - stackhpc/stackhpc-zuul-config
                 include:
                   - job
             - openstack/openstack-zuul-jobs:
-                shadow: stackhpc-zuul-config
+                shadow: stackhpc/stackhpc-zuul-config
                 include:
                   - job
             - include:
