@@ -2,6 +2,12 @@
 # NOTE(mnasiadka): Needs to be redefined here since OpenDev moved nodesets
 #                  config to opendev/zuul-providers and we still use nodepool
 - nodeset:
+    name: ubuntu-jammy
+    nodes:
+      name: ubuntu-jammy
+      label: ubuntu-jammy
+
+- nodeset:
     name: ubuntu-noble
     nodes:
       name: ubuntu-noble
