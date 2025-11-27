@@ -17,7 +17,7 @@ zuul_operator_tenant_config:
       source:
         github:
           config-projects:
-            - stackhpc-zuul-config
+            - stackhpc/stackhpc-zuul-config
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
             - stackhpc/stackhpc-kayobe-config:
