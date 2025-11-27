@@ -16,6 +16,8 @@ zuul_operator_tenant_config:
       exclude-unprotected-branches: true
       source:
         github:
+          config-projects:
+            - stackhpc-zuul-config
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
             - stackhpc/stackhpc-kayobe-config:
@@ -179,6 +181,3 @@ zuul_operator_tenant_config:
                 - x/group-based-policy-automation
                 - x/group-based-policy-ui
                 - x/python-group-based-policy-client
-        stackhpc:
-          config-projects:
-            - stackhpc-zuul-config
