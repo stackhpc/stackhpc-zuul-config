@@ -1,7 +1,7 @@
 ---
 zuul_operator_tenant_config:
   - authorization-rule:
-      name: stackhpc-admin
+      name: stackhpc_admin
       conditions:
         - zuul_uid: "alex@stackhpc.com"
         - zuul_uid: "bartosz@stackhpc.com"
@@ -13,7 +13,7 @@ zuul_operator_tenant_config:
   - tenant:
       name: stackhpc
       admin-rules:
-        - stackhpc-admin
+        - stackhpc_admin
       exclude-unprotected-branches: true
       source:
         stackhpc:
