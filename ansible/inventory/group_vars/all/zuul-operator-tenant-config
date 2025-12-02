@@ -83,6 +83,7 @@ zuul_operator_tenant_config:
                 - airship/spyglass
                 - airship/spyglass-plugin-xls
                 - airship/treasuremap
+                - opendev/grafyaml
                 - opendev/irc-meetings
                 - opendev/publications
                 - opendev/system-config
