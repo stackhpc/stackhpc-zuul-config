@@ -33,3 +33,4 @@ zuul_operator_cr: |
     externalConfig:
       openstack:
         secretName: zuul-clouds-yaml
+    zuulImageVersion: "13.1"
