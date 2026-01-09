@@ -16,7 +16,7 @@ zuul_operator_cr: |
       config:
         secretName: zuul-nodepool-config
     web:
-      count: 1
+      count: 3
       root: "https://zuul.stackhpc.com"
     connections:
       github:
