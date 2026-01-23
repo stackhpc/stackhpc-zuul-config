@@ -39,3 +39,5 @@
       nodes:
         - name: ubuntu-jammy
           label: ubuntu-jammy
+    secrets:
+      - zuul_s3
