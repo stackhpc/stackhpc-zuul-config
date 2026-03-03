@@ -31,6 +31,9 @@ zuul_operator_tenant_config:
             - stackhpc/neutron: &neutron_downstream_branches
                 include-branches:
                   - stackhpc/2025.1
+            # Additional project deps from github.com
+            - sqlalchemy/sqlalchemy
+            - svinota/pyroute2
         opendev:
           untrusted-projects:
             - opendev/base-jobs:
@@ -128,6 +131,7 @@ zuul_operator_tenant_config:
                 - openstack/monasca-ui
                 - openstack/neutron
                 - openstack/neutron-lib
+                - openstack/neutron-tempest-plugin
                 - openstack/nova
                 - openstack/octavia
                 - openstack/os-apply-config
