@@ -25,9 +25,12 @@ zuul_operator_tenant_config:
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
             - stackhpc/stackhpc-kayobe-config:
-                include-branches: &downstream_branches
+                include-branches: &skc_downstream_branches
                   - stackhpc/2025.1
                   - stackhpc/2024.1
+            - stackhpc/neutron: &neutron_downstream_branches
+                include-branches:
+                  - stackhpc/2025.1
         opendev:
           untrusted-projects:
             - opendev/base-jobs:
