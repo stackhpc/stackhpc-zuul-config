@@ -109,6 +109,7 @@ zuul_operator_tenant_config:
                 - openstack/governance
                 - openstack/governance-sigs
                 - openstack/governance-website
+                - openstack/grenade
                 - openstack/heat
                 - openstack/heat-cfntools
                 - openstack/heat-templates
@@ -138,6 +139,7 @@ zuul_operator_tenant_config:
                 - openstack/os-brick
                 - openstack/os-client-config
                 - openstack/os-collect-config
+                - openstack/os-ken
                 - openstack/os-refresh-config
                 - openstack/osc-lib
                 - openstack/openstack-manuals
@@ -167,6 +169,7 @@ zuul_operator_tenant_config:
                 - openstack/placement
                 - openstack/pycadf
                 - openstack/python-monascaclient
+                - openstack/rally
                 - openstack/releases
                 - openstack/requirements
                 - openstack/security-doc
