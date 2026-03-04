@@ -32,8 +32,10 @@ zuul_operator_tenant_config:
                 include-branches:
                   - stackhpc/2025.1
             # Additional project deps from github.com
-            - sqlalchemy/sqlalchemy
-            - svinota/pyroute2
+            - include: []
+              projects:
+              - sqlalchemy/sqlalchemy
+              - svinota/pyroute2
         opendev:
           untrusted-projects:
             - opendev/base-jobs:
