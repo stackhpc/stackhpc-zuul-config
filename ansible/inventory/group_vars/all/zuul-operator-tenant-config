@@ -31,11 +31,6 @@ zuul_operator_tenant_config:
             - stackhpc/neutron: &neutron_downstream_branches
                 include-branches:
                   - stackhpc/2025.1
-            # Additional project deps from github.com
-            - include: []
-              projects:
-              - sqlalchemy/sqlalchemy
-              - svinota/pyroute2
         opendev:
           untrusted-projects:
             - opendev/base-jobs:
