@@ -62,6 +62,8 @@ zuul_operator_tenant_config:
                 - nodeset
               projects:
                 - openstack/project-config
+                - openstack/devstack
+                - openstack/grenade
                 - openstack/kayobe:
                     include-branches: &upstream_branches
                       - master
