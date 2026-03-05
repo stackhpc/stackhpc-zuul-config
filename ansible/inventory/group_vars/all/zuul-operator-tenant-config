@@ -36,6 +36,7 @@ zuul_operator_tenant_config:
             # Additional project deps from github.com
             - include: []
               projects:
+              - sqlalchemy-alembic
               - sqlalchemy/sqlalchemy
               - svinota/pyroute2
         opendev:
@@ -174,6 +175,7 @@ zuul_operator_tenant_config:
                 - openstack/pycadf
                 - openstack/python-monascaclient
                 - openstack/rally
+                - openstack/rally-openstack
                 - openstack/releases
                 - openstack/requirements
                 - openstack/security-doc
