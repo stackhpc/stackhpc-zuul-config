@@ -23,6 +23,9 @@ zuul_operator_cr: |
         driver: github
         secretName: zuul-github
         server: github.com
+      github-git:
+        driver: git
+        baseurl: https://github.com
       opendev:
         driver: git
         baseurl: https://opendev.org

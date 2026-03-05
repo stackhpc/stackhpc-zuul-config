@@ -31,6 +31,8 @@ zuul_operator_tenant_config:
             - stackhpc/neutron: &neutron_downstream_branches
                 include-branches:
                   - stackhpc/2025.1
+        github-git:
+          untrusted-projects:
             # Additional project deps from github.com
             - include: []
               projects:
