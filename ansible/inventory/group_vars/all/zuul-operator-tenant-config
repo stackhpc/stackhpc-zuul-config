@@ -108,7 +108,6 @@ zuul_operator_tenant_config:
                 - openstack/cinder
                 - openstack/contributor-guide
                 - openstack/debtcollector
-                - openstack/devstack
                 - openstack/election
                 - openstack/futurist
                 - openstack/glance
@@ -116,7 +115,6 @@ zuul_operator_tenant_config:
                 - openstack/governance
                 - openstack/governance-sigs
                 - openstack/governance-website
-                - openstack/grenade
                 - openstack/heat
                 - openstack/heat-cfntools
                 - openstack/heat-templates
