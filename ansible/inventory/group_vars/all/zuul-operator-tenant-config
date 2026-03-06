@@ -112,6 +112,9 @@ zuul_operator_tenant_config:
                 - openstack/cinder
                 - openstack/contributor-guide
                 - openstack/debtcollector
+                - openstack/designate
+                - openstack/designate-dashboard
+                - openstack/designate-tempest-plugin
                 - openstack/election
                 - openstack/futurist
                 - openstack/glance
@@ -139,8 +142,14 @@ zuul_operator_tenant_config:
                 - openstack/monasca-thresh
                 - openstack/monasca-transform
                 - openstack/monasca-ui
+                - openstack/networking-bagpipe
+                - openstack/networking-bgpvpn
+                - openstack/networking-sfc
                 - openstack/neutron
+                - openstack/neutron-dynamic-routing
+                - openstack/neutron-fwaas
                 - openstack/neutron-lib
+                - openstack/neutron-vpnaas
                 - openstack/nova
                 - openstack/octavia
                 - openstack/os-apply-config
@@ -186,6 +195,7 @@ zuul_operator_tenant_config:
                 - openstack/stackviz
                 - openstack/stevedore
                 - openstack/swift
+                - openstack/tap-as-a-service
                 - openstack/taskflow
                 - openstack/tempest
                 - openstack/tenks
