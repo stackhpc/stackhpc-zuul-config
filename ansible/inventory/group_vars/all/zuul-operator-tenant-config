@@ -78,6 +78,7 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 - openstack/neutron-tempest-plugin:
                     include-branches: *upstream_branches
+                - openstack/rally-openstack
             - include: []
               projects:
                 - airship/airshipctl
@@ -177,7 +178,6 @@ zuul_operator_tenant_config:
                 - openstack/pycadf
                 - openstack/python-monascaclient
                 - openstack/rally
-                - openstack/rally-openstack
                 - openstack/releases
                 - openstack/requirements
                 - openstack/security-doc
