@@ -36,7 +36,7 @@ zuul_operator_tenant_config:
             # Additional project deps from github.com
             - include: []
               projects:
-              - sqlalchemy-alembic
+              - sqlalchemy/alembic
               - sqlalchemy/sqlalchemy
               - svinota/pyroute2
         opendev:
