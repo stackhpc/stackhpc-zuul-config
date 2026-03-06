@@ -137,6 +137,7 @@ zuul_operator_tenant_config:
                 - openstack/monasca-thresh
                 - openstack/monasca-transform
                 - openstack/monasca-ui
+                - openstack/neutron
                 - openstack/neutron-lib
                 - openstack/nova
                 - openstack/octavia
