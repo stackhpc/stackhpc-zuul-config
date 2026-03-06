@@ -80,6 +80,7 @@ zuul_operator_tenant_config:
                 - openstack/neutron-tempest-plugin:
                     include-branches: *upstream_branches
                 - openstack/rally-openstack
+                - openstack/tempest
             - include: []
               projects:
                 - airship/airshipctl
@@ -107,6 +108,7 @@ zuul_operator_tenant_config:
                 - openstack/ansible-collection-kolla
                 - openstack/api-site
                 - openstack/automaton
+                - openstack/barbican
                 - openstack/ceilometer
                 - openstack/ceilometermiddleware
                 - openstack/cinder
@@ -127,11 +129,14 @@ zuul_operator_tenant_config:
                 - openstack/heat-templates
                 - openstack/horizon
                 - openstack/ideas
+                - openstack/ironic
                 - openstack/keystone
                 - openstack/keystoneauth
                 - openstack/keystonemiddleware
+                - openstack/magnum
                 - openstack/manila
                 - openstack/manila-ui
+                - openstack/mistral
                 - openstack/monasca-agent
                 - openstack/monasca-api
                 - openstack/monasca-common
@@ -186,6 +191,11 @@ zuul_operator_tenant_config:
                 - openstack/pbr
                 - openstack/placement
                 - openstack/pycadf
+                - openstack/python-barbicanclient
+                - openstack/python-designateclient
+                - openstack/python-magnumclient
+                - openstack/python-manilaclient
+                - openstack/python-mistralclient
                 - openstack/python-monascaclient
                 - openstack/rally
                 - openstack/releases
@@ -197,7 +207,6 @@ zuul_operator_tenant_config:
                 - openstack/swift
                 - openstack/tap-as-a-service
                 - openstack/taskflow
-                - openstack/tempest
                 - openstack/tenks
                 - openstack/tooz
                 - openstack/training-guides
