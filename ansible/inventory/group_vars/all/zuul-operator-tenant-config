@@ -76,6 +76,10 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 - openstack/kolla-ansible:
                     include-branches: *upstream_branches
+                - openstack/neutron:
+                    include-branches: *upstream_branches
+                - openstack/neutron-tempest-plugin:
+                    include-branches: *upstream_branches
             - include: []
               projects:
                 - airship/airshipctl
@@ -135,9 +139,7 @@ zuul_operator_tenant_config:
                 - openstack/monasca-thresh
                 - openstack/monasca-transform
                 - openstack/monasca-ui
-                - openstack/neutron
                 - openstack/neutron-lib
-                - openstack/neutron-tempest-plugin
                 - openstack/nova
                 - openstack/octavia
                 - openstack/os-apply-config
