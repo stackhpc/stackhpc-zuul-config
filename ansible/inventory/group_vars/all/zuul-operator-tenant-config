@@ -76,8 +76,6 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 - openstack/kolla-ansible:
                     include-branches: *upstream_branches
-                - openstack/neutron:
-                    include-branches: *upstream_branches
                 - openstack/neutron-tempest-plugin:
                     include-branches: *upstream_branches
             - include: []
