@@ -112,11 +112,13 @@ zuul_operator_tenant_config:
                 - openstack/ceilometer
                 - openstack/ceilometermiddleware
                 - openstack/cinder
+                - openstack/cinder-tempest-plugin
                 - openstack/contributor-guide
                 - openstack/debtcollector
                 - openstack/designate
                 - openstack/designate-dashboard
                 - openstack/designate-tempest-plugin
+                - openstack/diskimage-builder
                 - openstack/election
                 - openstack/futurist
                 - openstack/glance
@@ -157,6 +159,7 @@ zuul_operator_tenant_config:
                 - openstack/neutron-vpnaas
                 - openstack/nova
                 - openstack/octavia
+                - openstack/octavia-lib
                 - openstack/os-apply-config
                 - openstack/os-brick
                 - openstack/os-client-config
@@ -197,6 +200,10 @@ zuul_operator_tenant_config:
                 - openstack/python-manilaclient
                 - openstack/python-mistralclient
                 - openstack/python-monascaclient
+                - openstack/python-octaviaclient
+                - openstack/python-openstackclient
+                - openstack/python-watcherclient
+                - openstack/python-zaqarclient
                 - openstack/rally
                 - openstack/releases
                 - openstack/requirements
@@ -211,6 +218,8 @@ zuul_operator_tenant_config:
                 - openstack/tooz
                 - openstack/training-guides
                 - openstack/tripleo-ci
+                - openstack/watcher
+                - openstack/watcher-tempest-plugin
                 - openstack/zaqar
                 - starlingx/docs
                 - starlingx/election
