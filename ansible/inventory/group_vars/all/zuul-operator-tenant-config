@@ -42,18 +42,7 @@ zuul_operator_tenant_config:
               - svinota/pyroute2
         opendev:
           untrusted-projects:
-            - opendev/base-jobs:
-                shadow:
-                  - stackhpc-zuul-config
-                include:
-                  - job
             - zuul/zuul-jobs:
-                shadow:
-                  - opendev/base-jobs
-                  - stackhpc-zuul-config
-                include:
-                  - job
-            - openstack/openstack-zuul-jobs:
                 shadow:
                   - stackhpc-zuul-config
                 include:
@@ -63,6 +52,7 @@ zuul_operator_tenant_config:
                 - nodeset
                 - project-template
               projects:
+                - opendev/base-jobs
                 - openstack/project-config
                 - openstack/devstack
                 - openstack/grenade
