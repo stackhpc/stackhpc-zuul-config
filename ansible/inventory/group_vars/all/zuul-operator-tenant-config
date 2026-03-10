@@ -61,6 +61,7 @@ zuul_operator_tenant_config:
             - include:
                 - job
                 - nodeset
+                - project-template
               projects:
                 - openstack/project-config
                 - openstack/devstack
