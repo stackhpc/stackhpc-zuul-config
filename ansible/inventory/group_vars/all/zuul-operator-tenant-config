@@ -41,6 +41,10 @@ zuul_operator_tenant_config:
               - sqlalchemy/sqlalchemy
               - svinota/pyroute2
         opendev:
+          config-projects:
+            - opendev/base-jobs:
+                shadow:
+                  - stackhpc-zuul-config
           untrusted-projects:
             - zuul/zuul-jobs:
                 shadow:
@@ -52,7 +56,6 @@ zuul_operator_tenant_config:
                 - nodeset
                 - project-template
               projects:
-                - opendev/base-jobs
                 - openstack/project-config
                 - openstack/devstack
                 - openstack/grenade
