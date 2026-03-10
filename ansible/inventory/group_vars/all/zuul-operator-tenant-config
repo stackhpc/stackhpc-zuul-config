@@ -44,7 +44,9 @@ zuul_operator_tenant_config:
               - svinota/pyroute2
         opendev:
           config-projects:
-            - opendev/base-jobs
+            - opendev/base-jobs:
+                exclude:
+                  - secrets
           untrusted-projects:
             - zuul/zuul-jobs:
                 shadow:
