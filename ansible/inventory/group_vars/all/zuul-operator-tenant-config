@@ -60,10 +60,12 @@ zuul_operator_tenant_config:
                 - openstack/project-config
                 - openstack/devstack
                 - openstack/grenade
-                - openstack/kayobe:
+                - openstack/horizon:
                     include-branches: &upstream_branches
                       - master
                       - stable/2025.1
+                - openstack/kayobe:
+                    include-branches: *upstream_branches
                 - openstack/kayobe-config:
                     include-branches: *upstream_branches
                 - openstack/kayobe-config-dev:
@@ -105,6 +107,7 @@ zuul_operator_tenant_config:
                 - opendev/publications
                 - opendev/system-config
                 - openstack/ansible-collection-kolla
+                - openstack/aodh
                 - openstack/api-site
                 - openstack/automaton
                 - openstack/barbican
@@ -128,15 +131,16 @@ zuul_operator_tenant_config:
                 - openstack/heat
                 - openstack/heat-cfntools
                 - openstack/heat-templates
-                - openstack/horizon
                 - openstack/ideas
                 - openstack/ironic
                 - openstack/keystone
                 - openstack/keystoneauth
                 - openstack/keystonemiddleware
+                - openstack/kuryr-kubernetes
                 - openstack/magnum
                 - openstack/manila
                 - openstack/manila-ui
+                - openstack/masakari
                 - openstack/mistral
                 - openstack/monasca-agent
                 - openstack/monasca-api
@@ -166,6 +170,7 @@ zuul_operator_tenant_config:
                 - openstack/os-ken
                 - openstack/os-refresh-config
                 - openstack/os-test-images
+                - openstack/os-vif
                 - openstack/osc-lib
                 - openstack/openstack-manuals
                 - openstack/ossa
