@@ -82,7 +82,10 @@ zuul_operator_tenant_config:
                 - openstack/rally-openstack
                 - openstack/requirements:
                     include-branches: *upstream_branches
-                - openstack/tempest
+                - openstack/tempest:
+                    include-branches: *upstream_branches
+                # only master branch
+                - x/devstack-plugin-tobiko
             - include: []
               projects:
                 - airship/airshipctl
