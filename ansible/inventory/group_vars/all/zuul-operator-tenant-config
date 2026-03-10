@@ -70,9 +70,11 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 - openstack/neutron-tempest-plugin:
                     include-branches: *upstream_branches
+                - openstack/openstack-zuul-jobs:
+                    shadow:
+                      - stackhpc-zuul-extra-config
                 - openstack/rally-openstack
                 - openstack/tempest
-                - openstack/openstack-zuul-jobs
             - include: []
               projects:
                 - airship/airshipctl
