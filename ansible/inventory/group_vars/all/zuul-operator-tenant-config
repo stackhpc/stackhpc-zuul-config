@@ -77,6 +77,7 @@ zuul_operator_tenant_config:
                     shadow:
                       - stackhpc-zuul-extra-config
                 - openstack/rally-openstack
+                - openstack/requirements
                 - openstack/tempest
             - include: []
               projects:
@@ -203,7 +204,6 @@ zuul_operator_tenant_config:
                 - openstack/python-zaqarclient
                 - openstack/rally
                 - openstack/releases
-                - openstack/requirements
                 - openstack/security-doc
                 - openstack/service-types-authority
                 - openstack/stackviz
