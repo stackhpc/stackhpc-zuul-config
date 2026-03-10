@@ -78,7 +78,8 @@ zuul_operator_tenant_config:
                     shadow:
                       - stackhpc-zuul-extra-config
                 - openstack/rally-openstack
-                - openstack/requirements
+                - openstack/requirements:
+                    include-branches: *upstream_branches
                 - openstack/tempest
             - include: []
               projects:
