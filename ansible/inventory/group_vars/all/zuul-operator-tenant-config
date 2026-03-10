@@ -18,7 +18,9 @@ zuul_operator_tenant_config:
       source:
         stackhpc:
           config-projects:
-            - stackhpc-zuul-config
+            - stackhpc-zuul-config:
+                shadow:
+                  - opendev/base-jobs
           untrusted-projects:
             - stackhpc-zuul-extra-config
         github:
@@ -42,9 +44,7 @@ zuul_operator_tenant_config:
               - svinota/pyroute2
         opendev:
           config-projects:
-            - opendev/base-jobs:
-                shadow:
-                  - stackhpc-zuul-config
+            - opendev/base-jobs
           untrusted-projects:
             - zuul/zuul-jobs:
                 shadow:
