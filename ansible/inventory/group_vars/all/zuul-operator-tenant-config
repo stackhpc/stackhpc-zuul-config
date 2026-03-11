@@ -228,6 +228,24 @@ zuul_operator_tenant_config:
                 - openstack/watcher-tempest-plugin
                 - openstack/xstatic-angular
                 - openstack/xstatic-angular-bootstrap
+                - openstack/xstatic-angular-fileupload
+                - openstack/xstatic-angular-gettext
+                - openstack/xstatic-angular-lrdragndrop
+                - openstack/xstatic-angular-smart-table
+                - openstack/xstatic-bootstrap-datepicker
+                - openstack/xstatic-bootstrap-scss
+                - openstack/xstatic-bootswatch",
+                - openstack/xstatic-d3
+                - openstack/xstatic-hogan
+                - openstack/xstatic-jasmine
+                - openstack/xstatic-jquery-migrate
+                - openstack/xstatic-jquery.quicksearch
+                - openstack/xstatic-jquery.tablesorter
+                - openstack/xstatic-jsencrypt
+                - openstack/xstatic-mdi
+                - openstack/xstatic-rickshaw
+                - openstack/xstatic-roboto-fontface
+                - openstack/xstatic-spin
                 - openstack/zaqar
                 - starlingx/docs
                 - starlingx/election
