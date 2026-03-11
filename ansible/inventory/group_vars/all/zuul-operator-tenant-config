@@ -234,7 +234,7 @@ zuul_operator_tenant_config:
                 - openstack/xstatic-angular-smart-table
                 - openstack/xstatic-bootstrap-datepicker
                 - openstack/xstatic-bootstrap-scss
-                - openstack/xstatic-bootswatch",
+                - openstack/xstatic-bootswatch
                 - openstack/xstatic-d3
                 - openstack/xstatic-hogan
                 - openstack/xstatic-jasmine
