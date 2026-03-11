@@ -18,9 +18,7 @@ zuul_operator_tenant_config:
       source:
         stackhpc:
           config-projects:
-            - stackhpc-zuul-config:
-                shadow:
-                  - opendev/base-jobs
+            - stackhpc-zuul-config
         github:
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
@@ -41,9 +39,12 @@ zuul_operator_tenant_config:
               - sqlalchemy/sqlalchemy
               - svinota/pyroute2
         opendev:
-          config-projects:
-            - opendev/base-jobs
           untrusted-projects:
+            - opendev/base-jobs:
+                shadow:
+                  - stackhpc-zuul-config
+                include:
+                  - job
             - zuul/zuul-jobs:
                 shadow:
                   - stackhpc-zuul-config
