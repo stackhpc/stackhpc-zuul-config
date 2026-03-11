@@ -74,9 +74,7 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 - openstack/neutron-tempest-plugin:
                     include-branches: *upstream_branches
-                - openstack/openstack-zuul-jobs:
-                    shadow:
-                      - stackhpc-zuul-extra-config
+                - openstack/openstack-zuul-jobs
                 - openstack/rally-openstack
                 - openstack/requirements:
                     include-branches: *upstream_branches
