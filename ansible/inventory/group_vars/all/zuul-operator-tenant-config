@@ -225,6 +225,7 @@ zuul_operator_tenant_config:
                 - openstack/watcher
                 - openstack/watcher-tempest-plugin
                 - openstack/xstatic-angular
+                - openstack/xstatic-angular-bootstrap
                 - openstack/zaqar
                 - starlingx/docs
                 - starlingx/election
