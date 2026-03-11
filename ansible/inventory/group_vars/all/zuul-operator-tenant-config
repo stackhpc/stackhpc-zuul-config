@@ -21,8 +21,6 @@ zuul_operator_tenant_config:
             - stackhpc-zuul-config:
                 shadow:
                   - opendev/base-jobs
-          untrusted-projects:
-            - stackhpc-zuul-extra-config
         github:
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
@@ -133,9 +131,11 @@ zuul_operator_tenant_config:
                 - openstack/governance-website
                 - openstack/heat
                 - openstack/heat-cfntools
+                - openstack/heat-dashboard
                 - openstack/heat-templates
                 - openstack/ideas
                 - openstack/ironic
+                - openstack/ironic-ui
                 - openstack/keystone
                 - openstack/keystoneauth
                 - openstack/keystonemiddleware
@@ -226,6 +226,7 @@ zuul_operator_tenant_config:
                 - openstack/tripleo-ci
                 - openstack/watcher
                 - openstack/watcher-tempest-plugin
+                - openstack/xstatic-angular
                 - openstack/zaqar
                 - starlingx/docs
                 - starlingx/election
