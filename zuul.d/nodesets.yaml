@@ -1,0 +1,18 @@
+---
+- nodeset:
+    name: ubuntu-focal
+    nodes:
+      name: ubuntu-jammy
+      label: ubuntu-jammy
+
+- nodeset:
+    name: ubuntu-jammy
+    nodes:
+      name: ubuntu-jammy
+      label: ubuntu-jammy
+
+- nodeset:
+    name: ubuntu-noble
+    nodes:
+      name: ubuntu-noble
+      label: ubuntu-noble

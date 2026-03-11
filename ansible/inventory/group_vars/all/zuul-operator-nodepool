@@ -1,11 +1,15 @@
 zuul_operator_nodepool_yaml:
   labels:
+    - name: kubernetes-runner-pod-jammy
+    - name: rocky-9
+    - name: rocky-9-arm64
+    - name: rocky-9-tenks
+    - name: rocky-10
+    - name: rocky-10-arm64
     - name: ubuntu-jammy
     - name: ubuntu-noble
-    - name: rocky-9
+    - name: ubuntu-noble-arm64
     - name: ubuntu-noble-tenks
-    - name: rocky-9-tenks
-    - name: kubernetes-runner-pod-jammy
 
   providers:
     - name: smslab-openstack
@@ -17,20 +21,31 @@ zuul_operator_nodepool_yaml:
       launch-timeout: 300
       launch-retries: 3
       cloud-images:
+        - name: rocky-9
+          image-name: "Rocky9"
+          username: "zuul"
+        - name: rocky-9-arm64
+          image-name: "Rocky9-arm64"
+          username: "zuul"
+        - name: rocky-9-tenks
+          image-name: "Rocky9"
+          username: "zuul"
+        - name: rocky-10
+          image-name: "Rocky10"
+          username: "zuul"
+        - name: rocky-10-arm64
+          image-name: "Rocky10-arm64"
+          username: "zuul"
         - name: ubuntu-jammy
           image-name: "Ubuntu-22.04"
           username: "zuul"
         - name: ubuntu-noble
           image-name: "Ubuntu-24.04"
           username: "zuul"
-        - name: rocky-9
-          image-name: "Rocky9"
-          username: "zuul"
+        - name: ubuntu-noble-arm64
+          image-name: "Ubuntu-24.04-arm64"
         - name: ubuntu-noble-tenks
           image-name: "Ubuntu-24.04"
-          username: "zuul"
-        - name: rocky-9-tenks
-          image-name: "Rocky9"
           username: "zuul"
       pools:
         - name: main
