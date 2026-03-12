@@ -78,6 +78,8 @@ zuul_operator_tenant_config:
                 - openstack/neutron-tempest-plugin:
                     include-branches: *upstream_branches
                 - openstack/openstack-zuul-jobs
+                - openstack/openstacksdk:
+                    include-branches: *upstream_branches
                 - openstack/rally-openstack
                 - openstack/requirements:
                     include-branches: *upstream_branches
