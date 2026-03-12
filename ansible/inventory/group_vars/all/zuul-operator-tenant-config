@@ -141,6 +141,7 @@ zuul_operator_tenant_config:
                 - openstack/keystonemiddleware
                 - openstack/kuryr-kubernetes
                 - openstack/magnum
+                - openstack/magnum-ui
                 - openstack/manila
                 - openstack/manila-ui
                 - openstack/masakari

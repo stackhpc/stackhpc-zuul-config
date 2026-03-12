@@ -1,11 +1,5 @@
 ---
 - nodeset:
-    name: ubuntu-focal
-    nodes:
-      name: ubuntu-jammy
-      label: ubuntu-jammy
-
-- nodeset:
     name: ubuntu-jammy
     nodes:
       name: ubuntu-jammy
