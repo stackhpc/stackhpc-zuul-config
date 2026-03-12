@@ -65,6 +65,9 @@ zuul_operator_tenant_config:
                       - stable/2025.1
                 - openstack/ironic:
                     include-branches: *upstream_branches
+                - openstack/ironic-inspector:
+                    include-branches:
+                      - stable/2025.1
                 - openstack/ironic-tempest-plugin:
                     include-branches: *upstream_branches
                 - openstack/kayobe:
@@ -213,6 +216,7 @@ zuul_operator_tenant_config:
                 - openstack/pycadf
                 - openstack/python-barbicanclient
                 - openstack/python-designateclient
+                - openstack/python-ironicclient
                 - openstack/python-magnumclient
                 - openstack/python-manilaclient
                 - openstack/python-mistralclient
