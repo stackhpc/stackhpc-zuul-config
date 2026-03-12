@@ -65,6 +65,8 @@ zuul_operator_tenant_config:
                       - stable/2025.1
                 - openstack/ironic:
                     include-branches: *upstream_branches
+                - openstack/ironic-tempest-plugin:
+                    include-branches: *upstream_branches
                 - openstack/kayobe:
                     include-branches: *upstream_branches
                 - openstack/kayobe-config:
@@ -138,6 +140,8 @@ zuul_operator_tenant_config:
                 - openstack/heat-dashboard
                 - openstack/heat-templates
                 - openstack/ideas
+                - openstack/ironic-python-agent
+                - openstack/ironic-python-agent-builder
                 - openstack/ironic-ui
                 - openstack/keystone
                 - openstack/keystoneauth
@@ -229,6 +233,7 @@ zuul_operator_tenant_config:
                 - openstack/tooz
                 - openstack/training-guides
                 - openstack/tripleo-ci
+                - openstack/virtualbmc
                 - openstack/watcher
                 - openstack/watcher-tempest-plugin
                 - openstack/xstatic-angular
