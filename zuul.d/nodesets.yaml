@@ -1,12 +1,36 @@
 ---
 - nodeset:
+    name: debian-bookworm
+    nodes:
+      name: debian-bookworm
+      label: debian-bookworm
+
+- nodeset:
+    name: debian-trixie-8GB
+    nodes:
+      name: debian-trixie
+      label: debian-trixie
+
+- nodeset:
     name: ubuntu-jammy
     nodes:
       name: ubuntu-jammy
       label: ubuntu-jammy
 
 - nodeset:
+    name: ubuntu-jammy-arm64
+    nodes:
+      name: ubuntu-jammy-arm64
+      label: ubuntu-jammy-arm64
+
+- nodeset:
     name: ubuntu-noble
     nodes:
       name: ubuntu-noble
       label: ubuntu-noble
+
+- nodeset:
+    name: ubuntu-noble-arm64
+    nodes:
+      name: ubuntu-noble-arm64
+      label: ubuntu-noble-arm64
