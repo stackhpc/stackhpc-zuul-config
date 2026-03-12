@@ -34,6 +34,7 @@ zuul_operator_tenant_config:
             # Additional project deps from github.com
             - include: []
               projects:
+              - ansible/ansible
               - novnc/novnc
               - sqlalchemy/alembic
               - sqlalchemy/sqlalchemy
@@ -116,6 +117,7 @@ zuul_operator_tenant_config:
                 - opendev/publications
                 - opendev/system-config
                 - openstack/ansible-collection-kolla
+                - openstack/ansible-collections-openstack
                 - openstack/aodh
                 - openstack/api-site
                 - openstack/automaton
@@ -155,6 +157,7 @@ zuul_operator_tenant_config:
                 - openstack/manila
                 - openstack/manila-ui
                 - openstack/masakari
+                - openstack/masakari-monitors
                 - openstack/mistral
                 - openstack/monasca-agent
                 - openstack/monasca-api
