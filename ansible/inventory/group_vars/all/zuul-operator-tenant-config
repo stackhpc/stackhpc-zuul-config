@@ -165,6 +165,7 @@ zuul_operator_tenant_config:
                 - openstack/monasca-ui
                 - openstack/networking-bagpipe
                 - openstack/networking-bgpvpn
+                - openstack/networking-generic-switch
                 - openstack/networking-sfc
                 - openstack/neutron
                 - openstack/neutron-dynamic-routing
@@ -227,6 +228,8 @@ zuul_operator_tenant_config:
                 - openstack/stackviz
                 - openstack/stevedore
                 - openstack/swift
+                - openstack/sushy
+                - openstack/sushy-tools
                 - openstack/tap-as-a-service
                 - openstack/taskflow
                 - openstack/tenks
