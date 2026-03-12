@@ -36,6 +36,9 @@ zuul_operator_nodepool_yaml:
         - name: rocky-10-arm64
           image-name: "Rocky10-arm64"
           username: "zuul"
+        - name: ubuntu-focal
+          image-name: "Ubuntu-20.04"
+          username: "zuul"
         - name: ubuntu-jammy
           image-name: "Ubuntu-22.04"
           username: "zuul"

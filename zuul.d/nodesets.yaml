@@ -12,6 +12,12 @@
       label: debian-trixie
 
 - nodeset:
+    name: ubuntu-focal
+    nodes:
+      name: ubuntu-focal
+      label: ubuntu-focal
+
+- nodeset:
     name: ubuntu-jammy
     nodes:
       name: ubuntu-jammy
