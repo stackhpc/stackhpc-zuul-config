@@ -63,6 +63,8 @@ zuul_operator_tenant_config:
                     include-branches: &upstream_branches
                       - master
                       - stable/2025.1
+                - openstack/ironic:
+                    include-branches: *upstream_branches
                 - openstack/kayobe:
                     include-branches: *upstream_branches
                 - openstack/kayobe-config:
@@ -134,7 +136,6 @@ zuul_operator_tenant_config:
                 - openstack/heat-dashboard
                 - openstack/heat-templates
                 - openstack/ideas
-                - openstack/ironic
                 - openstack/ironic-ui
                 - openstack/keystone
                 - openstack/keystoneauth
