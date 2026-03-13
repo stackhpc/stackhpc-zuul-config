@@ -22,6 +22,9 @@ zuul_operator_tenant_config:
         github:
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
+            - stackhpc/requirements: &requirements_downstream_branches
+                include-branches:
+                  - stackhpc/2025.1
             - stackhpc/stackhpc-kayobe-config:
                 include-branches: &skc_downstream_branches
                   - stackhpc/2025.1
@@ -83,7 +86,9 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 - openstack/neutron-tempest-plugin:
                     include-branches: *upstream_branches
-                - openstack/openstack-zuul-jobs
+                - openstack/openstack-zuul-jobs:
+                    shadow:
+                      - stackhpc-zuul-config
                 - openstack/openstacksdk:
                     include-branches: *upstream_branches
                 - openstack/rally-openstack
