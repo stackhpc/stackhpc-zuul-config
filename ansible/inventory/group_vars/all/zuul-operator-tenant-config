@@ -1,5 +1,6 @@
 ---
 zuul_operator_tenant_config:
+# Authorization rules for administrators
   - authorization-rule:
       name: stackhpc_admin
       conditions:
@@ -9,7 +10,8 @@ zuul_operator_tenant_config:
         # Michal Nasiadka
         - zuul_uid: "109068399179727592063"
         - zuul_uid: "piotr@stackhpc.com"
-        
+
+# Tenant config
   - tenant:
       name: stackhpc
       admin-rules:
