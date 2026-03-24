@@ -59,6 +59,24 @@ zuul_operator_nodepool_yaml:
           security-groups:
             - "nodepool"
           labels:
+            - name: ubuntu-focal
+              console-log: True
+              cloud-image: ubuntu-focal
+              flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
             - name: ubuntu-jammy
               console-log: True
               cloud-image: ubuntu-jammy
