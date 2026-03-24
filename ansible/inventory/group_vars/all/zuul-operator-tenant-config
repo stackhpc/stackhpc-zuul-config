@@ -27,8 +27,6 @@ zuul_operator_tenant_config:
             - stackhpc/requirements: &requirements_downstream_branches
                 include-branches:
                   - stackhpc/2025.1
-                shadow:
-                  - openstack/requirements
             - stackhpc/stackhpc-kayobe-config:
                 include-branches: &skc_downstream_branches
                   - stackhpc/2025.1
@@ -98,6 +96,8 @@ zuul_operator_tenant_config:
                 - openstack/rally-openstack
                 - openstack/requirements:
                     include-branches: *upstream_branches
+                    shadow:
+                      - stackhpc/requirements
                 - openstack/tempest:
                     include-branches: *upstream_branches
                 # only master branch
