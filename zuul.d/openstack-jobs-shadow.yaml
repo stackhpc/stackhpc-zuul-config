@@ -220,4 +220,15 @@
       - ^.*/yoga
       - ^.*/zed
 
-
+- job:
+    name: build-openstack-releasenotes
+    parent: build-reno-releasenotes
+    nodeset: ubuntu-jammy
+    description: |
+      Build releasenotes, with optional translation support, using reno.
+    # Building translated releasenotes can take long for large repositories
+    timeout: 3600
+    required-projects:
+      - name: openstack/requirements
+    vars:
+      constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
