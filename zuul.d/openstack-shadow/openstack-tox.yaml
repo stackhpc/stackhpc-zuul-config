@@ -1,0 +1,69 @@
+---
+- job:
+    name: openstack-tox
+    abstract: true
+    parent: tox-fips
+    nodeset: ubuntu-noble
+    description: |
+      Base job to run tox jobs with OpenStack project specific updates.
+
+      Processing upper-constraints files from openstack/requirements.
+    branches:
+      regex: ^*/(victoria|wallaby|xena|yoga|zed|2023.1|2023.2|2024.1|2024.2)$
+      negate: true
+    required-projects:
+      - name: stackhpc/requirements
+    vars:
+      tox_constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
+      enable_fips: false
+      # TODO(frickler): drop this again when latest tox is unbroken
+      ensure_tox_version: '<4.48'
+
+- job:
+    name: openstack-tox
+    abstract: true
+    parent: tox-fips
+    nodeset: ubuntu-jammy
+    description: |
+      Base job to run tox jobs with OpenStack project specific updates.
+
+      Processing upper-constraints files from openstack/requirements.
+    branches:
+      - ^.*/2023.1
+      - ^.*/2023.2
+      - ^.*/2024.1
+      - ^.*/2024.2
+    required-projects:
+      - name: stackhpc/requirements
+    vars:
+      tox_constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
+      enable_fips: false
+
+- job:
+    name: openstack-tox
+    abstract: true
+    parent: tox-fips
+    nodeset: ubuntu-focal
+    description: |
+      Base job (Focal) to run tox jobs with OpenStack project specific updates.
+
+      Processing upper-constraints files from openstack/requirements.
+
+      This job runs on Focal from stable/victoria until stable/zed. This
+      job is prepared to make sure all stable branches from stable/victoria until
+      stable/zed will keep running on Focal.
+    branches:
+      - ^.*/victoria
+      - ^.*/wallaby
+      - ^.*/xena
+      - ^.*/yoga
+      - ^.*/zed
+    required-projects:
+      - name: stackhpc/requirements
+    vars:
+      tox_constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
+      enable_fips: false
+      # NOTE(gmann): This is stable|unmaintained branch (<=(stable|unmaintained)/zed)
+      # job and new tox 4 require some changes in tox.ini to be compatible with it. Let's
+      # pin tox <4 for stable branches testing (<=(stable|unmaintained)/zed).
+      ensure_tox_version: '<4'

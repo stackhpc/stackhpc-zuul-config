@@ -1,0 +1,18 @@
+---
+- job:
+    name: openstack-tox-cover
+    parent: tox-cover
+    description: |
+      Run code coverage tests.
+
+      Uses tox with the ``cover`` environment.
+    nodeset: ubuntu-noble
+    branches:
+      regex: ^.*/(victoria|wallaby|xena|yoga|zed|2023.1|2023.2|2024.1|2024.2)$
+      negate: true
+    required-projects:
+      - name: openstack/requirements
+    irrelevant-files: *common-irrelevant-files
+    vars:
+      tox_constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
+    timeout: 3000
