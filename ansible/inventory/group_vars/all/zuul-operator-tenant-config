@@ -96,6 +96,8 @@ zuul_operator_tenant_config:
                 - openstack/rally-openstack
                 - openstack/requirements:
                     include-branches: *upstream_branches
+                    shadow:
+                      - stackhpc/requirements
                 - openstack/tempest:
                     include-branches: *upstream_branches
                 # only master branch
