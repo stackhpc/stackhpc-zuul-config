@@ -6,6 +6,7 @@ zuul_operator_nodepool_yaml:
     - name: rocky-9-tenks
     - name: rocky-10
     - name: rocky-10-arm64
+    - name: ubuntu-focal
     - name: ubuntu-jammy
     - name: ubuntu-noble
     - name: ubuntu-noble-arm64
