@@ -14,7 +14,7 @@
     required-projects:
       - name: stackhpc/requirements
     vars:
-      tox_constraints_file: '{{ ansible_user_dir }}/src/opendev.org/openstack/requirements/upper-constraints.txt'
+      tox_constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
       enable_fips: false
       # TODO(frickler): drop this again when latest tox is unbroken
       ensure_tox_version: '<4.48'
@@ -36,7 +36,7 @@
     required-projects:
       - name: stackhpc/requirements
     vars:
-      tox_constraints_file: '{{ ansible_user_dir }}/src/opendev.org/openstack/requirements/upper-constraints.txt'
+      tox_constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
       enable_fips: false
 
 - job:
@@ -61,7 +61,7 @@
     required-projects:
       - name: stackhpc/requirements
     vars:
-      tox_constraints_file: '{{ ansible_user_dir }}/src/opendev.org/openstack/requirements/upper-constraints.txt'
+      tox_constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
       enable_fips: false
       # NOTE(gmann): This is stable|unmaintained branch (<=(stable|unmaintained)/zed)
       # job and new tox 4 require some changes in tox.ini to be compatible with it. Let's
