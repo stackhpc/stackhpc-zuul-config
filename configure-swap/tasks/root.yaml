@@ -1,0 +1,61 @@
+---
+
+# If no ephemeral devices are available, use root filesystem
+
+- name: Calculate required swap
+  set_fact:
+    swap_required: "{{ configure_swap_size - ansible_memory_mb['swap']['total'] | int }}"
+
+- name: Get root filesystem
+  block:
+    - name: Get root filesystem
+      shell: df --output='fstype' /root | tail -1
+      register: root_fs
+
+    - name: Save root filesystem
+      set_fact:
+        root_filesystem: "{{ root_fs.stdout }}"
+
+    - name: Debug the root_filesystem variable
+      debug:
+        var: root_filesystem
+
+# Note, we don't use a sparse device to avoid wedging when disk space
+# and memory are both unavailable.
+
+- name: Create swap backing file
+  become: yes
+  command: dd if=/dev/zero of=/root/swapfile bs=1M count={{ swap_required }}
+  args:
+    creates: /root/swapfile
+
+- name: Ensure swapfile perms
+  become: yes
+  file:
+    path: /root/swapfile
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Make swapfile
+  become: yes
+  command: mkswap /root/swapfile
+
+- name: Write swap to fstab
+  become: yes
+  ansible.posix.mount:
+    path: none
+    src: /root/swapfile
+    fstype: swap
+    opts: sw
+    passno: 0
+    dump: 0
+    state: present
+
+- name: Add all swap
+  become: yes
+  command: swapon -a
+
+- name: Debug the swap_required variable
+  debug:
+    var: swap_required
