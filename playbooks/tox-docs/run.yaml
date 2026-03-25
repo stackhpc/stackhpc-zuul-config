@@ -1,0 +1,7 @@
+- name: Build PDF Docs
+  hosts: all
+  roles:
+    - revoke-sudo
+    - tox
+    - role: build-pdf-docs
+      when: not tox_skip_pdf
