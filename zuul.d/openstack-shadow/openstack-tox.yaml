@@ -7,7 +7,7 @@
     description: |
       Base job to run tox jobs with OpenStack project specific updates.
 
-      Processing upper-constraints files from openstack/requirements.
+      Processing upper-constraints files from stackhpc/requirements.
     branches:
       regex: ^*/(victoria|wallaby|xena|yoga|zed|2023.1|2023.2|2024.1|2024.2)$
       negate: true
@@ -27,7 +27,7 @@
     description: |
       Base job to run tox jobs with OpenStack project specific updates.
 
-      Processing upper-constraints files from openstack/requirements.
+      Processing upper-constraints files from stackhpc/requirements.
     branches:
       - ^.*/2023.1
       - ^.*/2023.2
@@ -47,7 +47,7 @@
     description: |
       Base job (Focal) to run tox jobs with OpenStack project specific updates.
 
-      Processing upper-constraints files from openstack/requirements.
+      Processing upper-constraints files from stackhpc/requirements.
 
       This job runs on Focal from stable/victoria until stable/zed. This
       job is prepared to make sure all stable branches from stable/victoria until

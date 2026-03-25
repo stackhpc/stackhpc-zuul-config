@@ -11,7 +11,7 @@
       regex: ^.*/(victoria|wallaby|xena|yoga|zed|2023.1|2023.2|2024.1|2024.2)$
       negate: true
     required-projects:
-      - name: openstack/requirements
+      - name: stackhpc/requirements
     irrelevant-files: &common-irrelevant-files
       - ^.*\.rst$
       - ^api-ref/.*$
