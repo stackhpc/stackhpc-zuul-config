@@ -9,6 +9,8 @@ zuul_operator_cr: |
       count: 3
       sshkey:
         secretName: zuul-sshkey
+    merger:
+      count: 3
     scheduler:
       config:
         secretName: zuul-tenant-config
