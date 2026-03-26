@@ -10,7 +10,13 @@
       version 3.9.
 
       Uses tox with the ``py39`` environment.
-    irrelevant-files: *common-irrelevant-files
+    irrelevant-files: &common-irrelevant-files
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+      - ^deliverables/.*$
+      - ^\.pre-commit-config\.yaml$
     branches:
       regex: ^stable/(victoria|wallaby|xena|yoga|zed)$
       negate: true
