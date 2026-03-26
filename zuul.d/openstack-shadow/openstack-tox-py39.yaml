@@ -17,3 +17,30 @@
       tox_envlist: py39
       bindep_profile: test py39
       python_version: '3.9'
+
+- job:
+    name: openstack-tox-py39
+    parent: openstack-tox
+    nodeset: ubuntu-focal
+    timeout: 2400
+    description: |
+
+      Run unit tests for an OpenStack Python project under cPython
+      version 3.9.
+
+      Uses tox version <4 with the ``py39`` environment.
+    irrelevant-files: *common-irrelevant-files
+    branches:
+      - ^.*/victoria
+      - ^.*/wallaby
+      - ^.*/xena
+      - ^.*/yoga
+      - ^.*/zed
+    vars:
+      tox_envlist: py39
+      bindep_profile: test py39
+      python_version: '3.9'
+      # NOTE(gmann): This is stable branch (<=(stable|unmaintained)/zed) job and new
+      # tox 4 require some changes in tox.ini to be compatible with it. Let's
+      # pin tox <4 for stable branches testing (<=(stable|unmaintained)/zed).
+      ensure_tox_version: '<4'
