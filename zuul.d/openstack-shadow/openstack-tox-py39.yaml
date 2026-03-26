@@ -1,0 +1,19 @@
+- job:
+    name: openstack-tox-py39
+    parent: openstack-tox
+    nodeset: ubuntu-focal
+    timeout: 4800
+    description: |
+
+      Run unit tests for an OpenStack Python project under cPython
+      version 3.9.
+
+      Uses tox with the ``py39`` environment.
+    irrelevant-files: *common-irrelevant-files
+    branches:
+      regex: ^stable/(victoria|wallaby|xena|yoga|zed)$
+      negate: true
+    vars:
+      tox_envlist: py39
+      bindep_profile: test py39
+      python_version: '3.9'
