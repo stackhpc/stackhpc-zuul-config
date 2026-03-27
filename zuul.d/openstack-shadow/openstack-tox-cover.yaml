@@ -21,4 +21,4 @@
       - ^\.pre-commit-config\.yaml$
     vars:
       tox_constraints_file: '{{ ansible_user_dir }}/src/github.com/stackhpc/requirements/upper-constraints.txt'
-    timeout: 3000
+    timeout: 6000
