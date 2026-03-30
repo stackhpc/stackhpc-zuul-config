@@ -8,6 +8,7 @@
   package:
     name:
       - latexmk
+      - make
       - texlive-xetex
       - texlive-fonts-recommended
       # Required for tgtermes.sty style, this is a recommended package
