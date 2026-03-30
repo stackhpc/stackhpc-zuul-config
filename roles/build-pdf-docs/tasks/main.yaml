@@ -4,6 +4,12 @@
   register: pdfdocs_env
   ignore_errors: yes
 
+- name: Ensure make is installed
+  become: true
+  package:
+    name: make
+    state: present
+
 - name: Run tox with pdf build envlist
   include_role:
     name: tox
