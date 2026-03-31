@@ -114,9 +114,81 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+            - name: ubuntu-noble-arm64
+              console-log: True
+              cloud-image: ubuntu-noble-arm64
+              flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
             - name: rocky-9
               console-log: True
               cloud-image: rocky-9
+              flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+            - name: rocky-9-arm64
+              console-log: True
+              cloud-image: rocky-9-arm64
+              flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+            - name: rocky-10
+              console-log: True
+              cloud-image: rocky-10
+              flavor-name: general.v1.small
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+            - name: rocky-10-arm64
+              console-log: True
+              cloud-image: rocky-10-arm64
               flavor-name: general.v1.small
               key-name: zuul-ci
               userdata: |-
