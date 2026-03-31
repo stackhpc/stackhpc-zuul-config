@@ -67,3 +67,20 @@
       # job and new tox 4 require some changes in tox.ini to be compatible with it. Let's
       # pin tox <4 for stable branches testing (<=(stable|unmaintained)/zed).
       ensure_tox_version: '<4'
+
+- job:
+    name: openstack-tox-py312
+    parent: openstack-tox
+    nodeset: ubuntu-noble
+    timeout: 10800
+    description: |
+
+      Run unit tests for an OpenStack Python project under cPython
+      version 3.12.
+
+      Uses tox with the ``py312`` environment.
+    irrelevant-files: *common-irrelevant-files
+    vars:
+      tox_envlist: py312
+      bindep_profile: test py312
+      python_version: '3.12'
