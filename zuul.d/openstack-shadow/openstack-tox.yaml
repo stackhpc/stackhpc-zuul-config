@@ -115,7 +115,6 @@
       # pin tox <4 for stable branches testing (<=(stable|unmaintained)/zed).
       ensure_tox_version: '<4'
 
-
 - job:
     name: openstack-tox-py312
     parent: openstack-tox
