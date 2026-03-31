@@ -16,7 +16,7 @@ jobs:
       ANSIBLE_VAULT_PASSWORD_FILE: .vault.txt
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set Ansible Vault password file
       run: |
