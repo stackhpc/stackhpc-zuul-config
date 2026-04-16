@@ -208,7 +208,7 @@ zuul_operator_nodepool_yaml:
               boot-from-volume: true
               console-log: True
               cloud-image: ubuntu-noble-tenks
-              flavor-name: general.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
@@ -228,7 +228,7 @@ zuul_operator_nodepool_yaml:
               boot-from-volume: true
               console-log: True
               cloud-image: rocky-9-tenks
-              flavor-name: general.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
