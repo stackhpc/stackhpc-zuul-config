@@ -81,7 +81,7 @@ zuul_operator_nodepool_yaml:
             - name: ubuntu-jammy
               console-log: True
               cloud-image: ubuntu-jammy
-              flavor-name: c1.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
@@ -99,7 +99,7 @@ zuul_operator_nodepool_yaml:
             - name: ubuntu-noble
               console-log: True
               cloud-image: ubuntu-noble
-              flavor-name: c1.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
@@ -117,7 +117,7 @@ zuul_operator_nodepool_yaml:
             - name: ubuntu-noble-arm64
               console-log: True
               cloud-image: ubuntu-noble-arm64
-              flavor-name: c1.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
@@ -135,7 +135,7 @@ zuul_operator_nodepool_yaml:
             - name: rocky-9
               console-log: True
               cloud-image: rocky-9
-              flavor-name: c1.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
@@ -153,7 +153,7 @@ zuul_operator_nodepool_yaml:
             - name: rocky-9-arm64
               console-log: True
               cloud-image: rocky-9-arm64
-              flavor-name: c1.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
@@ -171,7 +171,7 @@ zuul_operator_nodepool_yaml:
             - name: rocky-10
               console-log: True
               cloud-image: rocky-10
-              flavor-name: c1.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
@@ -189,7 +189,7 @@ zuul_operator_nodepool_yaml:
             - name: rocky-10-arm64
               console-log: True
               cloud-image: rocky-10-arm64
-              flavor-name: c1.v1.medium
+              flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
                 #cloud-config
