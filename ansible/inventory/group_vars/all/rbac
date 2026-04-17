@@ -120,6 +120,9 @@ zuul_operator_rbac: |
   - kind: ServiceAccount
     name: zuul-operator
     namespace: zuul
+  - kind: ServiceAccount
+    name: default
+    namespace: zuul
   roleRef:
     kind: ClusterRole
     name: cluster-admin #zuul-operator
