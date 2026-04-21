@@ -86,7 +86,7 @@
         # will have a "re-run" button which emits this event.
         - event: check_run
           action: rerequested
-          check: .*/check:.*
+          check: .*/check-review:.*
     start:
       github:
         check: 'in_progress'
