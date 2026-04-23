@@ -24,15 +24,18 @@ zuul_operator_tenant_config:
         github:
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
-            - stackhpc/requirements: &requirements_downstream_branches
+            - stackhpc/manila:
+                include-branches:
+                  - stackhpc/2025.1
+            - stackhpc/neutron:
+                include-branches:
+                  - stackhpc/2025.1
+            - stackhpc/requirements:
                 include-branches:
                   - stackhpc/2025.1
             - stackhpc/stackhpc-kayobe-config:
-                include-branches: &skc_downstream_branches
-                  - stackhpc/2025.1
-                  - stackhpc/2024.1
-            - stackhpc/neutron: &neutron_downstream_branches
                 include-branches:
+                  - stackhpc/2024.1
                   - stackhpc/2025.1
         github-git:
           untrusted-projects:
