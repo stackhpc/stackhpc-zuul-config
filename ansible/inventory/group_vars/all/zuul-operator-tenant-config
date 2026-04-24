@@ -167,6 +167,7 @@ zuul_operator_tenant_config:
                 - openstack/magnum
                 - openstack/magnum-ui
                 - openstack/manila
+                - openstack/manila-tempest-plugin
                 - openstack/manila-ui
                 - openstack/masakari
                 - openstack/masakari-monitors
