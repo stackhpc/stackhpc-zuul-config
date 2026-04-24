@@ -93,6 +93,8 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 - openstack/neutron-tempest-plugin:
                     include-branches: *upstream_branches
+                - openstack/nova:
+                    include-branches: *upstream_branches
                 - openstack/openstack-zuul-jobs:
                     shadow:
                       - stackhpc-zuul-config
@@ -192,7 +194,6 @@ zuul_operator_tenant_config:
                 - openstack/neutron-fwaas
                 - openstack/neutron-lib
                 - openstack/neutron-vpnaas
-                - openstack/nova
                 - openstack/octavia
                 - openstack/octavia-lib
                 - openstack/os-apply-config
