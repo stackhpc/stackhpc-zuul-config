@@ -38,4 +38,4 @@ zuul_operator_cr: |
     externalConfig:
       openstack:
         secretName: zuul-clouds-yaml
-    zuulImageVersion: "14.0.0"
+    zuulImageVersion: "14.2.0"
