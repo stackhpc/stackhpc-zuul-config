@@ -66,6 +66,8 @@ zuul_operator_tenant_config:
               projects:
                 - opendev/grafyaml
                 - openstack/project-config
+                - openstack/barbican-tempest-plugin:
+                    include-branches: *upstream_branches
                 - openstack/devstack
                 - openstack/grenade
                 - openstack/horizon:
@@ -109,6 +111,7 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 # only master branch
                 - x/devstack-plugin-tobiko
+                - x/devstack-plugin-glusterfs
             - include: []
               projects:
                 - airship/airshipctl
