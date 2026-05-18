@@ -68,13 +68,14 @@ zuul_operator_tenant_config:
                 - opendev/grafyaml
                 - openstack/project-config
                 - openstack/barbican-tempest-plugin:
-                    include-branches: *upstream_branches
-                - openstack/devstack
-                - openstack/grenade
-                - openstack/horizon:
                     include-branches: &upstream_branches
                       - master
                       - stable/2025.1
+                      - stable/2026.1
+                - openstack/devstack
+                - openstack/grenade
+                - openstack/horizon:
+                    include-branches: *upstream_branches
                 - openstack/ironic:
                     include-branches: *upstream_branches
                 - openstack/ironic-inspector:
