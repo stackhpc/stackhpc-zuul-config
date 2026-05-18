@@ -73,7 +73,8 @@ zuul_operator_tenant_config:
                       - master
                       - stable/2025.1
                       - stable/2026.1
-                - openstack/castellan: *upstream_branches
+                - openstack/castellan:
+                    include-branches: *upstream_branches
                 - openstack/devstack
                 - openstack/grenade
                 - openstack/horizon:
