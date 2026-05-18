@@ -6,6 +6,7 @@ zuul_operator_nodepool_yaml:
     - name: rocky-9-tenks
     - name: rocky-10
     - name: rocky-10-arm64
+    - name: rocky-10-tenks
     - name: ubuntu-focal
     - name: ubuntu-jammy
     - name: ubuntu-noble
@@ -36,6 +37,9 @@ zuul_operator_nodepool_yaml:
           username: "zuul"
         - name: rocky-10-arm64
           image-name: "Rocky10-arm64"
+          username: "zuul"
+        - name: rocky-10-tenks
+          image-name: "Rocky10"
           username: "zuul"
         - name: ubuntu-focal
           image-name: "Ubuntu-20.04"
@@ -228,6 +232,26 @@ zuul_operator_nodepool_yaml:
               boot-from-volume: true
               console-log: True
               cloud-image: rocky-9-tenks
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: rocky-10-tenks
+              boot-from-volume: true
+              console-log: True
+              cloud-image: rocky-10-tenks
               flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
