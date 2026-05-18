@@ -1,3 +1,7 @@
+- name: Debug work root
+  debug:
+    msg: "work_root: {{ zuul.executor.work_root }}"
+
 - name: Checkout stackhpc branch for downstream forks
   vars:
     stackhpc_forked_projects:
