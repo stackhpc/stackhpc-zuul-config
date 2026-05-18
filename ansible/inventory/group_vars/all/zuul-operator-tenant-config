@@ -30,6 +30,7 @@ zuul_operator_tenant_config:
             - stackhpc/neutron:
                 include-branches:
                   - stackhpc/2025.1
+                  - stackhpc/2026.1
             - stackhpc/requirements:
                 include-branches:
                   - stackhpc/2025.1
