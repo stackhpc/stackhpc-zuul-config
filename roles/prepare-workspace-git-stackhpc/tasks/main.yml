@@ -3,10 +3,11 @@
     stackhpc_forked_projects:
       - openstack/requirements
   shell: |
-        cd {{ zuul.executor.work_root }}/{{ item.value.src_dir }}
+        cd {{ zuul.executor.work_root }}/{{ item.src_dir }}
         echo "Current branch: $(git branch --show-current), commit: $(git rev-parse --short HEAD)"
         git checkout {{ zuul.branch }} \
           || git checkout {{ zuul.branch | regex_replace('^stackhpc/(.+)$', 'stable/\1') }} \
           || true
+        echo "Final: $(git log --oneline -1)"
   loop: "{{ zuul.projects.values() | list }}"
   when: item.name in stackhpc_forked_projects
