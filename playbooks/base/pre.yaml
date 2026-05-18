@@ -23,14 +23,4 @@
   roles:
     - validate-host
     - prepare-workspace-git
-
-- name: Checkout stackhpc branch for downstream forks
-  vars:
-    stackhpc_forked_projects:
-      - openstack/requirements
-  shell: |
-    cd {{ item.src_dir }}
-    git checkout {{ zuul.branch | regex_replace('^stable/(.+)$', 'stackhpc/\1') }} \
-      || true
-  loop: "{{ zuul.projects.values() | list }}"
-  when: item.name in stackhpc_forked_projects
+    - prepare-workspace-git-stackhpc
