@@ -1,13 +1,9 @@
-- name: Debug work root
-  debug:
-    msg: "work_root: {{ zuul.executor.work_root }}"
-
 - name: Checkout stackhpc branch for downstream forks
   vars:
     stackhpc_forked_projects:
       - openstack/requirements
   shell: |
-        cd {{ zuul.executor.work_root }}/{{ item.src_dir }}
+        cd {{ zuul_workspace_root }}/{{ item.src_dir }}
         echo "Current branch: $(git branch --show-current), commit: $(git rev-parse --short HEAD)"
         git checkout {{ zuul.branch }} \
           || git checkout {{ zuul.branch | regex_replace('^stackhpc/(.+)$', 'stable/\1') }} \
