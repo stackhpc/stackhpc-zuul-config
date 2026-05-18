@@ -1,13 +1,10 @@
-- name: Checkout stackhpc branch for downstream forks
-  vars:
-    stackhpc_forked_projects:
-      - openstack/requirements
+- name: Checkout correct branch for all projects
   shell: |
-        cd {{ zuul_workspace_root }}/{{ item.src_dir }}
-        echo "Current branch: $(git branch --show-current), commit: $(git rev-parse --short HEAD)"
-        git checkout {{ zuul.branch }} \
-          || git checkout {{ zuul.branch | regex_replace('^stackhpc/(.+)$', 'stable/\1') }} \
-          || true
-        echo "Final: $(git log --oneline -1)"
+    cd ./{{ item.src_dir }}
+    echo "Current: $(git log --oneline -1)"
+    git checkout {{ zuul.branch }} \
+      || git checkout {{ zuul.branch | regex_replace('^stackhpc/(.+)$', 'stable/\1') }} \
+      || true
+    echo "Final: $(git log --oneline -1)"
   loop: "{{ zuul.projects.values() | list }}"
-  when: item.name in stackhpc_forked_projects
+  when: item.checkout_description == 'project default branch'
