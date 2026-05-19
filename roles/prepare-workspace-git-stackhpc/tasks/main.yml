@@ -9,3 +9,11 @@
     echo "Final: $(git log --oneline -1)"
   loop: "{{ zuul.projects.values() | list }}"
   when: item.checkout_description == 'project default branch'
+
+- name: Install doc jobs reqs
+  become: true
+  package:
+    name:
+      - glibc-devel
+      - gcc
+      - make
