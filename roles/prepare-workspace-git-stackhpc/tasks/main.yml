@@ -14,6 +14,5 @@
   become: true
   package:
     name:
-      - glibc-devel
-      - gcc
-      - make
+      - build-essential
+  when: ansible_facts.os_family == 'Debian'
