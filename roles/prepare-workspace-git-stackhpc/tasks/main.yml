@@ -12,7 +12,9 @@
 
 - name: Install doc jobs reqs
   become: true
-  package:
+  ansible.builtin.apt:
     name:
       - build-essential
+    state: present
+    update_cache: yes
   when: ansible_facts.os_family == 'Debian'
