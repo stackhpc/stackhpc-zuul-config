@@ -1,4 +1,7 @@
 ---
 - job:
     name: build-openstack-releasenotes
+    nodeset:
+      nodes: []
     run: playbooks/noop/run.yaml
+
