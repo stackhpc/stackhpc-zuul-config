@@ -1,5 +1,6 @@
 - name: Checkout correct branch for all projects
   shell: |
+    echo "Processing project: {{ item.name }}"
     cd ./{{ item.src_dir }}
     echo "Current: $(git log --oneline -1)"
     git checkout {{ zuul.branch }} \
