@@ -1,4 +1,4 @@
 ---
 - job:
     name: build-openstack-releasenotes
-    parent: noop
+    run: playbooks/noop/run.yaml
