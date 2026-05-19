@@ -39,6 +39,9 @@ zuul_operator_tenant_config:
                 include-branches:
                   - stackhpc/2024.1
                   - stackhpc/2025.1
+            - stackhpc/zuul-operator:
+                include-branches:
+                  - stackhpc
         github-git:
           untrusted-projects:
             # Additional project deps from github.com
