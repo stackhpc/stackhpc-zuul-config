@@ -1,6 +1,6 @@
 ---
 zuul_operator_tenant_config:
-# Authorization rules for administrators
+  # Authorization rules for administrators
   - authorization-rule:
       name: stackhpc_admin
       conditions:
@@ -11,7 +11,7 @@ zuul_operator_tenant_config:
         - zuul_uid: "109068399179727592063"
         - zuul_uid: "piotr@stackhpc.com"
 
-# Tenant config
+  # Tenant config
   - tenant:
       name: stackhpc
       admin-rules:
@@ -26,11 +26,11 @@ zuul_operator_tenant_config:
             # Additional project deps from github.com
             - include: []
               projects:
-              - ansible/ansible
-              - novnc/novnc
-              - sqlalchemy/alembic
-              - sqlalchemy/sqlalchemy
-              - svinota/pyroute2
+                - ansible/ansible
+                - novnc/novnc
+                - sqlalchemy/alembic
+                - sqlalchemy/sqlalchemy
+                - svinota/pyroute2
         opendev:
           untrusted-projects:
             - opendev/base-jobs:
@@ -283,7 +283,7 @@ zuul_operator_tenant_config:
                 - x/group-based-policy-ui
                 - x/python-group-based-policy-client
                 - x/tobiko
-       github:
+        github:
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
             - stackhpc/manila:

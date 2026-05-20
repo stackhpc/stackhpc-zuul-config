@@ -6,11 +6,13 @@ zuul_operator_cr: |
     name: stackhpc-zuul
   spec:
     executor:
-      count: 3
+      count: 6
       sshkey:
         secretName: zuul-sshkey
+    fingergw:
+      count: 2
     merger:
-      count: 3
+      count: 6
     scheduler:
       count: 2
       config:
