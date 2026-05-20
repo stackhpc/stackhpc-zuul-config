@@ -118,6 +118,10 @@ zuul_operator_crd: |
                         type: string
                       git_user_name:
                         type: string
+                      git_http_low_speed_time:
+                        type: integer
+                      git_timeout:
+                        type: integer
                   web:
                     type: object
                     properties:
