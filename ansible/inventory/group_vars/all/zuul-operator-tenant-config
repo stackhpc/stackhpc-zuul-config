@@ -21,29 +21,6 @@ zuul_operator_tenant_config:
         stackhpc:
           config-projects:
             - stackhpc-zuul-config
-        github:
-          untrusted-projects:
-            - stackhpc/ansible-collection-cephadm
-            - stackhpc/manila:
-                include-branches:
-                  - stackhpc/2025.1
-            - stackhpc/neutron:
-                include-branches:
-                  - stackhpc/2025.1
-                  - stackhpc/2026.1
-            - stackhpc/requirements:
-                include-branches:
-                  - stackhpc/2025.1
-                  - stackhpc/2026.1
-                include:
-                  - job
-            - stackhpc/stackhpc-kayobe-config:
-                include-branches:
-                  - stackhpc/2024.1
-                  - stackhpc/2025.1
-            - stackhpc/zuul-operator:
-                include-branches:
-                  - stackhpc
         github-git:
           untrusted-projects:
             # Additional project deps from github.com
@@ -306,3 +283,26 @@ zuul_operator_tenant_config:
                 - x/group-based-policy-ui
                 - x/python-group-based-policy-client
                 - x/tobiko
+       github:
+          untrusted-projects:
+            - stackhpc/ansible-collection-cephadm
+            - stackhpc/manila:
+                include-branches:
+                  - stackhpc/2025.1
+            - stackhpc/neutron:
+                include-branches:
+                  - stackhpc/2025.1
+                  - stackhpc/2026.1
+            - stackhpc/requirements:
+                include-branches:
+                  - stackhpc/2025.1
+                  - stackhpc/2026.1
+                include:
+                  - job
+            - stackhpc/stackhpc-kayobe-config:
+                include-branches:
+                  - stackhpc/2024.1
+                  - stackhpc/2025.1
+            - stackhpc/zuul-operator:
+                include-branches:
+                  - stackhpc
