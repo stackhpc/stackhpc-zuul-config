@@ -13,6 +13,8 @@ zuul_operator_cr: |
       count: 2
     merger:
       count: 6
+      git_http_low_speed_time: 360
+      git_timeout: 600
     scheduler:
       count: 2
       config:
