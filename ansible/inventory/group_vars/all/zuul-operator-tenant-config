@@ -59,7 +59,9 @@ zuul_operator_tenant_config:
                 - openstack/horizon:
                     include-branches: *upstream_branches
                 - openstack/ironic:
-                    include-branches: *upstream_branches
+                    include-branches:
+                      - *upstream_branches
+                      - stable/2025.2
                 - openstack/ironic-inspector:
                     include-branches:
                       - stable/2025.1
