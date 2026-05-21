@@ -1,0 +1,466 @@
+- job:
+    name: opendev-buildset-registry
+    description: |
+      Starts a buildset registry which interacts with the intermediate
+      CI registry to share speculative container images between
+      projects.
+
+      Configure any jobs which require the use of a buildset registry
+      to depend on this job using the "dependencies" job attribute.
+
+      This job will pause after starting the registry so that it is
+      available to any jobs which depend on it.  Once all such jobs
+      are complete, this job will finish.
+    pre-run: playbooks/buildset-registry/pre.yaml
+    run: playbooks/buildset-registry/run.yaml
+    post-run: playbooks/buildset-registry/post.yaml
+    secrets:
+      - secret: opendev-intermediate-registry
+        name: intermediate_registry
+    vars:
+      docker_mirror_base_url: "http://{{ zuul_site_mirror_fqdn }}/deb-docker/{{ ansible_distribution_release }}"
+
+- job:
+    name: opendev-build-docker-image-base
+    parent: opendev-buildset-registry
+    description: |
+      This is a parent for an image build job which expects a
+      buildset registry to be running and pulls images from the
+      intermediate registry into it.  It mostly exists so that
+      the intermediate registry secret need not be supplied to the
+      image build playbook.
+    pre-run: playbooks/docker-image/pre.yaml
+    secrets:
+      - secret: opendev-intermediate-registry
+        name: intermediate_registry
+
+- job:
+    name: opendev-build-docker-image
+    parent: opendev-build-docker-image-base
+    description: |
+      Starts a buildset registry (if one has not already been started,
+      e.g., by invoking :zuul:job:`opendev-buildset-registry` and
+      specifying it as a dependency) and builds one or more docker
+      images.
+
+      Analog of build-docker-image job, but with a buildset registry.
+
+      This job will pause after starting the registry so that it is
+      available to any jobs which depend on it.  Once all such jobs
+      are complete, this job will finish.
+
+      .. include:: ../../playbooks/docker-image/README.rst
+    run: playbooks/docker-image/run.yaml
+
+- job:
+    name: opendev-upload-docker-image
+    parent: opendev-build-docker-image
+    description: |
+      Starts a buildset registry and builds and uploads one or more
+      docker images to docker.io.
+
+      Analog of upload-docker-image job, but with a buildset registry.
+
+      .. include:: ../../playbooks/docker-image/README.rst
+      .. include:: ../../playbooks/docker-image/credentials.rst
+    post-run: playbooks/docker-image/upload.yaml
+
+- job:
+    name: opendev-promote-docker-image
+    parent: promote-docker-image
+    description: |
+      Retag a previously-uploaded docker image.
+
+      Analog of promote-docker-image job.
+
+      .. include:: ../../playbooks/docker-image/README.rst
+      .. include:: ../../playbooks/docker-image/credentials.rst
+
+- job:
+    name: opendev-build-container-image-base
+    parent: opendev-buildset-registry
+    description: |
+      This is a parent for an image build job which expects a
+      buildset registry to be running and pulls images from the
+      intermediate registry into it.  It mostly exists so that
+      the intermediate registry secret need not be supplied to the
+      image build playbook.
+    pre-run: playbooks/container-image/pre.yaml
+    secrets:
+      - secret: opendev-intermediate-registry
+        name: intermediate_registry
+
+- job:
+    name: opendev-build-container-image
+    parent: opendev-build-container-image-base
+    description: |
+      Starts a buildset registry (if one has not already been started,
+      e.g., by invoking :zuul:job:`opendev-buildset-registry` and
+      specifying it as a dependency) and builds one or more docker
+      images.
+
+      Analog of build-docker-image job, but with a buildset registry.
+
+      This job will pause after starting the registry so that it is
+      available to any jobs which depend on it.  Once all such jobs
+      are complete, this job will finish.
+
+      .. include:: ../../playbooks/container-image/README.rst
+    run: playbooks/container-image/run.yaml
+    vars: &container_vars
+      # Set some default variables appropriate for this installation
+      promote_container_image_api: "https://zuul.opendev.org/api/tenant/{{ zuul.tenant }}"
+      promote_container_image_pipeline: gate
+      promote_container_image_job: opendev-upload-container-image
+
+- job:
+    name: opendev-upload-container-image
+    parent: opendev-build-container-image
+    description: |
+      Starts a buildset registry and builds and uploads one or more
+      container images to a registry.
+
+      Analog of upload-container-image job, but with a buildset registry.
+
+      .. include:: ../../playbooks/container-image/README.rst
+      .. include:: ../../playbooks/container-image/credentials.rst
+    pre-run: playbooks/container-image/pre-quay.yaml
+    post-run: playbooks/container-image/upload.yaml
+
+- job:
+    name: opendev-promote-container-image
+    parent: promote-container-image
+    description: |
+      Retag a previously-uploaded container image.
+
+      Analog of promote-container-image job.
+
+      .. include:: ../../playbooks/container-image/README.rst
+      .. include:: ../../playbooks/container-image/credentials.rst
+    pre-run: playbooks/container-image/pre-quay.yaml
+    vars: *container_vars
+
+- job:
+    name: opendev-mirror-container-images
+    parent: mirror-container-images
+    description: |
+      Mirror container images to quay.io
+    pre-run: playbooks/container-image/pre-quay.yaml
+    vars:
+      docker_mirror_base_url: "https://{{ zuul_site_mirror_fqdn }}/deb-docker/{{ ansible_distribution_release }}"
+
+- job:
+    name: opendev-buildset-registry-consumer
+    description: |
+      Pull from the intermediate registry
+
+      This is a parent for jobs which use container images and expect
+      a buildset registry to be running.  It pulls images from the
+      intermediate registry into it.
+    pre-run: playbooks/docker-image/pre.yaml
+    secrets:
+      - secret: opendev-intermediate-registry
+        name: intermediate_registry
+
+- job:
+    name: opendev-promote-docs-base
+    description: |
+      Publish a previously built branch-tip documentation tarball.
+
+      Use this in the promote pipeline to publish a branch tip tarball
+      built in the gate pipeline.
+
+      This is an abstract job intended to be inherited from in an
+      OpenDev tenant and an appropriate secret added.
+
+      .. zuul:jobvar:: afs
+         :type: dict
+
+         This is expected to be a Zuul Secret with these keys:
+
+        .. zuul:jobvar:: keytab
+
+           The AFS keytab for the service principal.
+
+        .. zuul:jobvar:: service_name
+
+           The name of the service princpal.
+
+        .. zuul:jobvar:: targets
+
+           This is a dict containing information about where docs should be
+           published.
+
+          .. zuul:jobvar:: master
+
+             This is expected to be a dict with a single key value pair:
+             `path: the full docs publication path to use if the job is
+             run on the master branch.`
+
+          .. zuul:jobvar:: branch
+
+             This is expected to be a dict with a key value pair:
+             `path: the full docs publication path to use if the job is run on
+             any other branch.`
+
+          .. zuul:jobvar:: tag
+
+             This is expected to be a dict with a key value pair:
+             `path: the full docs publication path to use if the job is run on
+             a tag.`
+
+        .. zuul:jobvar:: docs_redirect_path
+
+           If this variable is present, a .htaccess redirect will be
+           created at this path when the job is run on the master
+           branch.  For example, it can be used to redirect "project/"
+           to "project/latest".
+
+        .. zuul:jobvar:: docs_redirect_content
+
+           The contents of the .htaccess file in docs_redirect_path.
+
+      .. zuul:jobvar:: download_artifact_job
+
+         The name of the job which built the docs artifact which this
+         job should download and promote.
+
+       .. zuul:jobvar:: write_root_marker
+
+          If this is set to false, then the root marker file is not
+          written.
+
+          Warning: setting this parameter incorrectly can result in loss of published data.
+
+    abstract: True
+    run: playbooks/docs/promote.yaml
+    vars:
+      write_root_marker: true
+    nodeset:
+      nodes: []
+
+- job:
+    name: opendev-promote-docs
+    parent: opendev-promote-docs-base
+    description: |
+      Publish a previously built branch-tip documentation tarball.
+
+      Use this in the promote pipeline to publish a branch tip tarball
+      built in the gate pipeline.
+
+      The documentation tarball is published to
+      https://docs.opendev.org/{{ zuul.project.name }}.
+
+      Publishes depending on branch to latest/ (for master), or the
+      basename of the branch like train (for stable/train).
+    vars:
+      download_artifact_job: opendev-tox-docs
+    secrets:
+      - secret: opendev-zuul-docs
+        name: afs
+        pass-to-parent: true
+
+- job:
+    name: opendev-promote-artifact-base
+    description: |
+      Publish a previously built branch-tip artifact.
+
+      Use this in the promote pipeline to publish a branch tip artifact
+      built in the gate pipeline.
+
+      This is an abstract job intended to be inherited from in an
+      OpenDev tenant and an appropriate secret added.
+
+      .. zuul:jobvar:: afs
+         :type: dict
+
+         This is expected to be a Zuul Secret with these keys:
+
+        .. zuul:jobvar:: keytab
+
+           The AFS keytab for the service principal.
+
+        .. zuul:jobvar:: service_name
+
+           The name of the service princpal.
+
+        .. zuul:jobvar:: artifacts_path
+
+           The full publication path to use.
+
+      .. zuul:jobvar:: download_artifact_job
+
+         The name of the job which built the artifacts which this
+         job should download and promote.
+
+      .. zuul:jobvar:: download_artifact_type
+
+         The type of the artifact to download (as specified in the
+         ``type`` attribute of the artifact metadata).
+
+      .. zuul:jobvar:: artifact_extra_name
+
+         The artifact will be renamed to PROJECT-BRANCH.ext; if this
+         argument is present, it will be PROJECT-EXTRA-BRANCH.ext.
+    abstract: True
+    run: playbooks/artifacts/promote.yaml
+    nodeset:
+      nodes: []
+
+- job:
+    name: opendev-promote-python
+    parent: opendev-promote-artifact-base
+    description: |
+      Publish a previously built branch-tip sdist/wheels.
+
+      Use this in the promote pipeline to publish a branch tip
+      sdist and wheel(s) built in the gate pipeline.
+    vars:
+      download_artifact_job: build-python-release
+      download_artifact_type:
+        - python_sdist
+        - python_wheel
+    secrets:
+      - secret: opendev-zuul-tarballs
+        name: afs
+        pass-to-parent: true
+
+- job:
+    name: opendev-promote-javascript-content
+    parent: opendev-promote-artifact-base
+    description: |
+      Publish a previously built branch-tip javascript content archive.
+
+      Use this in the promote pipeline to publish a branch tip
+      javascript content archive built in the gate pipeline.
+    vars:
+      download_artifact_job: build-javascript-content-tarball
+      download_artifact_type: javascript_content
+      artifact_extra_name: js-content
+    secrets:
+      - secret: opendev-zuul-tarballs
+        name: afs
+        pass-to-parent: true
+
+- job:
+    name: opendev-promote-javascript-deployment-tarball
+    parent: opendev-promote-artifact-base
+    description: |
+      Publish a previously built branch-tip javascript content archive.
+
+      Use this in the promote pipeline to publish a branch tip
+      javascript content archive built in the gate pipeline.
+    vars:
+      download_artifact_job: build-javascript-deployment
+      download_artifact_type: javascript_content
+      artifact_extra_name: js-content
+    secrets:
+      - secret: opendev-zuul-tarballs
+        name: afs
+        pass-to-parent: true
+
+- job:
+    name: opendev-promote-javascript-deployment
+    parent: opendev-promote-artifact-base
+    description: |
+      Publish previously built branch-tip javascript content
+
+      Use this in the promote pipeline to publish branch tip
+      javascript content built in the gate pipeline. Expects
+      a tarball to have been published which will be extracted
+      into the target location.
+
+      .. zuul:jobvar:: download_artifact_job
+
+         The name of the job which built the artifacts which this
+         job should download and promote.
+
+      .. zuul:jobvar:: download_artifact_type
+
+         The type of the artifact to download (as specified in the
+         ``type`` attribute of the artifact metadata).
+    run: playbooks/artifacts/promote-deployment.yaml
+    vars:
+      download_artifact_job: build-javascript-deployment
+      download_artifact_type: javascript_content
+    secrets:
+      - secret: opendev-zuul-tarballs
+        name: afs
+
+- job:
+    name: opendev-release-python
+    description: Release python tarballs / wheels to pypi.
+    pre-run: playbooks/release-python/pre.yaml
+    run: playbooks/release-python/run.yaml
+    post-run: playbooks/release-python/post.yaml
+    secrets:
+      - secret: opendev-pypi
+        name: pypi_info
+
+- job:
+    name: opendev-upload-git-mirror
+    description: |
+      Mirrors a tested project repository to a remote git server.  This is a
+      nodeless version of the job in zuul-jobs, defined here since this job's
+      playbook must be in a trusted repo.
+
+      .. zuul:jobvar:: git_mirror_credentials
+        :type: dict
+
+        This is expected to be a Zuul secret with these keys:
+
+        .. zuul:jobvar:: user
+
+          SSH user for the remote git repository
+
+        .. zuul:jobvar:: host
+
+          SSH host for the remote git repository
+
+        .. zuul:jobvar:: ssh_key
+
+          Literal private key contents.
+          Should start with something like ``-----BEGIN RSA PRIVATE KEY-----``.
+
+        .. zuul:jobvar:: host_key
+
+          SSH host key of the remote git server.
+          Can be obtained with ``ssh-keyscan -H <host>``.
+
+        .. zuul:jobvar:: target_repository
+
+          Path of the remote git repository
+    run: playbooks/upload-git-mirror/run.yaml
+    nodeset:
+      nodes: []
+
+# TODO(clean this base job up once we're using -src and -keys and running
+# infra-prod jobs in parallel.
+- job:
+    name: opendev-infra-prod-base
+    description: |
+      A base job for running production playbooks on OpenDev's bridge.
+
+      This is not for general use.
+    abstract: true
+    pre-run: playbooks/infra-prod/pre.yaml
+
+- job:
+    name: opendev-infra-prod-setup-src
+    description: |
+      A base job for replicating source to OpenDev's bridge.
+
+      This is not for general use.
+    abstract: true
+    # pre.yaml includes setup keys which also dynamically adds the server
+    # to our inventory. Then runs source setup.
+    pre-run: playbooks/infra-prod/pre.yaml
+
+- job:
+    name: opendev-infra-prod-setup-keys
+    description: |
+      A base job for allowing executors to log into OpenDev's bridge.
+
+      This is not for general use.
+    abstract: true
+    pre-run: playbooks/infra-prod/setup-keys.yaml
