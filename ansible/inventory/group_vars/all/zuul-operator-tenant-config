@@ -33,11 +33,6 @@ zuul_operator_tenant_config:
                 - svinota/pyroute2
         opendev:
           untrusted-projects:
-            - opendev/base-jobs:
-                shadow:
-                  - stackhpc-zuul-config
-                include:
-                  - job
             - zuul/zuul-jobs:
                 shadow:
                   - stackhpc-zuul-config
