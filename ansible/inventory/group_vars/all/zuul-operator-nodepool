@@ -25,6 +25,12 @@ zuul_operator_nodepool_yaml:
       launch-timeout: 300
       launch-retries: 3
       cloud-images:
+        - name: centos-9-stream
+          image-name: CentOS-Stream9 
+          username: "zuul"
+        - name: centos-9-stream-arm64
+          image-name: CentOS-Stream9-arm64
+          username: "zuul"
         - name: rocky-9
           image-name: "Rocky9"
           username: "zuul"
@@ -68,7 +74,7 @@ zuul_operator_nodepool_yaml:
           labels:
             - name: centos-9-stream
               console-log: True
-              cloud-image: CentOS-Stream9
+              cloud-image: centos-9-stream
               flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
@@ -86,7 +92,7 @@ zuul_operator_nodepool_yaml:
                     sudo: ALL=(ALL) NOPASSWD:ALL
             - name: centos-9-stream-arm64
               console-log: True
-              cloud-image: CentOS-Stream9-arm64
+              cloud-image: centos-9-stream-arm64
               flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
