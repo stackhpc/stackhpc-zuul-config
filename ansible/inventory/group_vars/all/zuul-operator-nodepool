@@ -77,6 +77,7 @@ zuul_operator_nodepool_yaml:
             - "nodepool"
           labels:
             - name: centos-9-stream
+              boot-from-volume: true
               console-log: True
               cloud-image: centos-9-stream
               flavor-name: ci.v1.medium
@@ -94,7 +95,9 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: centos-9-stream-arm64
+              boot-from-volume: true
               console-log: True
               cloud-image: centos-9-stream-arm64
               flavor-name: ci.v1.medium
@@ -112,25 +115,9 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
-            - name: centos-9-stream-arm64
-              console-log: True
-              cloud-image: centos-9-stream-arm64
-              flavor-name: ci.v1.medium
-              key-name: zuul-ci
-              userdata: |-
-                #cloud-config
-                bootcmd:
-                  - rm -f /run/nologin
-                  - rm -f /etc/nologin
-                users:
-                  - default
-                  - name: zuul
-                    groups: users,adm,sudo
-                    shell: /bin/bash
-                    lock_passwd: true
-                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
-                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: debian-trixie
+              boot-from-volume: true
               console-log: True
               cloud-image: debian-trixie
               flavor-name: ci.v1.medium
@@ -148,6 +135,7 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: rocky-9
               console-log: True
               cloud-image: rocky-9
@@ -166,7 +154,9 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: nested-virt-ubuntu-noble
+              boot-from-volume: true
               console-log: True
               cloud-image: ubuntu-noble
               flavor-name: ci.v1.medium
@@ -184,7 +174,9 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: rocky-9-arm64
+              boot-from-volume: true
               console-log: True
               cloud-image: rocky-9-arm64
               flavor-name: ci.v1.medium
@@ -202,6 +194,7 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: rocky-9-tenks
               boot-from-volume: true
               console-log: True
@@ -223,6 +216,7 @@ zuul_operator_nodepool_yaml:
                     sudo: ALL=(ALL) NOPASSWD:ALL
               volume-size: 100
             - name: rocky-10
+              boot-from-volume: true
               console-log: True
               cloud-image: rocky-10
               flavor-name: ci.v1.medium
@@ -240,7 +234,9 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: rocky-10-arm64
+              boot-from-volume: true
               console-log: True
               cloud-image: rocky-10-arm64
               flavor-name: ci.v1.medium
@@ -258,6 +254,7 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: rocky-10-tenks
               boot-from-volume: true
               console-log: True
@@ -279,6 +276,7 @@ zuul_operator_nodepool_yaml:
                     sudo: ALL=(ALL) NOPASSWD:ALL
               volume-size: 100
             - name: ubuntu-focal
+              boot-from-volume: true
               console-log: True
               cloud-image: ubuntu-focal
               flavor-name: ci.v1.medium
@@ -296,7 +294,9 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: ubuntu-jammy
+              boot-from-volume: true
               console-log: True
               cloud-image: ubuntu-jammy
               flavor-name: ci.v1.medium
@@ -314,7 +314,9 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: ubuntu-noble
+              boot-from-volume: true
               console-log: True
               cloud-image: ubuntu-noble
               flavor-name: ci.v1.medium
@@ -332,7 +334,9 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: ubuntu-noble-arm64
+              boot-from-volume: true
               console-log: True
               cloud-image: ubuntu-noble-arm64
               flavor-name: ci.v1.medium
@@ -350,6 +354,7 @@ zuul_operator_nodepool_yaml:
                     lock_passwd: true
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
             - name: ubuntu-noble-tenks
               boot-from-volume: true
               console-log: True
