@@ -1,0 +1,4 @@
+- name: Raise an error if CPU count is too low
+  when: ansible_processor_count < minimum_cpu_count
+  fail:
+    msg: "CPU count {{ cpu_count.stdout }} is less than minimum value {{ minimum_cpu_count }}"

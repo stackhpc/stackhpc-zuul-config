@@ -1,0 +1,59 @@
+- hosts: localhost
+  vars:
+    src_dir: "{{ zuul.executor.work_root }}/publish"
+  tasks:
+    - name: Check execution context
+      when: "zuul.branch is not defined"
+      fail:
+        msg: "This playbook must be run in a branch-based pipeline (e.g., 'promote')."
+    - name: Create artifact staging directory
+      file:
+        state: directory
+        mode: "0755"
+        path: "{{ zuul.executor.work_root }}/artifacts"
+    - name: Download artifacts
+      include_role:
+        name: download-artifact
+      vars:
+        # download_artifact_job: provided by zuul job
+        download_artifact_api: "https://zuul.opendev.org/api/tenant/{{ zuul.tenant }}"
+        # download_artifact_name: provided by zuul job
+        download_artifact_pipeline: gate
+        download_artifact_directory: "{{ zuul.executor.work_root }}/artifacts"
+    - name: Find content tarball artifacts
+      find:
+        paths: "{{ zuul.executor.work_root }}/artifacts"
+        patterns: "*.tar.gz"
+      register: files
+    - name: Set target directory
+      set_fact:
+        target_dir: "{{ afs.artifacts_path }}"
+    - name: Get an AFS token
+      include_role:
+        name: create-afs-token
+    - name: Ensure unpacking dir exists
+      file:
+        path: "{{ src_dir }}"
+        state: directory
+        mode: "0755"
+    - name: Ensure target directory exists
+      file:
+        path: "{{ target_dir }}"
+        state: directory
+        mode: "0755"
+    - name: Unpack into publish dir
+      # TODO(clarkb) what is the proper way to set mode here?
+      unarchive:  # noqa 208
+        src: "{{ item.path }}"
+        dest: "{{ src_dir }}"
+      loop: "{{ files.files }}"
+    - name: Upload to AFS
+      include_role:
+        name: upload-afs-synchronize
+      vars:
+        afs_source: '{{ src_dir }}/'
+        afs_target: '{{ target_dir }}/'
+        afs_copy_only: false
+    - name: Destroy AFS token
+      include_role:
+        name: destroy-afs-token

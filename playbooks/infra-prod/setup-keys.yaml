@@ -1,0 +1,24 @@
+- hosts: localhost
+  tasks:
+    - name: Add bastion to inventory
+      add_host:
+        name: bridge01.opendev.org
+        ansible_python_interpreter: python3
+        ansible_user: zuul
+        # Without setting ansible_host directly, mirror-workspace-git-repos
+        # gets sad because if delegate_to localhost and with add_host that
+        # ends up with ansible_host being localhost.
+        ansible_host: bridge01.opendev.org
+        ansible_port: 22
+        # Port 19885 is firewalled
+        zuul_console_disabled: true
+        # Playbooks are written to refer to "prod_bastion[0]" rather
+        # than the hostname directly, so we can swap the bridge
+        # hostname more easily.
+        groups:
+          - prod_bastion
+
+    - name: Add bridge.o.o hostkey to known hosts
+      known_hosts:
+        name: bridge01.opendev.org
+        key: "bridge01.opendev.org ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC2zgQQ0lpnjtST1oINVPo9jTDI0W3IJA+ZSUTsOo6gGzz6M8PN+jyxQ3EQy8H/xPjm2C55yGfaLNzj557P5arI0TkdeNHt4hzRcmpsNUVE4fOtzMblThRSA1ipfhd/DqMUKz1Ofie3hojnhE1ecB86IcdbF9rfJxl0DOuoSQfClJw3kDx5nK+0Ps5lVnSBZ+NUKbnUFizWVjKz6qIe3tZpuHAvuD/S8tM/gJ+3fC7LcssGb+njo5ghhSUl8wasGBXZQuby33mtuX+UBON+h95odanZs3iGMZScPxgchGb4xB3OTyYn0dFG3mnwPuUnrEKluJ/eFXCkM+Q35DMCa+mynco0stt136e2qTrX1jhtcaDerufb7hs2/7zM/q4zbRYKalUhnh0CZshQ3Y1AuwI3ssmwczQpwgTJnceBmmh5xYPDVCGPpAamTPKhl4VSqlfm2Nc56+dcUm0Y6jiQjBhLIbWevq6RWse6K4R39ovPlTN3z037oJxQHsIETrXxHp0="  # noqa: yaml[line-length]

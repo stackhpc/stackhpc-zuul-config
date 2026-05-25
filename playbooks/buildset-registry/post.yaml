@@ -1,0 +1,29 @@
+- hosts: localhost
+  roles:
+    - push-to-intermediate-registry
+
+- hosts: all
+  tasks:
+    - name: Check if buildset registry is running
+      command: "docker ps"
+      register: docker_ps
+
+    - name: Create container log dir
+      when: "'buildset_registry' in docker_ps.stdout"
+      file:
+        path: "{{ ansible_user_dir }}/zuul-output/logs/docker"
+        state: directory
+        mode: "0755"
+
+    - name: Save registry container logs
+      when: "'buildset_registry' in docker_ps.stdout"
+      shell: "docker logs buildset_registry &> {{ ansible_user_dir }}/zuul-output/logs/docker/buildset_registry.txt"
+      args:
+        executable: /bin/bash
+
+    # This can be useful to make sure you can put a hold on the
+    # registry node if you need to debug it
+    - name: Trigger failure if required
+      fail:
+        msg: 'Triggering failure for debugging'
+      when: buildset_registry_debug_fail | default(false) | bool

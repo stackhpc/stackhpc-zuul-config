@@ -1,0 +1,55 @@
+- hosts: prod_bastion[0]
+  tasks:
+    - name: "Make sure a manual maintenance isn't going on"
+      wait_for:
+        path: /home/zuul/DISABLE-ANSIBLE
+        state: absent
+        sleep: 10
+        timeout: 3600 # Wait for an hour before bailing
+
+    - name: "Correct ownership of repos"
+      command: "chown -R zuul:zuul /home/zuul/src"
+      # E303: Skip linting since it triggers on the "chown" command,
+      # but we prefer the shell above
+      tags:
+        - skip_ansible_lint
+      # Ignore the error if the dir doesn't exist
+      ignore_errors: true
+      # Do this as root, because it needs to chown root-owned files
+      become: true
+
+    # This role executes code on the executor, so this needs to be in
+    # a trusted playbook.
+    - name: Synchronize src repos to workspace directory.
+      include_role:
+        name: prepare-workspace-git
+
+    # The intent of the periodic jobs is to run with latest master. If
+    # they get enqueued, then other patches land, they'll still run
+    # with the value of the zuul ref from when they were
+    # enqueued. That's not what we want for prod, as it can lead to
+    # running or deploying old versions of config files.  Reset them
+    # to master.
+    - name: Should we run from master
+      set_fact:
+        infra_prod_run_from_master: "{{ zuul.pipeline | default('') in ['periodic', 'opendev-prod-hourly'] }}"
+
+    - name: Reset checkouts to master for periodic jobs
+      when: infra_prod_run_from_master | bool
+      block:
+        - name: Update system-config from master
+          git:
+            repo: 'https://opendev.org/opendev/system-config'
+            dest: '/home/zuul/src/opendev.org/opendev/system-config'
+            force: true
+            version: 'master'
+            recursive: false
+
+        - name: Update project-config from master
+          when: '"opendev.org/openstack/project-config" in zuul.projects'
+          git:
+            repo: 'https://opendev.org/openstack/project-config'
+            dest: '/home/zuul/src/opendev.org/openstack/project-config'
+            force: true
+            version: 'master'
+            recursive: false

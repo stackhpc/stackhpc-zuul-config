@@ -1,0 +1,37 @@
+- hosts: all
+  vars:
+    # NOTE(yoctozepto): For now, buildset-registry supports only Docker.
+    container_command: docker
+  tasks:
+    - name: Install docker
+      include_role:
+        name: ensure-docker
+    - name: Open the IPv4 port for the buildset registry
+      become: true
+      iptables:
+        action: insert
+        chain: openstack-INPUT
+        destination_port: '5000:5001'
+        jump: ACCEPT
+        match: tcp
+        ctstate: NEW
+        protocol: tcp
+        ip_version: ipv4
+    - name: Open the IPv6 port for the buildset registry
+      become: true
+      iptables:
+        action: insert
+        chain: openstack-INPUT
+        destination_port: '5000:5001'
+        jump: ACCEPT
+        match: tcp
+        ctstate: NEW
+        protocol: tcp
+        ip_version: ipv6
+    - name: Run buildset registry (if not already running)
+      when: buildset_registry is not defined
+      include_role:
+        name: run-buildset-registry
+    - name: Use buildset registry
+      include_role:
+        name: use-buildset-registry

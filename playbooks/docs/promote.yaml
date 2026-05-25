@@ -1,0 +1,96 @@
+- hosts: localhost
+  tasks:
+    - name: Check execution context
+      when: "zuul.branch is not defined"
+      fail:
+        msg: "This playbook must be run in a branch-based pipeline (e.g., 'promote')."
+    - name: Download docs archive
+      include_role:
+        name: download-artifact
+      vars:
+        # download_artifact_job: provided by zuul job
+        download_artifact_api: "https://zuul.opendev.org/api/tenant/{{ zuul.tenant }}"
+        download_artifact_type:
+          - docs_archive
+          - docs_pdf
+        download_artifact_pipeline: gate
+    - name: Create working directory
+      file:
+        path: "{{ zuul.executor.work_root }}/docs"
+        state: directory
+        mode: "0755"
+    - name: Extract docs archive
+      # TODO(clarkb) what is the proper way to set mode on this task?
+      vars:
+        findme:
+          - "{{ zuul.executor.work_root }}/docs-html.tar.bz2"
+          - "{{ zuul.executor.work_root }}/docs-html.tar.gz"
+      unarchive:  # noqa 208
+        src: "{{ lookup('first_found', findme) }}"
+        dest: "{{ zuul.executor.work_root }}/docs"
+    - name: Write root_marker file
+      include_role:
+        name: write-root-marker
+      when: "write_root_marker"
+      vars:
+        root_marker_dir: "{{ zuul.executor.work_root }}/docs"
+    - name: Find PDF files
+      find:
+        paths: "{{ zuul.executor.work_root }}/"
+        file_type: file
+        patterns: "*.pdf"
+      register: pdf_files
+    - name: Move found PDF file into doc dir
+      command: "mv {{ item.path }} {{ zuul.executor.work_root }}/docs"
+      with_items: "{{ pdf_files.files }}"
+      when: pdf_files.matched > 0
+    - name: Set target directory if master
+      when: "zuul.branch == 'master'"
+      set_fact:
+        target_dict: "{{ afs.targets.master }}"
+    - name: Set target directory if not master
+      when: "zuul.branch != 'master'"
+      set_fact:
+        target_dict: "{{ afs.targets.branch }}"
+    - name: Set publish site
+      set_fact:
+        publish_site: "{{ publish_site.format(zuul=zuul) }}"
+      when: publish_site is defined
+    - name: Set target path
+      set_fact:
+        target_dir: "{{ target_dict.path.format(zuul=zuul, publish_site=publish_site, special_publish_directory=special_publish_directory) }}"
+    - name: Adjust target path
+      when: "target_dict.regex is defined"
+      set_fact:
+        target_dir: "{{ target_dir | regex_replace(target_dict.regex.pattern, target_dict.regex.sub) }}"
+    - name: Get an AFS token
+      include_role:
+        name: create-afs-token
+    - name: Create publication directory
+      file:
+        path: "{{ target_dir }}"
+        state: directory
+        mode: "0755"
+    - name: Set redirect target directory
+      when: "target_dict.redirect is defined"
+      set_fact:
+        redirect_target_dir: "{{ target_dict.redirect.path.format(zuul=zuul) }}"
+    - name: Set redirect content
+      when: "target_dict.redirect is defined"
+      set_fact:
+        redirect_content: "{{ target_dict.redirect.content.format(zuul=zuul) }}"
+    - name: Create redirect htaccess file
+      when: "target_dict.redirect is defined"
+      copy:
+        dest: "{{ redirect_target_dir }}"
+        content: "{{ redirect_content }}"
+        mode: "0644"
+    - name: Upload to AFS
+      include_role:
+        name: upload-afs-roots
+      vars:
+        afs_source: "{{ zuul.executor.work_root }}/docs/"
+        afs_target: "{{ target_dir }}"
+    - name: Destroy AFS token
+      include_role:
+        name: destroy-afs-token

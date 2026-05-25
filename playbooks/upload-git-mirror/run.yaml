@@ -1,0 +1,5 @@
+- hosts: localhost
+  roles:
+    - role: upload-git-mirror
+      vars:
+        git_mirror_repository: "{{ git_mirror_credentials.target_repository.format(zuul=zuul) }}"

@@ -1,0 +1,6 @@
+- hosts: localhost
+  roles:
+    # This will create image repos in quay if the container_image
+    # entries and container_registry_credentials have the appropriate
+    # contents.
+    - ensure-quay-repo

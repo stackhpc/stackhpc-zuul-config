@@ -1,0 +1,53 @@
+- hosts: localhost
+  vars:
+    name_replacement: '.*?(-py.*?\.whl|\.tar\.gz)'
+    name_extra: "{{ (artifact_extra_name|default('') and '-'+artifact_extra_name or '') | regex_replace('[^a-zA-z1-9_\\-.]', '') }}"
+    name_target: "{{ zuul.project.short_name }}{{ name_extra }}-{{ zuul.branch | replace('/', '-') }}\\1"
+  tasks:
+    - name: Check execution context
+      when: "zuul.branch is not defined"
+      fail:
+        msg: "This playbook must be run in a branch-based pipeline (e.g., 'promote')."
+    - name: Create artifact staging directory
+      file:
+        state: directory
+        mode: "0755"
+        path: "{{ zuul.executor.work_root }}/artifacts"
+    - name: Download artifacts
+      include_role:
+        name: download-artifact
+      vars:
+        # download_artifact_job: provided by zuul job
+        download_artifact_api: "https://zuul.opendev.org/api/tenant/{{ zuul.tenant }}"
+        # download_artifact_name: provided by zuul job
+        download_artifact_pipeline: gate
+        download_artifact_directory: "{{ zuul.executor.work_root }}/artifacts"
+    - name: Find artifacts
+      find:
+        paths: "{{ zuul.executor.work_root }}/artifacts"
+      register: files
+    - name: Set target directory
+      set_fact:
+        target_dict: "{{ afs.targets.default }}"
+    - name: Set target path
+      set_fact:
+        target_dir: "{{ target_dict.path.format(zuul=zuul) }}"
+    - name: Adjust target path
+      when: "target_dict.regex is defined"
+      set_fact:
+        target_dir: "{{ target_dir | regex_replace(target_dict.regex.pattern, target_dict.regex.sub) }}"
+    - name: Get an AFS token
+      include_role:
+        name: create-afs-token
+    - name: Ensure target directory exists
+      file:
+        path: "{{ target_dir }}"
+        state: directory
+        mode: "0755"
+    - name: Upload to AFS
+      command: "cp {{ item.path }} {{ target_dir }}/{{ item.path | basename | regex_replace(name_replacement, name_target) }}"
+      when: "item.path is match(name_replacement)"
+      loop: "{{ files.files }}"
+    - name: Destroy AFS token
+      include_role:
+        name: destroy-afs-token

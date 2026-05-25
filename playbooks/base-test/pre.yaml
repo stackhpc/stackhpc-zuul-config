@@ -1,0 +1,68 @@
+- name: Create job header and inventory
+  hosts: localhost
+  roles:
+    - role: emit-job-header
+      zuul_log_path_shard_build: true
+    - log-inventory
+
+- name: Setup Zuul environment
+  hosts: all
+  pre_tasks:
+    # NOTE(pabelanger): Until we hit the validate-host role, we have a minimal
+    # set of ansible variables collected by zuul-executor. This doesn't include
+    # network variables (ansible_default_ipv4 / ansible_default_ipv6) so gather
+    # these variables as they are important to the configure-unbound role.
+    - name: Gather network facts
+      setup:
+        gather_subset: 'network'
+
+  roles:
+    - add-build-sshkey
+    - start-zuul-console
+    - ensure-output-dirs
+
+- name: Configure unbound
+  hosts: all
+  roles:
+    # NOTE(pabelanger): We run this role in its own play to ensure unbound is
+    # restarted before proceeding with any other role. This is because we use
+    # notify / handler to restart the unbound service. With ansible notify
+    # actions are triggered at the end of each block of tasks in a play.
+    - configure-unbound
+
+- name: Prepare workspace and configure mirrors
+  hosts: all
+  roles:
+    - validate-host
+    # Hardware-check runs after validate-host as validate-host gathers host
+    # facts which are used to check the hardware.
+    - hardware-check
+    - test-prepare-workspace-git
+    - mirror-info
+    - role: configure-mirrors
+      set_apt_mirrors_trusted: true
+      mirror_use_ssl: true
+      configure_mirrors_components_9_stream:
+        'baseos': true
+        'baseos-debug': false
+        'baseos-source': false
+        'appstream': true
+        'appstream-debug': false
+        'appstream-source': false
+        'crb': true
+        'crb-debug': false
+        'crb-source': false
+        'highavailability': true
+        'highavailability-debug': false
+        'highavailability-source': false
+        'nfv': true
+        'nfv-debug': false
+        'nfv-source': false
+        'rt': true
+        'rt-debug': false
+        'rt-source': false
+        'resilientstorage': true
+        'resilientstorage-debug': false
+        'resilientstorage-source': false
+        'extras-common': true
+        'extras-common-source': false

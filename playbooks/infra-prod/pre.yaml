@@ -1,0 +1,5 @@
+- name: Setup keys
+  import_playbook: setup-keys.yaml
+
+- name: Setup source
+  import_playbook: setup-src.yaml
