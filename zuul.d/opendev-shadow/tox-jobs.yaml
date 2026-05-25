@@ -1,0 +1,102 @@
+- job:
+    name: opendev-tox-docs
+    # This is not parented to tox-docs because the post playbook
+    # differs.
+    description: |
+      Build documentation with "tox".
+
+      Uses tox with the ``docs`` environment.
+    vars:
+      tox_envlist: docs
+      bindep_profile: compile doc
+    pre-run: playbooks/tox-docs/pre.yaml
+    run: playbooks/tox-docs/run.yaml
+    post-run: playbooks/tox-docs/post.yaml
+
+- job:
+    name: opendev-publish-tox-docs-base
+    # This is not parented to opendev-tox-docs because the post
+    # playbook differs.
+    description: |
+      Publish a ref-based documentation build.
+
+      Use this in the tag or release pipelines to publish a build
+      based on a newly-created tag.
+
+      This is an abstract job intended to be inherited from in an
+      OpenDev tenant and an appropriate secret added.
+
+      .. zuul:jobvar:: afs
+         :type: dict
+
+         This is expected to be a Zuul Secret with these keys:
+
+        .. zuul:jobvar:: keytab
+
+           The AFS keytab for the service principal.
+
+        .. zuul:jobvar:: service_name
+
+           The name of the service princpal.
+
+        .. zuul:jobvar:: targets
+
+           This is a dict containing information about where docs should be
+           published.
+
+          .. zuul:jobvar:: master
+
+             This is expected to be a dict with a single key value pair:
+             `path: the full docs publication path to use if the job is
+             run on the master branch.`
+
+          .. zuul:jobvar:: branch
+
+             This is expected to be a dict with a key value pair:
+             `path: the full docs publication path to use if the job is run on
+             any other branch.`
+
+          .. zuul:jobvar:: tag
+
+             This is expected to be a dict with a key value pair:
+             `path: the full docs publication path to use if the job is run on
+             a tag.`
+    abstract: True
+    vars:
+      tox_envlist: docs
+      bindep_profile: compile doc
+    pre-run: playbooks/tox-docs/pre.yaml
+    run: playbooks/tox-docs/run.yaml
+    post-run:
+      - playbooks/tox-docs/post.yaml
+      - playbooks/tox-docs/publish.yaml
+
+- job:
+    name: opendev-publish-unversioned-tox-docs
+    parent: opendev-publish-tox-docs-base
+    description: |
+      Publish a ref-based documentation build to "latest" always.
+
+      Use this in the tag or release pipelines to publish a build
+      based on a newly-created tag but published as if it were a
+      branch tip build instead. This is useful when the project has
+      only a single branch and multiple version-specific copies of
+      its documentation are undesirable, or when triggered by a tag
+      alongside a version-specific publication job.
+    secrets:
+      - secret: opendev-unversioned-docs
+        name: afs
+        pass-to-parent: true
+
+- job:
+    name: opendev-publish-tox-docs
+    parent: opendev-publish-tox-docs-base
+    description: |
+      Publish a ref-based documentation build.
+
+      Use this in the tag or release pipelines to publish a build
+      based on a newly-created tag.
+    secrets:
+      - secret: opendev-zuul-docs
+        name: afs
+        pass-to-parent: true
