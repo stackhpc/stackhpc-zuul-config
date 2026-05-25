@@ -14,6 +14,7 @@ zuul_operator_cr: |
         issuer_id: "https://accounts.google.com"
         client_id: "161754685259-nvqgt0hruifde3415k3c7r42sob7cof0.apps.googleusercontent.com"
         uid_claim: email
+        scope: "openid profile email"
     connections:
       github:
         driver: github
