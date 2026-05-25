@@ -11,8 +11,8 @@ zuul_operator_cr: |
         default: true
         driver: OpenIDConnect
         realm: stackhpc
-        issuer_id=https://accounts.google.com
-        client_id: 161754685259-nvqgt0hruifde3415k3c7r42sob7cof0.apps.googleusercontent.com
+        issuer_id: "https://accounts.google.com"
+        client_id: "161754685259-nvqgt0hruifde3415k3c7r42sob7cof0.apps.googleusercontent.com"
         uid_claim: email
     connections:
       github:
