@@ -7,6 +7,7 @@ zuul_operator_cr: |
   spec:
     executor:
       count: 6
+      disk_limit_per_job: 5000
       sshkey:
         secretName: zuul-sshkey
     fingergw:
