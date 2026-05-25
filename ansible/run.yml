@@ -29,8 +29,8 @@
 
     - name: Ensure CRDs
       kubernetes.core.k8s:
-        definition: "{{ zuul_operator_crd }}"
         namespace: "zuul"
+        src: "{{ zuul_operator_crd_url }}"
         state: present
 
     - name: Ensure RBAC

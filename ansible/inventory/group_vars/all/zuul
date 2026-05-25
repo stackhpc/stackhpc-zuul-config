@@ -1,4 +1,5 @@
 ---
+zuul_operator_crd_url: "https://raw.githubusercontent.com/stackhpc/zuul-operator/refs/heads/stackhpc/deploy/crds/zuul-ci_v1alpha2_zuul_crd.yaml"
 zuul_operator_cr: |
   apiVersion: operator.zuul-ci.org/v1alpha2
   kind: Zuul
