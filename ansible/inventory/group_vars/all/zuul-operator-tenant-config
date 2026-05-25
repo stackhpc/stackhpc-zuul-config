@@ -132,6 +132,7 @@ zuul_operator_tenant_config:
                 - openstack/ceilometermiddleware
                 - openstack/cinder
                 - openstack/cinder-tempest-plugin
+                - openstack/codegenerator
                 - openstack/contributor-guide
                 - openstack/debtcollector
                 - openstack/designate
