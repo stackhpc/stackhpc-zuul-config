@@ -109,6 +109,10 @@ zuul_operator_crd: |
                         type: integer
                         default: 21600
                         minimum: 0
+                      disk_limit_per_job:
+                        type: integer
+                        default: 250
+                        minimum: -1
                   merger:
                     type: object
                     properties:
