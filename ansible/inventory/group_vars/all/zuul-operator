@@ -17,5 +17,5 @@ zuul_operator_operator: |
         serviceAccountName: zuul-operator
         containers:
           - name: operator
-            image: "quay.io/stackhpc-infra/zuul-operator:1.1.1-shpc"
+            image: "quay.io/stackhpc-infra/zuul-operator:1.1.3-shpc"
             imagePullPolicy: "Always"
