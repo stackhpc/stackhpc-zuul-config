@@ -4,6 +4,7 @@ zuul_operator_nodepool_yaml:
     - name: centos-9-stream-arm64
     - name: debian-trixie
     - name: kubernetes-runner-pod-jammy
+    - name: nested-virt-ubuntu-jammy
     - name: nested-virt-ubuntu-noble
     - name: rocky-9
     - name: rocky-9-arm64
@@ -139,6 +140,26 @@ zuul_operator_nodepool_yaml:
             - name: rocky-9
               console-log: True
               cloud-image: rocky-9
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: nested-virt-ubuntu-jammy
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-jammy
               flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
