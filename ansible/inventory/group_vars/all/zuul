@@ -22,6 +22,7 @@ zuul_operator_cr: |
       config:
         secretName: zuul-tenant-config
     launcher:
+      type: both
       config:
         secretName: zuul-nodepool-config
     web:
