@@ -1,0 +1,6 @@
+---
+- flavor:
+    name: 8GB
+
+- flavor:
+    name: 16GB

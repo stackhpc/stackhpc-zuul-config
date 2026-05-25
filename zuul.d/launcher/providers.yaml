@@ -1,0 +1,59 @@
+---
+- section:
+    name: smslab
+    connection: smslab
+    label-defaults:
+      boot-timeout: 120
+      key-name: infra-root-keys-2024-04-08
+    image-defaults:
+      import-timeout: 21600  # 6 hours
+    launch-timeout: 600
+    images:
+      - centos-9-stream
+      - debian-bookworm
+      - debian-trixie
+      - rockylinux-9
+      - rockylinux-10
+      - ubuntu-focal
+      - ubuntu-jammy
+      - ubuntu-noble
+      - ubuntu-resolute
+    labels:
+      # CentOS 9 Stream
+      - centos-9-stream-8GB
+      - centos-9-stream-16GB
+      - centos-9-stream
+      # Bookworm
+      - debian-bookworm-8GB
+      - debian-bookworm-16GB
+      - debian-bookworm
+      # Debian Trixie
+      - debian-trixie-8GB
+      - debian-trixie-16GB
+      # Rocky Linux 9
+      - rockylinux-9-8GB
+      - rockylinux-9-16GB
+      - rockylinux-9
+      # focal
+      - ubuntu-focal-8GB
+      - ubuntu-focal-16GB
+      - ubuntu-focal
+      # jammy
+      - ubuntu-jammy-8GB
+      - ubuntu-jammy-16GB
+      - ubuntu-jammy
+      # noble
+      - ubuntu-noble-8GB
+      - ubuntu-noble-16GB
+      - ubuntu-noble
+      # resolute
+      - ubuntu-resolute-8GB
+      - ubuntu-resolute-16GB
+    flavors:
+      - name: 8GB
+        description: 8vcpu, 8GB ram, 40GB disk
+        flavor-name: performance1-8
+      - name: 16GB
+        # TODO: are the 4vcpus adequate for a 16gb flavor?
+        description: 4vcpu, 15GB ram, 40GB disk
+        flavor-name: performance2-15

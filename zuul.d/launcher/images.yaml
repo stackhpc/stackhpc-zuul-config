@@ -1,0 +1,64 @@
+---
+- image:
+    name: centos-9-stream
+    type: cloud
+
+- image:
+    name: centos-9-stream-arm64
+    type: cloud
+
+- image:
+    name: debian-trixie
+    type: cloud
+
+- image:
+    name: debian-trixie-arm64
+    type: cloud
+
+- image:
+    name: rocky-9
+    type: cloud
+
+- image:
+    name: rocky-9-arm64
+    type: cloud
+
+- image:
+    name: rocky-10
+    type: cloud
+
+- image:
+    name: rocky-10-arm64
+    type: cloud
+
+- image:
+    name: ubuntu-focal
+    type: cloud
+
+- image:
+    name: ubuntu-focal-arm64
+    type: cloud
+
+- image:
+    name: ubuntu-jammy
+    type: cloud
+
+- image:
+    name: ubuntu-jammy-arm64
+    type: cloud
+
+- image:
+    name: ubuntu-noble
+    type: cloud
+
+- image:
+    name: ubuntu-noble-arm64
+    type: cloud
+
+- image:
+    name: ubuntu-resolute
+    type: cloud
+
+- image:
+    name: ubuntu-resolute-arm64
+    type: cloud

@@ -6,11 +6,37 @@ zuul_operator_cr: |
   metadata:
     name: stackhpc-zuul
   spec:
+    auth:
+      google_auth:
+        default: true
+        driver: OpenIDConnect
+        realm: stackhpc
+        issuer_id=https://accounts.google.com
+        client_id: 161754685259-nvqgt0hruifde3415k3c7r42sob7cof0.apps.googleusercontent.com
+        uid_claim: email
+    connections:
+      github:
+        driver: github
+        secretName: zuul-github
+        server: github.com
+      github-git:
+        driver: git
+        baseurl: https://github.com
+      opendev:
+        driver: git
+        baseurl: https://opendev.org
+      stackhpc:
+        driver: git
+        baseurl: https://github.com/stackhpc
+        canonical_hostname: github.stackhpc.com
     executor:
       count: 6
       disk_limit_per_job: 5000
       sshkey:
         secretName: zuul-sshkey
+    externalConfig:
+      openstack:
+        secretName: zuul-clouds-yaml
     fingergw:
       count: 2
     merger:
@@ -28,22 +54,4 @@ zuul_operator_cr: |
     web:
       count: 3
       root: "https://zuul.stackhpc.com"
-    connections:
-      github:
-        driver: github
-        secretName: zuul-github
-        server: github.com
-      github-git:
-        driver: git
-        baseurl: https://github.com
-      opendev:
-        driver: git
-        baseurl: https://opendev.org
-      stackhpc:
-        driver: git
-        baseurl: https://github.com/stackhpc
-        canonical_hostname: github.stackhpc.com
-    externalConfig:
-      openstack:
-        secretName: zuul-clouds-yaml
     zuulImageVersion: "14.2.0"
