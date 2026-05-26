@@ -33,7 +33,6 @@ zuul_operator_cr: |
     executor:
       count: 6
       disk_limit_per_job: 5000
-      storageClassName: ssd
       sshkey:
         secretName: zuul-sshkey
     externalConfig:
