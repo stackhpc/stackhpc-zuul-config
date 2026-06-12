@@ -2,6 +2,9 @@
     name: ^.*$
     check:
       jobs: []
+    check-dismiss:
+      jobs:
+        - noop
     gate:
       jobs: []
 

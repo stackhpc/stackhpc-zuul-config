@@ -2,20 +2,33 @@
     name: check
     description: |
       Newly uploaded patchsets enter this pipeline to receive an
-      initial check status.
+      initial check status. For PRs from Developers (write access),
+      runs automatically. For external PRs, requires the ok-to-test
+      label to be added by a member of the stackhpc/Developers GitHub group.
     manager: independent
+    require:
+      github:
+        open: True
+        current-patchset: True
     trigger:
       github:
-        # Run this pipeline on new/changed pull requests
+        # Run automatically for write-access users (stackhpc/Developers)
         - event: pull_request
           action:
             - opened
             - changed
             - reopened
-        # Run in response to a pull request comment "recheck"
+          permission: write
+        # Run when a Developers member adds ok-to-test label to an external PR
+        - event: pull_request
+          action: labeled
+          label:
+            - ok-to-test
+        # Run in response to a pull request comment "recheck" by write-access users
         - event: pull_request
           action: comment
           comment: (?i)^\s*recheck(\s.*)?$
+          permission: write
         # When using the checks API to report results, failed runs
         # will have a "re-run" button which emits this event.
         - event: check_run
@@ -51,6 +64,23 @@
     dequeue:
       github:
         check: cancelled
+        comment: false
+
+- pipeline:
+    name: check-dismiss
+    description: |
+      Silently removes the ok-to-test label when new commits are pushed to a
+      pull request, requiring a Developers member to re-approve before CI runs.
+    manager: independent
+    trigger:
+      github:
+        - event: pull_request
+          action:
+            - changed
+            - reopened
+    start:
+      github:
+        unlabel: ok-to-test
         comment: false
 
 - pipeline:
