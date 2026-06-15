@@ -82,6 +82,8 @@ zuul_operator_tenant_config:
                     include-branches: *upstream_branches
                 - openstack/nova:
                     include-branches: *upstream_branches
+                    shadow:
+                      - stackhpc/nova
                 - openstack/openstack-zuul-jobs:
                     shadow:
                       - stackhpc-zuul-config
