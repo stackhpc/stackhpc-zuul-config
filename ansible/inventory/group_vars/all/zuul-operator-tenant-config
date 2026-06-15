@@ -135,7 +135,6 @@ zuul_operator_tenant_config:
                 - openstack/designate
                 - openstack/designate-dashboard
                 - openstack/designate-tempest-plugin
-                - openstack/devstack-plugin-ceph
                 - openstack/diskimage-builder
                 - openstack/election
                 - openstack/futurist
