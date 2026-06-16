@@ -49,6 +49,7 @@ zuul_operator_tenant_config:
                       - stable/2026.1
                 - openstack/castellan:
                     include-branches: *upstream_branches
+                - openstack/cyborg-tempest-plugin
                 - openstack/devstack
                 - openstack/devstack-plugin-ceph:
                     include-branches: *upstream_branches
