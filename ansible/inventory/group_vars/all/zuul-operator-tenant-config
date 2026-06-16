@@ -94,6 +94,8 @@ zuul_operator_tenant_config:
                       - stackhpc-zuul-config
                 - openstack/openstacksdk:
                     include-branches: *upstream_branches
+                - openstack/os-vif:
+                    include-branches: *upstream_branches
                 - openstack/osprofiler
                 - openstack/python-cyborgclient:
                     include-branches: *upstream_branches
@@ -202,7 +204,6 @@ zuul_operator_tenant_config:
                 - openstack/os-ken
                 - openstack/os-refresh-config
                 - openstack/os-test-images
-                - openstack/os-vif
                 - openstack/osc-lib
                 - openstack/openstack-manuals
                 - openstack/ossa
