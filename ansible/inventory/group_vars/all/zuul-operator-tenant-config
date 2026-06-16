@@ -55,6 +55,8 @@ zuul_operator_tenant_config:
                 - openstack/devstack
                 - openstack/devstack-plugin-ceph:
                     include-branches: *upstream_branches
+                - openstack/devstack-plugin-nfs:
+                    include-branches: *upstream_branches
                 - openstack/grenade
                 - openstack/horizon:
                     include-branches: *upstream_branches
