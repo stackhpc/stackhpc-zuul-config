@@ -184,6 +184,7 @@ zuul_operator_tenant_config:
                 - openstack/neutron-lib
                 - openstack/neutron-vpnaas
                 - openstack/octavia
+                - openstack/octavia-dashboard
                 - openstack/octavia-lib
                 - openstack/os-apply-config
                 - openstack/os-brick
