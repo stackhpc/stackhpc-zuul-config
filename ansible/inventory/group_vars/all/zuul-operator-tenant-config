@@ -95,6 +95,7 @@ zuul_operator_tenant_config:
                 - openstack/tempest:
                     include-branches: *upstream_branches
                 # only master branch
+                - openstack/whitebox-tempest-plugin
                 - x/cursive
                 - x/devstack-plugin-tobiko
                 - x/devstack-plugin-glusterfs
