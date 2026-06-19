@@ -71,7 +71,7 @@ zuul_operator_nodepool_yaml:
       pools:
         - name: main
           auto-floating-ip: False
-          max-servers: 5
+          max-servers: 20
           networks:
             - "zuul"
           security-groups:
