@@ -30,6 +30,10 @@ zuul_operator_cr: |
         driver: git
         baseurl: https://github.com/stackhpc
         canonical_hostname: github.stackhpc.com
+      smslab:
+        driver: openstack
+        cloud: smslab
+        rate: 1
     executor:
       count: 6
       disk_limit_per_job: 5000

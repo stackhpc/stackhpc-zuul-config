@@ -1,0 +1,4 @@
+- label:
+    name: rocky-10
+    image: rocky-10
+    flavor: ci-v1-medium

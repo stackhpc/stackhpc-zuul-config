@@ -1,0 +1,4 @@
+- image:
+    name: rocky-10
+    type: cloud
+    description: Rocky Linux 10 cloud image

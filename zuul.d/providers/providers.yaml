@@ -1,0 +1,49 @@
+- section:
+    name: smslab-base
+    abstract: true
+    connection: smslab
+    label-defaults:
+      key-name: zuul-ci
+      networks:
+        - zuul
+      security-groups:
+        - nodepool
+      auto-floating-ip: false
+      boot-timeout: 180
+      userdata: |-
+        #cloud-config
+        bootcmd:
+          - rm -f /run/nologin
+          - rm -f /etc/nologin
+        users:
+          - default
+          - name: zuul
+            groups: users,adm,sudo
+            shell: /bin/bash
+            lock_passwd: true
+            ssh_authorized_keys:
+              - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEdBENiO8LjvRc2SMObxZ1QgYmtf1TLtsrDVLn9m47VS zuul@stackhpc-ci"
+            sudo: ALL=(ALL) NOPASSWD:ALL
+    image-defaults:
+      username: zuul
+    launch-timeout: 300
+    launch-attempts: 3
+    flavors:
+      - name: ci-v1-medium
+        flavor-name: ci.v1.medium
+    images:
+      - name: rocky-10
+        image-id: 44edb785-4c67-4516-ac6d-5948bea8ed06
+    labels:
+      - rocky-10
+
+- section:
+    name: smslab
+    parent: smslab-base
+    region: RegionOne
+
+- provider:
+    name: smslab-openstack
+    section: smslab
+    resource-limits:
+      instances: 20
