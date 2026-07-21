@@ -41,9 +41,9 @@
     name: smslab
     parent: smslab-base
     region: RegionOne
+    resource-limits:
+      instances: 20
 
 - provider:
     name: smslab-openstack
     section: smslab
-    resource-limits:
-      instances: 20
