@@ -403,7 +403,7 @@ zuul_operator_nodepool_yaml:
                     ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
                     sudo: ALL=(ALL) NOPASSWD:ALL
               volume-size: 100
-           - name: ubuntu-resolute
+            - name: ubuntu-resolute
               boot-from-volume: true
               console-log: True
               cloud-image: ubuntu-resolute
