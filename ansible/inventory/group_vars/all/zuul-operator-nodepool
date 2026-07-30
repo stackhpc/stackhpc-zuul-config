@@ -17,6 +17,7 @@ zuul_operator_nodepool_yaml:
     - name: ubuntu-noble
     - name: ubuntu-noble-arm64
     - name: ubuntu-noble-tenks
+    - name: ubuntu-resolute
 
   providers:
     - name: smslab-openstack
@@ -67,6 +68,12 @@ zuul_operator_nodepool_yaml:
           image-name: "Ubuntu-24.04-arm64"
         - name: ubuntu-noble-tenks
           image-name: "Ubuntu-24.04"
+          username: "zuul"
+        - name: ubuntu-resolute
+          image-name: "Ubuntu-26.04"
+          username: "zuul"
+        - name: ubuntu-resolute-arm64
+          image-name: "Ubuntu-26.04"
           username: "zuul"
       pools:
         - name: main
@@ -380,6 +387,46 @@ zuul_operator_nodepool_yaml:
               boot-from-volume: true
               console-log: True
               cloud-image: ubuntu-noble-tenks
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+           - name: ubuntu-resolute
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-resolute
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ zuul_operator_nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: ubuntu-resolute-arm64
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-resolute-arm64
               flavor-name: ci.v1.medium
               key-name: zuul-ci
               userdata: |-
