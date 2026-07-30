@@ -18,6 +18,7 @@ zuul_operator_nodepool_yaml:
     - name: ubuntu-noble-arm64
     - name: ubuntu-noble-tenks
     - name: ubuntu-resolute
+    - name: ubuntu-resolute-arm64
 
   providers:
     - name: smslab-openstack
