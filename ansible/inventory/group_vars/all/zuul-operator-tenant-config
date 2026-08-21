@@ -294,6 +294,7 @@ zuul_operator_tenant_config:
         github:
           untrusted-projects:
             - stackhpc/ansible-collection-cephadm
+            - stackhpc/ansible-collection-hashicorp
             - stackhpc/manila:
                 include-branches:
                   - stackhpc/2025.1
