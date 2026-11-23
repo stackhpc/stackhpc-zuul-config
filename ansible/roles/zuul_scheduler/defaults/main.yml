@@ -1,0 +1,11 @@
+---
+# Tenant configuration (main.yaml), as a list. Required.
+# zuul_tenant_config:
+
+# Set to false to install everything without starting the scheduler, e.g.
+# to import keys before the first start.
+zuul_scheduler_start: true
+
+zuul_keys_backup_dir: /var/lib/zuul/backup
+zuul_keys_backup_retention_days: 14
+zuul_keys_backup_schedule: "*-*-* 00:30:00"

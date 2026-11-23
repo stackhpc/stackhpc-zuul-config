@@ -1,0 +1,6 @@
+---
+- name: Run zuul-merger
+  ansible.builtin.include_role:
+    name: zuul_service
+  vars:
+    zuul_service_component: merger

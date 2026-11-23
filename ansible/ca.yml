@@ -1,0 +1,15 @@
+---
+# Generate the CA for ZooKeeper TLS. Run once, then encrypt the output and
+# add it to the vault:
+#
+#   ansible-playbook ansible/ca.yml -e zk_ca_output=/path/to/zk-ca.yml
+#   ansible-vault encrypt /path/to/zk-ca.yml
+- name: Generate ZooKeeper CA
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    # Use the controller's Python, which has the cryptography library.
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+  roles:
+    - zk_ca

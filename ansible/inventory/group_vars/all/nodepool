@@ -1,0 +1,445 @@
+nodepool_config:
+  labels:
+    - name: centos-9-stream
+    - name: centos-9-stream-arm64
+    - name: debian-trixie
+    - name: nested-virt-ubuntu-jammy
+    - name: nested-virt-ubuntu-noble
+    - name: rocky-9
+    - name: rocky-9-arm64
+    - name: rocky-9-tenks
+    - name: rocky-10
+    - name: rocky-10-arm64
+    - name: rocky-10-tenks
+    - name: ubuntu-focal
+    - name: ubuntu-jammy
+    - name: ubuntu-noble
+    - name: ubuntu-noble-arm64
+    - name: ubuntu-noble-tenks
+    - name: ubuntu-resolute
+    - name: ubuntu-resolute-arm64
+
+  providers:
+    - name: smslab-openstack
+      driver: openstack
+      cloud: smslab
+      region-name: 'RegionOne'
+      rate: 1.0
+      boot-timeout: 180
+      launch-timeout: 300
+      launch-retries: 3
+      cloud-images:
+        - name: centos-9-stream
+          image-name: CentOS-Stream9 
+          username: "zuul"
+        - name: centos-9-stream-arm64
+          image-name: CentOS-Stream9-arm64
+          username: "zuul"
+        - name: debian-trixie
+          image-name: Debian-13
+        - name: rocky-9
+          image-name: "Rocky9"
+          username: "zuul"
+        - name: rocky-9-arm64
+          image-name: "Rocky9-arm64"
+          username: "zuul"
+        - name: rocky-9-tenks
+          image-name: "Rocky9"
+          username: "zuul"
+        - name: rocky-10
+          image-name: "Rocky10"
+          username: "zuul"
+        - name: rocky-10-arm64
+          image-name: "Rocky10-arm64"
+          username: "zuul"
+        - name: rocky-10-tenks
+          image-name: "Rocky10"
+          username: "zuul"
+        - name: ubuntu-focal
+          image-name: "Ubuntu-20.04"
+          username: "zuul"
+        - name: ubuntu-jammy
+          image-name: "Ubuntu-22.04"
+          username: "zuul"
+        - name: ubuntu-noble
+          image-name: "Ubuntu-24.04"
+          username: "zuul"
+        - name: ubuntu-noble-arm64
+          image-name: "Ubuntu-24.04-arm64"
+        - name: ubuntu-noble-tenks
+          image-name: "Ubuntu-24.04"
+          username: "zuul"
+        - name: ubuntu-resolute
+          image-name: "Ubuntu-26.04"
+          username: "zuul"
+        - name: ubuntu-resolute-arm64
+          image-name: "Ubuntu-26.04"
+          username: "zuul"
+      pools:
+        - name: main
+          auto-floating-ip: False
+          max-servers: 20
+          networks:
+            - "zuul"
+          security-groups:
+            - "nodepool"
+          labels:
+            - name: centos-9-stream
+              boot-from-volume: true
+              console-log: True
+              cloud-image: centos-9-stream
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: centos-9-stream-arm64
+              boot-from-volume: true
+              console-log: True
+              cloud-image: centos-9-stream-arm64
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: debian-trixie
+              boot-from-volume: true
+              console-log: True
+              cloud-image: debian-trixie
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: rocky-9
+              console-log: True
+              cloud-image: rocky-9
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: nested-virt-ubuntu-jammy
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-jammy
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: nested-virt-ubuntu-noble
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-noble
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: rocky-9-arm64
+              boot-from-volume: true
+              console-log: True
+              cloud-image: rocky-9-arm64
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: rocky-9-tenks
+              boot-from-volume: true
+              console-log: True
+              cloud-image: rocky-9-tenks
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: rocky-10
+              boot-from-volume: true
+              console-log: True
+              cloud-image: rocky-10
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: rocky-10-arm64
+              boot-from-volume: true
+              console-log: True
+              cloud-image: rocky-10-arm64
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: rocky-10-tenks
+              boot-from-volume: true
+              console-log: True
+              cloud-image: rocky-10-tenks
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: ubuntu-focal
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-focal
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: ubuntu-jammy
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-jammy
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: ubuntu-noble
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-noble
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: ubuntu-noble-arm64
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-noble-arm64
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: ubuntu-noble-tenks
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-noble-tenks
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: ubuntu-resolute
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-resolute
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100
+            - name: ubuntu-resolute-arm64
+              boot-from-volume: true
+              console-log: True
+              cloud-image: ubuntu-resolute-arm64
+              flavor-name: ci.v1.medium
+              key-name: zuul-ci
+              userdata: |-
+                #cloud-config
+                bootcmd:
+                  - rm -f /run/nologin
+                  - rm -f /etc/nologin
+                users:
+                  - default
+                  - name: zuul
+                    groups: users,adm,sudo
+                    shell: /bin/bash
+                    lock_passwd: true
+                    ssh_authorized_keys: {{ nodepool_ssh_authorized_keys }}
+                    sudo: ALL=(ALL) NOPASSWD:ALL
+              volume-size: 100

@@ -1,0 +1,7 @@
+---
+- name: Run on the executor
+  hosts: localhost
+  tasks:
+    - name: Run a command in the bubblewrap sandbox
+      ansible.builtin.command: uname -a
+      changed_when: false

@@ -1,0 +1,42 @@
+# {{ ansible_managed }}
+# config-hash: {{ podman_service_config_hash }}
+[Unit]
+Description={{ podman_service_description }}
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName={{ podman_service_name }}
+Image={{ podman_service_image }}
+Network=host
+{% if podman_service_user %}
+User={{ podman_service_user }}
+{% endif %}
+{% for volume in podman_service_volumes %}
+Volume={{ volume }}
+{% endfor %}
+{% for key, value in podman_service_environment.items() %}
+Environment={{ key }}={{ value }}
+{% endfor %}
+{% if podman_service_environment_file %}
+EnvironmentFile={{ podman_service_environment_file }}
+{% endif %}
+{% if podman_service_privileged | bool %}
+PodmanArgs=--privileged
+{% endif %}
+{% for arg in podman_service_podman_args %}
+PodmanArgs={{ arg }}
+{% endfor %}
+StopTimeout={{ podman_service_stop_timeout }}
+{% if podman_service_exec %}
+Exec={{ podman_service_exec }}
+{% endif %}
+
+[Service]
+Restart={{ podman_service_restart }}
+RestartSec=10
+TimeoutStartSec=900
+TimeoutStopSec={{ podman_service_stop_timeout | int + 30 }}
+
+[Install]
+WantedBy=multi-user.target

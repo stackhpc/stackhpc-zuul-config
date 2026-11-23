@@ -2,39 +2,39 @@
 name: Apply Zuul configuration
 
 on:
-  push:
-    branches:
-      master
+  workflow_dispatch:
+  # Enable once the podman deployment has replaced the Kubernetes one.
+  # push:
+  #   branches:
+  #     - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-zuul
 
 jobs:
   deploy-zuul:
 
-    runs-on: self-hosted
+    # Self-hosted runner on the Zuul VM; see README.md.
+    runs-on: [self-hosted, zuul-deploy]
+    environment: production
 
     env:
-      ANSIBLE_FORCE_COLOR: True
-      ANSIBLE_VAULT_PASSWORD_FILE: .vault.txt
+      ANSIBLE_FORCE_COLOR: true
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-    - name: Set Ansible Vault password file
-      run: |
-        echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > $ANSIBLE_VAULT_PASSWORD_FILE
-
-    - name: Generate kubeconfig
-      env:
-        KUBE: ${{secrets.KUBE}}
-        OS_CLOUD: "smslab-stackhpc-ci"
-      run: |
-        mkdir -p ~/.kube
-        echo "$KUBE" > ~/.kube/config
+    - name: Install collections
+      run: ansible-galaxy collection install -r ansible/requirements.yml
 
     - name: Run playbook
-      run: >
-        ansible-playbook -i ansible/inventory ansible/run.yml
-
-    - name: Remove credentials
+      env:
+        ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
       run: |
-        rm -f ~/.kube/config .vault.txt
-
+        vault_file="$RUNNER_TEMP/vault.txt"
+        trap 'rm -f "$vault_file"' EXIT
+        printf '%s\n' "$ANSIBLE_VAULT_PASSWORD" > "$vault_file"
+        ansible-playbook -i ansible/inventory ansible/site.yml --vault-password-file "$vault_file"

@@ -1,0 +1,7 @@
+---
+# Private SSH key the executor uses to log in to test nodes. Required.
+# zuul_executor_ssh_key:
+
+# Running builds are aborted on stop and Zuul retries them, so restarts are
+# quick.
+zuul_executor_stop_timeout: 120

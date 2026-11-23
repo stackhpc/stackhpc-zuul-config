@@ -1,0 +1,26 @@
+# {{ ansible_managed }}
+dataDir=/data
+dataLogDir=/datalog
+tickTime=2000
+initLimit=10
+syncLimit=5
+autopurge.snapRetainCount=3
+autopurge.purgeInterval=2
+maxClientCnxns=60
+standaloneEnabled=true
+admin.enableServer=false
+4lw.commands.whitelist=srvr, stat, mntr, ruok
+serverCnxnFactory=org.apache.zookeeper.server.NettyServerCnxnFactory
+secureClientPort=2281
+secureClientPortAddress={{ zookeeper_client_address }}
+ssl.keyStore.location=/tls/keystore.pem
+ssl.trustStore.location=/tls/ca.pem
+{% if groups['zookeeper'] | length > 1 %}
+{% for host in groups['zookeeper'] %}
+server.{{ loop.index }}={{ hostvars[host].zuul_internal_address }}:2888:3888
+{% endfor %}
+quorumListenOnAllIPs=true
+sslQuorum=true
+ssl.quorum.keyStore.location=/tls/keystore.pem
+ssl.quorum.trustStore.location=/tls/ca.pem
+{% endif %}

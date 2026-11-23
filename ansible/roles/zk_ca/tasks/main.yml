@@ -1,0 +1,41 @@
+---
+- name: Generate CA private key
+  community.crypto.openssl_privatekey_pipe:
+    type: RSA
+    size: 4096
+    format: pkcs8
+  register: zk_ca_key
+  no_log: true
+
+- name: Generate CA signing request
+  community.crypto.openssl_csr_pipe:
+    privatekey_content: "{{ zk_ca_key.privatekey }}"
+    common_name: "{{ zk_ca_common_name }}"
+    basic_constraints:
+      - CA:TRUE
+    basic_constraints_critical: true
+    key_usage:
+      - keyCertSign
+      - cRLSign
+    key_usage_critical: true
+  register: zk_ca_csr
+
+- name: Self-sign CA certificate
+  community.crypto.x509_certificate_pipe:
+    provider: selfsigned
+    csr_content: "{{ zk_ca_csr.csr }}"
+    privatekey_content: "{{ zk_ca_key.privatekey }}"
+    selfsigned_not_after: "+{{ zk_ca_valid_days }}d"
+  register: zk_ca_cert
+
+- name: Write CA variables
+  ansible.builtin.copy:
+    dest: "{{ zk_ca_output }}"
+    mode: "0600"
+    content: |
+      ---
+      zuul_zk_ca_key: |
+        {{ zk_ca_key.privatekey | trim | indent(2) }}
+      zuul_zk_ca_cert: |
+        {{ zk_ca_cert.certificate | trim | indent(2) }}
+  no_log: true

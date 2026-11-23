@@ -1,1 +1,47 @@
-localhost ansible_connection=local
+# Every component runs on zuul01, which is also where the GitHub Actions
+# runner lives, hence the local connection.
+#
+# To move a component to another VM, add that host to the relevant group(s)
+# instead of zuul01, with ansible_host set and zuul_internal_address set to
+# an address the other hosts can reach. Once there is more than one host,
+# ZooKeeper, MariaDB and zuul-web listen on all interfaces instead of
+# loopback, so firewall them accordingly.
+zuul01 ansible_connection=local zuul_internal_address=127.0.0.1
+
+[zookeeper]
+zuul01
+
+[zuul_db]
+zuul01
+
+[zuul_scheduler]
+zuul01
+
+[zuul_web]
+zuul01
+
+[zuul_fingergw]
+zuul01
+
+[zuul_merger]
+zuul01
+
+[zuul_executor]
+zuul01
+
+[zuul_launcher]
+zuul01
+
+[nodepool_launcher]
+zuul01
+
+[zuul_proxy]
+zuul01
+
+[zuul:children]
+zuul_scheduler
+zuul_web
+zuul_fingergw
+zuul_merger
+zuul_executor
+zuul_launcher

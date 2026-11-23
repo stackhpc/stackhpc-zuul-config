@@ -1,0 +1,16 @@
+---
+# Extra vars for the reconfigure test: adding a tenant only takes effect if
+# site.yml triggers a smart-reconfigure.
+zuul_tenant_config:
+  - tenant:
+      name: test
+      source:
+        test-git:
+          config-projects:
+            - test-config
+  - tenant:
+      name: test2
+      source:
+        test-git:
+          config-projects:
+            - test-config

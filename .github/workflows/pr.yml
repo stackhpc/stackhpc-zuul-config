@@ -5,39 +5,87 @@ on:
   workflow_dispatch:
   pull_request:
 
+permissions:
+  contents: read
+
+# Runs on GitHub-hosted runners only, with no secrets. Nothing triggered by
+# a pull request may run on the self-hosted zuul-deploy runner.
 jobs:
-  deploy-zuul:
-
-    runs-on: self-hosted
-
-    env:
-      ANSIBLE_FORCE_COLOR: True
-      ANSIBLE_VAULT_PASSWORD_FILE: .vault.txt
+  lint:
+    runs-on: ubuntu-26.04
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-    - name: Set Ansible Vault password file
+    - name: Install dependencies
       run: |
-        echo ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > $ANSIBLE_VAULT_PASSWORD_FILE
+        python3 -m venv ~/venv
+        ~/venv/bin/pip install -r test-requirements.txt
+        echo ~/venv/bin >> "$GITHUB_PATH"
+
+    - name: Install collections
+      run: ansible-galaxy collection install -r ansible/requirements.yml
+
+    - name: Lint
+      run: ansible-lint ansible/
+
+    - name: Syntax check
+      run: ansible-playbook -i ansible/inventory-test ansible/site.yml --syntax-check
+
+  deploy-test:
+    runs-on: ubuntu-26.04
+
+    env:
+      ANSIBLE_FORCE_COLOR: true
+
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
     - name: Install dependencies
-      run: >
-        curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-    - name: Generate kubeconfig
-      env:
-        KUBE: ${{secrets.KUBE}}
-        OS_CLOUD: "smslab-stackhpc-ci"
       run: |
-        mkdir -p ~/.kube
-        echo "$KUBE" > ~/.kube/config
+        python3 -m venv ~/venv
+        ~/venv/bin/pip install -r test-requirements.txt
+        echo ~/venv/bin >> "$GITHUB_PATH"
 
-    - name: Run playbook
-      run: >
-        ansible-playbook -i ansible/inventory ansible/run.yml --check --diff -vvv
+    - name: Install collections
+      run: ansible-galaxy collection install -r ansible/requirements.yml
 
-    - name: Remove credentials
+    - name: Prepare test environment
+      run: ansible-playbook -i ansible/inventory-test ansible/test-prepare.yml
+
+    - name: Deploy
+      run: ansible-playbook -i ansible/inventory-test ansible/site.yml
+
+    - name: Test
+      run: ansible-playbook -i ansible/inventory-test ansible/test.yml
+
+    - name: Deploy again (idempotence)
       run: |
-        rm -f ~/.kube/config .vault.txt
+        ansible-playbook -i ansible/inventory-test ansible/site.yml | tee site.log
+        if grep -E 'changed=[1-9]' site.log; then
+          echo "Second deployment made changes"
+          exit 1
+        fi
 
+    - name: Add a tenant (smart-reconfigure)
+      run: ansible-playbook -i ansible/inventory-test ansible/site.yml -e @ansible/test/reconfigure.yml
+
+    - name: Test new tenant
+      run: ansible-playbook -i ansible/inventory-test ansible/test.yml -e zuul_test_tenant=test2
+
+    - name: Collect logs
+      if: failure()
+      run: |
+        mkdir -p logs
+        sudo journalctl --no-pager -u 'zuul-*' -u zookeeper -u mariadb -u nodepool-launcher > logs/journal.txt
+        sudo cp -r /etc/containers/systemd logs/quadlets
+        sudo cp /etc/zuul/main.yaml /etc/nodepool/nodepool.yaml logs/ || true
+        sudo podman ps -a > logs/podman-ps.txt
+        sudo chown -R "$USER" logs
+
+    - name: Upload logs
+      if: failure()
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: deploy-test-logs
+        path: logs/

@@ -1,0 +1,52 @@
+---
+- name: Ensure ZooKeeper directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ zookeeper_uid }}"
+    group: "{{ zookeeper_uid }}"
+    mode: "0750"
+  loop:
+    - /etc/zookeeper
+    - /var/lib/zookeeper/data
+    - /var/lib/zookeeper/datalog
+    - /var/log/zookeeper
+
+- name: Generate ZooKeeper TLS certificate
+  ansible.builtin.include_role:
+    name: zk_tls
+  vars:
+    zk_tls_dir: /etc/zookeeper/tls
+    zk_tls_owner: "{{ zookeeper_uid }}"
+    zk_tls_group: "{{ zookeeper_uid }}"
+
+- name: Write ZooKeeper configuration
+  ansible.builtin.template:
+    src: zoo.cfg.j2
+    dest: /etc/zookeeper/zoo.cfg
+    owner: "{{ zookeeper_uid }}"
+    group: "{{ zookeeper_uid }}"
+    mode: "0640"
+
+- name: Write ZooKeeper server id
+  ansible.builtin.copy:
+    content: "{{ groups['zookeeper'].index(inventory_hostname) + 1 }}\n"
+    dest: /var/lib/zookeeper/data/myid
+    owner: "{{ zookeeper_uid }}"
+    group: "{{ zookeeper_uid }}"
+    mode: "0640"
+
+- name: Run ZooKeeper
+  ansible.builtin.include_role:
+    name: podman_service
+  vars:
+    podman_service_name: zookeeper
+    podman_service_image: "{{ zookeeper_image }}"
+    podman_service_user: "{{ zookeeper_uid }}:{{ zookeeper_uid }}"
+    podman_service_volumes:
+      - /etc/zookeeper/zoo.cfg:/conf/zoo.cfg:ro
+      - /etc/zookeeper/tls:/tls:ro
+      - /var/lib/zookeeper/data:/data
+      - /var/lib/zookeeper/datalog:/datalog
+      - /var/log/zookeeper:/logs
+    podman_service_config_hash: "{{ (lookup('template', 'zoo.cfg.j2') ~ zk_tls_hash) | hash('sha1') }}"

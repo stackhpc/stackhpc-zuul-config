@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+{{ nodepool_config | to_nice_yaml(indent=2, width=120) }}
+zookeeper-servers:
+{% for host in groups['zookeeper'] %}
+  - host: {{ hostvars[host].zuul_internal_address }}
+    port: 2281
+{% endfor %}
+zookeeper-tls:
+  ca: /etc/nodepool/tls/ca.pem
+  cert: /etc/nodepool/tls/cert.pem
+  key: /etc/nodepool/tls/key.pem

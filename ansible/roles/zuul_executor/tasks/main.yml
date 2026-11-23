@@ -1,0 +1,29 @@
+---
+# Ubuntu stops unconfined processes creating user namespaces unless an
+# AppArmor profile allows it, which breaks bubblewrap inside the executor.
+- name: Allow unprivileged user namespaces
+  ansible.posix.sysctl:
+    name: kernel.apparmor_restrict_unprivileged_userns
+    value: "0"
+    sysctl_file: /etc/sysctl.d/90-zuul-executor.conf
+    state: present
+
+- name: Write SSH key for test nodes
+  ansible.builtin.copy:
+    content: "{{ zuul_executor_ssh_key | trim ~ '\n' }}"
+    dest: /etc/zuul/ssh/id_rsa
+    owner: zuul
+    group: zuul
+    mode: "0400"
+  register: zuul_executor_key
+  no_log: true
+
+- name: Run zuul-executor
+  ansible.builtin.include_role:
+    name: zuul_service
+  vars:
+    zuul_service_component: executor
+    # bubblewrap needs to set up namespaces and mounts.
+    zuul_service_privileged: true
+    zuul_service_stop_timeout: "{{ zuul_executor_stop_timeout }}"
+    zuul_service_config_hash: "{{ zuul_executor_key.checksum | default('') }}"

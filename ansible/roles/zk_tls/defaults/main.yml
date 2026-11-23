@@ -1,0 +1,16 @@
+---
+# Directory to write ca.pem, key.pem, cert.pem and keystore.pem
+# (key and certificate concatenated, as ZooKeeper expects). Required.
+# zk_tls_dir:
+
+zk_tls_owner: root
+zk_tls_group: root
+zk_tls_valid_days: 1825
+
+# Names the certificate is valid for. The internal address is how other
+# hosts reach this one, so it must always be included.
+zk_tls_names:
+  - "{{ inventory_hostname }}"
+  - "{{ zuul_internal_address }}"
+  - localhost
+  - 127.0.0.1

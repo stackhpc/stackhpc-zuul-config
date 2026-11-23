@@ -1,0 +1,79 @@
+---
+- name: Install podman
+  hosts: zookeeper:zuul_db:zuul:nodepool_launcher:zuul_proxy
+  become: true
+  roles:
+    - podman
+
+- name: Deploy ZooKeeper
+  hosts: zookeeper
+  become: true
+  roles:
+    - zookeeper
+
+- name: Deploy the Zuul database
+  hosts: zuul_db
+  become: true
+  roles:
+    - role: mariadb
+      vars:
+        mariadb_database: "{{ zuul_db_name | default('zuul') }}"
+        mariadb_user: "{{ zuul_db_user | default('zuul') }}"
+        mariadb_password: "{{ zuul_db_password }}"
+        mariadb_root_password: "{{ zuul_db_root_password }}"
+
+# Writes zuul.conf and records the hash the plays below use to restart
+# services when it changes.
+- name: Configure Zuul hosts
+  hosts: zuul
+  become: true
+  roles:
+    - zuul_common
+
+- name: Deploy zuul-scheduler
+  hosts: zuul_scheduler
+  become: true
+  roles:
+    - zuul_scheduler
+
+- name: Deploy zuul-merger
+  hosts: zuul_merger
+  become: true
+  roles:
+    - zuul_merger
+
+- name: Deploy zuul-executor
+  hosts: zuul_executor
+  become: true
+  roles:
+    - zuul_executor
+
+- name: Deploy zuul-launcher
+  hosts: zuul_launcher
+  become: true
+  roles:
+    - zuul_launcher
+
+- name: Deploy nodepool-launcher
+  hosts: nodepool_launcher
+  become: true
+  roles:
+    - nodepool_launcher
+
+- name: Deploy zuul-web
+  hosts: zuul_web
+  become: true
+  roles:
+    - zuul_web
+
+- name: Deploy zuul-fingergw
+  hosts: zuul_fingergw
+  become: true
+  roles:
+    - zuul_fingergw
+
+- name: Deploy the web proxy
+  hosts: zuul_proxy
+  become: true
+  roles:
+    - zuul_proxy

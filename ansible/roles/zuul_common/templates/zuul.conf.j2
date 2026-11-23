@@ -1,0 +1,54 @@
+# {{ ansible_managed }}
+{% macro options(config) %}
+{% for key, value in config.items() %}
+{{ key }}={{ value }}
+{% endfor %}
+{% endmacro %}
+[zookeeper]
+hosts={{ groups['zookeeper'] | map('extract', hostvars, 'zuul_internal_address') | map('regex_replace', '$', ':2281') | join(',') }}
+tls_ca=/etc/zuul/tls/ca.pem
+tls_cert=/etc/zuul/tls/cert.pem
+tls_key=/etc/zuul/tls/key.pem
+session_timeout=40
+
+[keystore]
+password={{ zuul_keystore_password }}
+
+[database]
+dburi=mysql+pymysql://{{ zuul_db_user }}:{{ zuul_db_password }}@{{ zuul_db_host }}/{{ zuul_db_name }}
+
+[scheduler]
+tenant_config=/etc/zuul/main.yaml
+state_dir=/var/lib/zuul
+{{ options(zuul_scheduler_config) }}
+[merger]
+{{ options(zuul_merger_config) }}
+[executor]
+private_key_file=/etc/zuul/ssh/id_rsa
+hostname={{ zuul_internal_address }}
+manage_ansible=false
+sigterm_method=stop
+{{ options(zuul_executor_config) }}
+[web]
+listen_address={{ zuul_web_listen_address }}
+port=9000
+root={{ zuul_web_root }}
+{{ options(zuul_web_config) }}
+[fingergw]
+port=79
+user=zuul
+
+[launcher]
+{{ options(zuul_launcher_config) }}
+{% for name, config in zuul_auth.items() %}
+[auth {{ name }}]
+{{ options(config) }}
+{% endfor %}
+{% for name, config in zuul_connections.items() %}
+[connection {{ name }}]
+{{ options(config) }}
+{% endfor %}
+{% for section, config in zuul_conf_extra.items() %}
+[{{ section }}]
+{{ options(config) }}
+{% endfor %}

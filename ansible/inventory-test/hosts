@@ -1,0 +1,40 @@
+# All-in-one test deployment on the machine running Ansible (a GitHub-hosted
+# runner in CI). There is no proxy: ACME cannot work there.
+localhost ansible_connection=local zuul_internal_address=127.0.0.1
+
+[zookeeper]
+localhost
+
+[zuul_db]
+localhost
+
+[zuul_scheduler]
+localhost
+
+[zuul_web]
+localhost
+
+[zuul_fingergw]
+localhost
+
+[zuul_merger]
+localhost
+
+[zuul_executor]
+localhost
+
+[zuul_launcher]
+localhost
+
+[nodepool_launcher]
+localhost
+
+[zuul_proxy]
+
+[zuul:children]
+zuul_scheduler
+zuul_web
+zuul_fingergw
+zuul_merger
+zuul_executor
+zuul_launcher

@@ -1,0 +1,13 @@
+---
+- name: Run zuul-{{ zuul_service_component }}
+  ansible.builtin.include_role:
+    name: podman_service
+  vars:
+    podman_service_name: zuul-{{ zuul_service_component }}
+    podman_service_image: "{{ zuul_image_prefix }}/zuul-{{ zuul_service_component }}:{{ zuul_version }}"
+    podman_service_user: "{{ zuul_service_user }}"
+    podman_service_privileged: "{{ zuul_service_privileged }}"
+    podman_service_volumes: "{{ zuul_service_volumes + zuul_service_extra_volumes }}"
+    podman_service_stop_timeout: "{{ zuul_service_stop_timeout }}"
+    podman_service_start: "{{ zuul_service_start }}"
+    podman_service_config_hash: "{{ (zuul_conf_hash ~ zuul_service_config_hash) | hash('sha1') }}"

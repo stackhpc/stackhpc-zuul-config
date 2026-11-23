@@ -1,0 +1,9 @@
+---
+zookeeper_image: docker.io/library/zookeeper:3.9.7
+
+# The image's entrypoint copes with an arbitrary uid. Keep it distinct from
+# the zuul uid (10001) so both can share a host.
+zookeeper_uid: 10002
+
+# Only listen on loopback when everything runs on one host.
+zookeeper_client_address: "{{ '127.0.0.1' if groups['all'] | length == 1 else '0.0.0.0' }}"

@@ -1,0 +1,33 @@
+---
+- name: Ensure Caddy directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+  loop:
+    - /etc/caddy
+    - /var/lib/caddy/data
+    - /var/lib/caddy/config
+
+- name: Write Caddyfile
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+    owner: root
+    group: root
+    mode: "0644"
+  register: zuul_proxy_caddyfile
+
+- name: Run Caddy
+  ansible.builtin.include_role:
+    name: podman_service
+  vars:
+    podman_service_name: caddy
+    podman_service_image: "{{ zuul_proxy_image }}"
+    podman_service_volumes:
+      - /etc/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - /var/lib/caddy/data:/data
+      - /var/lib/caddy/config:/config
+    podman_service_config_hash: "{{ zuul_proxy_caddyfile.checksum | default('') }}"

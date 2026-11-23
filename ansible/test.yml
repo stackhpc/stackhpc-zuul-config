@@ -1,0 +1,67 @@
+---
+# Smoke test a deployment from inventory-test: services are up, the tenant
+# loads without errors, and jobs run on the executor and on a Nodepool node.
+- name: Verify the Zuul deployment
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    zuul_test_api: http://127.0.0.1:9000/api
+    zuul_test_tenant: test
+    zuul_test_jobs:
+      - local-test
+      - node-test
+  tasks:
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Check services are running
+      ansible.builtin.assert:
+        that: ansible_facts.services[item ~ '.service'].state | default('missing') == 'running'
+        fail_msg: "{{ item }} is {{ ansible_facts.services[item ~ '.service'].state | default('missing') }}"
+      loop:
+        - zookeeper
+        - mariadb
+        - zuul-scheduler
+        - zuul-web
+        - zuul-fingergw
+        - zuul-merger
+        - zuul-executor
+        - zuul-launcher
+        - nodepool-launcher
+
+    - name: Check ZooKeeper is listening
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: 2281
+        timeout: 60
+
+    - name: Wait for zuul-web
+      ansible.builtin.uri:
+        url: "{{ zuul_test_api }}/info"
+      register: zuul_test_info
+      until: zuul_test_info is succeeded
+      retries: 30
+      delay: 10
+
+    - name: Wait for the tenant to load
+      ansible.builtin.uri:
+        url: "{{ zuul_test_api }}/tenant/{{ zuul_test_tenant }}/config-errors"
+      register: zuul_test_errors
+      until: zuul_test_errors is succeeded
+      retries: 30
+      delay: 10
+
+    - name: Check the tenant has no configuration errors
+      ansible.builtin.assert:
+        that: zuul_test_errors.json | length == 0
+        fail_msg: "{{ zuul_test_errors.json }}"
+
+    - name: Wait for successful builds
+      ansible.builtin.uri:
+        url: "{{ zuul_test_api }}/tenant/{{ zuul_test_tenant }}/builds?job_name={{ item }}&result=SUCCESS&limit=1"
+      register: zuul_test_builds
+      until: zuul_test_builds.json | default([]) | length > 0
+      retries: 40
+      delay: 15
+      loop: "{{ zuul_test_jobs }}"

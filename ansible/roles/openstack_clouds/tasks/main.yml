@@ -1,0 +1,23 @@
+---
+# Shared by Zuul and Nodepool. The containers run as uid 10001.
+- name: Ensure OpenStack configuration directory exists
+  ansible.builtin.file:
+    path: /etc/openstack
+    state: directory
+    owner: root
+    group: 10001
+    mode: "0750"
+
+- name: Write clouds.yaml
+  ansible.builtin.copy:
+    content: "{{ zuul_clouds_yaml | to_nice_yaml(indent=2) }}"
+    dest: /etc/openstack/clouds.yaml
+    owner: root
+    group: 10001
+    mode: "0640"
+  register: openstack_clouds_file
+  no_log: true
+
+- name: Record clouds.yaml hash
+  ansible.builtin.set_fact:
+    openstack_clouds_hash: "{{ openstack_clouds_file.checksum | default('') }}"

@@ -1,0 +1,30 @@
+---
+# The zuul user in the Zuul images.
+zuul_uid: 10001
+
+# Sections in zuul.conf, as dicts of option: value. Anything not managed by
+# the template can go here.
+zuul_auth: {}
+zuul_connections: {}
+zuul_scheduler_config: {}
+zuul_merger_config: {}
+zuul_executor_config: {}
+zuul_web_config: {}
+zuul_launcher_config: {}
+zuul_conf_extra: {}
+
+zuul_web_root: "https://{{ zuul_fqdn }}"
+
+# Only listen on loopback when everything runs on one host; otherwise the
+# proxy has to reach zuul-web over the network.
+zuul_web_listen_address: "{{ '127.0.0.1' if groups['all'] | length == 1 else '0.0.0.0' }}"
+
+zuul_db_host: "{{ hostvars[groups['zuul_db'][0]].zuul_internal_address }}"
+zuul_db_name: zuul
+zuul_db_user: zuul
+
+# Secrets, normally from the vault:
+# zuul_keystore_password:
+# zuul_db_password:
+# zuul_github_app_key:
+# zuul_executor_ssh_key:

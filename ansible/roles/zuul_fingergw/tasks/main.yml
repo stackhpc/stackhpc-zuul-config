@@ -1,0 +1,8 @@
+---
+# fingergw starts as root to bind port 79, then drops to the zuul user.
+- name: Run zuul-fingergw
+  ansible.builtin.include_role:
+    name: zuul_service
+  vars:
+    zuul_service_component: fingergw
+    zuul_service_user: ""

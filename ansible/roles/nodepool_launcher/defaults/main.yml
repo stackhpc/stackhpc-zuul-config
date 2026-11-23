@@ -1,0 +1,7 @@
+---
+nodepool_version: "11.0.0"
+nodepool_image: quay.io/zuul-ci/nodepool-launcher:{{ nodepool_version }}
+
+# Nodepool configuration (labels, providers, ...). ZooKeeper settings are
+# added by the role. Required.
+# nodepool_config:

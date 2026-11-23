@@ -1,62 +1,48 @@
 ---
-zuul_operator_crd_url: "https://raw.githubusercontent.com/stackhpc/zuul-operator/refs/heads/stackhpc/deploy/crds/zuul-ci_v1alpha2_zuul_crd.yaml"
-zuul_operator_cr: |
-  apiVersion: operator.zuul-ci.org/v1alpha2
-  kind: Zuul
-  metadata:
-    name: stackhpc-zuul
-  spec:
-    auth:
-      google_auth:
-        default: true
-        driver: OpenIDConnect
-        realm: stackhpc
-        issuer_id: "https://accounts.google.com"
-        client_id: "161754685259-nvqgt0hruifde3415k3c7r42sob7cof0.apps.googleusercontent.com"
-        uid_claim: email
-        scope: "openid profile email"
-    connections:
-      github:
-        driver: github
-        secretName: zuul-github
-        server: github.com
-      github-git:
-        driver: git
-        baseurl: https://github.com
-      opendev:
-        driver: git
-        baseurl: https://opendev.org
-      stackhpc:
-        driver: git
-        baseurl: https://github.com/stackhpc
-        canonical_hostname: github.stackhpc.com
-      smslab:
-        driver: openstack
-        cloud: smslab
-    executor:
-      count: 6
-      disk_limit_per_job: 5000
-      storageClassName: ssd
-      sshkey:
-        secretName: zuul-sshkey
-    externalConfig:
-      openstack:
-        secretName: zuul-clouds-yaml
-    fingergw:
-      count: 2
-    merger:
-      count: 6
-      git_http_low_speed_time: 360
-      git_timeout: 600
-    scheduler:
-      count: 2
-      config:
-        secretName: zuul-tenant-config
-    launcher:
-      type: both
-      config:
-        secretName: zuul-nodepool-config
-    web:
-      count: 3
-      root: "https://zuul.stackhpc.com"
-    zuulImageVersion: "14.2.0"
+# Address other hosts use to reach this one (ZooKeeper, MariaDB, zuul-web,
+# executor log streaming).
+zuul_internal_address: "{{ ansible_host | default(inventory_hostname) }}"
+
+zuul_version: "14.2.0"
+nodepool_version: "11.0.0"
+
+zuul_fqdn: zuul.stackhpc.com
+zuul_proxy_acme_email: ci@stackhpc.com
+
+zuul_auth:
+  google_auth:
+    default: "true"
+    driver: OpenIDConnect
+    realm: stackhpc
+    issuer_id: "https://accounts.google.com"
+    client_id: "161754685259-nvqgt0hruifde3415k3c7r42sob7cof0.apps.googleusercontent.com"
+    uid_claim: email
+    scope: "openid profile email"
+
+zuul_connections:
+  github:
+    driver: github
+    server: github.com
+    app_id: "{{ zuul_github_app_id }}"
+    app_key: /etc/zuul/github.key
+    webhook_token: "{{ zuul_github_webhook_token }}"
+  github-git:
+    driver: git
+    baseurl: https://github.com
+  opendev:
+    driver: git
+    baseurl: https://opendev.org
+  stackhpc:
+    driver: git
+    baseurl: https://github.com/stackhpc
+    canonical_hostname: github.stackhpc.com
+  smslab:
+    driver: openstack
+    cloud: smslab
+
+zuul_executor_config:
+  disk_limit_per_job: 5000
+
+zuul_merger_config:
+  git_http_low_speed_time: 360
+  git_timeout: 600

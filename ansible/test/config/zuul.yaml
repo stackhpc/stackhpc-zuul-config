@@ -1,0 +1,39 @@
+---
+# Config project for the test deployment. The periodic pipeline fires every
+# minute, so nothing needs to enqueue anything.
+- pipeline:
+    name: periodic
+    manager: independent
+    trigger:
+      timer:
+        - time: "* * * * *"
+
+- nodeset:
+    name: test-node
+    nodes:
+      - name: node
+        label: test-node
+
+- job:
+    name: base
+    parent: null
+    nodeset:
+      nodes: []
+
+# Runs on the executor only.
+- job:
+    name: local-test
+    run: playbooks/local.yaml
+
+# Runs on a node provided by Nodepool.
+- job:
+    name: node-test
+    nodeset: test-node
+    run: playbooks/node.yaml
+
+- project:
+    periodic:
+      jobs:
+        - noop
+        - local-test
+        - node-test

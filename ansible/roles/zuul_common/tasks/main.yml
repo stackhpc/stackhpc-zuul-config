@@ -1,0 +1,66 @@
+---
+- name: Create zuul group
+  ansible.builtin.group:
+    name: zuul
+    gid: "{{ zuul_uid }}"
+    system: true
+
+- name: Create zuul user
+  ansible.builtin.user:
+    name: zuul
+    uid: "{{ zuul_uid }}"
+    group: zuul
+    home: /var/lib/zuul
+    create_home: false
+    shell: /usr/sbin/nologin
+    system: true
+
+- name: Ensure Zuul directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: zuul
+    group: zuul
+    mode: "0750"
+  loop:
+    - /etc/zuul
+    - /etc/zuul/ssh
+    - /var/lib/zuul
+
+- name: Generate ZooKeeper client certificate
+  ansible.builtin.include_role:
+    name: zk_tls
+  vars:
+    zk_tls_dir: /etc/zuul/tls
+    zk_tls_owner: zuul
+    zk_tls_group: zuul
+
+- name: Install clouds.yaml
+  ansible.builtin.include_role:
+    name: openstack_clouds
+
+- name: Write GitHub app key
+  ansible.builtin.copy:
+    content: "{{ zuul_github_app_key }}"
+    dest: /etc/zuul/github.key
+    owner: zuul
+    group: zuul
+    mode: "0600"
+  when: zuul_github_app_key is defined
+  no_log: true
+
+- name: Write zuul.conf
+  ansible.builtin.template:
+    src: zuul.conf.j2
+    dest: /etc/zuul/zuul.conf
+    owner: zuul
+    group: zuul
+    mode: "0640"
+  register: zuul_conf_file
+
+# Every Zuul service restarts when this changes.
+- name: Record configuration hash
+  ansible.builtin.set_fact:
+    zuul_conf_hash: >-
+      {{ (zuul_conf_file.checksum | default('') ~ zk_tls_hash ~ openstack_clouds_hash
+          ~ (zuul_github_app_key | default('') | hash('sha1'))) | hash('sha1') }}

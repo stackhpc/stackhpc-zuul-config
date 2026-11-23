@@ -1,0 +1,14 @@
+---
+mariadb_image: docker.io/library/mariadb:11.8.9
+
+mariadb_database: zuul
+mariadb_user: zuul
+# mariadb_password:
+# mariadb_root_password:
+
+# Only listen on loopback when everything runs on one host.
+mariadb_bind_address: "{{ '127.0.0.1' if groups['all'] | length == 1 else '0.0.0.0' }}"
+
+mariadb_backup_dir: /var/backups/mariadb
+mariadb_backup_retention_days: 14
+mariadb_backup_schedule: "*-*-* 01:00:00"

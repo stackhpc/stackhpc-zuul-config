@@ -1,3 +1,0 @@
----
-zuul_operator_pxc_crd_url: "https://raw.githubusercontent.com/percona/percona-xtradb-cluster-operator/refs/tags/v1.18.0/deploy/crd.yaml"
-zuul_operator_pxc_bundle_url: "https://raw.githubusercontent.com/percona/percona-xtradb-cluster-operator/refs/tags/v1.18.0/deploy/bundle.yaml"

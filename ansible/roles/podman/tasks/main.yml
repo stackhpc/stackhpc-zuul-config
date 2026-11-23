@@ -1,0 +1,17 @@
+---
+- name: Install podman
+  ansible.builtin.apt:
+    name:
+      - podman
+      - crun
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure quadlet directory exists
+  ansible.builtin.file:
+    path: /etc/containers/systemd
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"

@@ -1,0 +1,78 @@
+---
+- name: Install Python cryptography library
+  ansible.builtin.apt:
+    name: python3-cryptography
+    state: present
+
+- name: Ensure TLS directory exists
+  ansible.builtin.file:
+    path: "{{ zk_tls_dir }}"
+    state: directory
+    owner: "{{ zk_tls_owner }}"
+    group: "{{ zk_tls_group }}"
+    mode: "0750"
+
+- name: Install CA certificate
+  ansible.builtin.copy:
+    content: "{{ zuul_zk_ca_cert }}"
+    dest: "{{ zk_tls_dir }}/ca.pem"
+    owner: "{{ zk_tls_owner }}"
+    group: "{{ zk_tls_group }}"
+    mode: "0644"
+
+- name: Generate private key
+  community.crypto.openssl_privatekey:
+    path: "{{ zk_tls_dir }}/key.pem"
+    type: RSA
+    size: 2048
+    format: pkcs8
+    owner: "{{ zk_tls_owner }}"
+    group: "{{ zk_tls_group }}"
+    mode: "0600"
+
+- name: Generate certificate signing request
+  community.crypto.openssl_csr_pipe:
+    privatekey_path: "{{ zk_tls_dir }}/key.pem"
+    common_name: "{{ inventory_hostname }}"
+    subject_alt_name: >-
+      {{ zk_tls_names | unique | map('regex_replace', '^([0-9.]+)$', 'IP:\1')
+         | map('regex_replace', '^(?!IP:)(.*)$', 'DNS:\1') | list }}
+    extended_key_usage:
+      - serverAuth
+      - clientAuth
+  register: zk_tls_csr
+
+- name: Sign certificate
+  community.crypto.x509_certificate:
+    path: "{{ zk_tls_dir }}/cert.pem"
+    csr_content: "{{ zk_tls_csr.csr }}"
+    provider: ownca
+    ownca_content: "{{ zuul_zk_ca_cert }}"
+    ownca_privatekey_content: "{{ zuul_zk_ca_key }}"
+    ownca_not_after: "+{{ zk_tls_valid_days }}d"
+    owner: "{{ zk_tls_owner }}"
+    group: "{{ zk_tls_group }}"
+    mode: "0644"
+
+- name: Read key and certificate
+  ansible.builtin.slurp:
+    path: "{{ zk_tls_dir }}/{{ item }}"
+  loop:
+    - key.pem
+    - cert.pem
+  register: zk_tls_files
+  no_log: true
+
+- name: Write keystore
+  ansible.builtin.copy:
+    content: "{{ zk_tls_files.results | map(attribute='content') | map('b64decode') | join('') }}"
+    dest: "{{ zk_tls_dir }}/keystore.pem"
+    owner: "{{ zk_tls_owner }}"
+    group: "{{ zk_tls_group }}"
+    mode: "0600"
+  no_log: true
+
+# Lets callers restart services when the certificate changes.
+- name: Record certificate hash
+  ansible.builtin.set_fact:
+    zk_tls_hash: "{{ (zk_tls_files.results[1].content ~ zuul_zk_ca_cert) | hash('sha1') }}"

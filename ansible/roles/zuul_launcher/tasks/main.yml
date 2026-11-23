@@ -1,0 +1,6 @@
+---
+- name: Run zuul-launcher
+  ansible.builtin.include_role:
+    name: zuul_service
+  vars:
+    zuul_service_component: launcher

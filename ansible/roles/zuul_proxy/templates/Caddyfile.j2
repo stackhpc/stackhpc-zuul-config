@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+{
+{% if zuul_proxy_acme_email %}
+	email {{ zuul_proxy_acme_email }}
+{% endif %}
+{% if zuul_proxy_acme_ca %}
+	acme_ca {{ zuul_proxy_acme_ca }}
+{% endif %}
+}
+
+{{ zuul_fqdn }} {
+	encode gzip
+	reverse_proxy {% for host in groups['zuul_web'] %}{{ '127.0.0.1' if host == inventory_hostname else hostvars[host].zuul_internal_address }}:9000{{ ' ' if not loop.last }}{% endfor %}
+
+}

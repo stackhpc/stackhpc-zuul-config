@@ -1,0 +1,116 @@
+---
+- name: Ensure MariaDB directories exist
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - path: /etc/mariadb
+      mode: "0755"
+    # Read by mysqld as the mysql user inside the container.
+    - path: /etc/mariadb/conf.d
+      mode: "0755"
+    - path: "{{ mariadb_backup_dir }}"
+      mode: "0700"
+  loop_control:
+    label: "{{ item.path }}"
+
+# The container entrypoint chowns this to the mysql user inside the
+# container, so leave ownership alone.
+- name: Ensure MariaDB data directory exists
+  ansible.builtin.file:
+    path: /var/lib/mariadb
+    state: directory
+    mode: "0700"
+
+- name: Write MariaDB environment file
+  ansible.builtin.copy:
+    content: |
+      MARIADB_ROOT_PASSWORD={{ mariadb_root_password }}
+      MARIADB_DATABASE={{ mariadb_database }}
+      MARIADB_USER={{ mariadb_user }}
+      MARIADB_PASSWORD={{ mariadb_password }}
+      MARIADB_AUTO_UPGRADE=1
+    dest: /etc/mariadb/mariadb.env
+    owner: root
+    group: root
+    mode: "0600"
+  register: mariadb_env
+  no_log: true
+
+- name: Write MariaDB configuration
+  ansible.builtin.copy:
+    content: |
+      [mysqld]
+      bind-address = {{ mariadb_bind_address }}
+      character-set-server = utf8mb4
+      collation-server = utf8mb4_unicode_ci
+    dest: /etc/mariadb/conf.d/zuul.cnf
+    owner: root
+    group: root
+    mode: "0644"
+  register: mariadb_config
+
+- name: Run MariaDB
+  ansible.builtin.include_role:
+    name: podman_service
+  vars:
+    podman_service_name: mariadb
+    podman_service_image: "{{ mariadb_image }}"
+    podman_service_environment_file: /etc/mariadb/mariadb.env
+    podman_service_volumes:
+      - /etc/mariadb/conf.d:/etc/mysql/conf.d:ro
+      - /var/lib/mariadb:/var/lib/mysql
+    podman_service_stop_timeout: 120
+    podman_service_config_hash: >-
+      {{ (mariadb_env.checksum | default('') ~ mariadb_config.checksum | default('')) | hash('sha1') }}
+
+- name: Install backup script
+  ansible.builtin.template:
+    src: mariadb-backup.j2
+    dest: /usr/local/sbin/mariadb-backup
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Install backup units
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: /etc/systemd/system/{{ item.name }}
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - name: mariadb-backup.service
+      content: |
+        [Unit]
+        Description=Dump the Zuul database
+        Requires=mariadb.service
+        After=mariadb.service
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/local/sbin/mariadb-backup
+    - name: mariadb-backup.timer
+      content: |
+        [Unit]
+        Description=Daily dump of the Zuul database
+
+        [Timer]
+        OnCalendar={{ mariadb_backup_schedule }}
+        Persistent=true
+
+        [Install]
+        WantedBy=timers.target
+  loop_control:
+    label: "{{ item.name }}"
+  register: mariadb_backup_units
+
+- name: Enable backup timer
+  ansible.builtin.systemd_service:
+    name: mariadb-backup.timer
+    state: started
+    enabled: true
+    daemon_reload: "{{ mariadb_backup_units is changed }}"

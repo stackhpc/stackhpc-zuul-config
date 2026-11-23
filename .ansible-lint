@@ -1,0 +1,14 @@
+---
+# Only the deployment code under ansible/ is linted. playbooks/, roles/ and
+# zuul.d/ are Zuul job content.
+exclude_paths:
+  - .github/
+  - playbooks/
+  - roles/
+  - zuul.d/
+  - ansible/test/config/
+
+skip_list:
+  # zuul_*, nodepool_* and mariadb_* are site-wide variables shared between
+  # roles and set in the inventory, not role-private ones.
+  - var-naming[no-role-prefix]

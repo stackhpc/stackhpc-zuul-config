@@ -1,0 +1,21 @@
+---
+zuul_version: "14.2.0"
+zuul_image_prefix: quay.io/zuul-ci
+
+# Zuul component, e.g. scheduler. The container and unit are named
+# zuul-<component>. Required.
+# zuul_service_component:
+
+zuul_service_user: "10001:10001"
+zuul_service_privileged: false
+zuul_service_stop_timeout: 60
+zuul_service_start: true
+
+zuul_service_volumes:
+  - /etc/zuul:/etc/zuul:ro
+  - /etc/openstack:/etc/openstack:ro
+  - /var/lib/zuul:/var/lib/zuul
+zuul_service_extra_volumes: []
+
+# Hash of any component-specific configuration, on top of zuul.conf.
+zuul_service_config_hash: ""

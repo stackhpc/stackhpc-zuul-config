@@ -1,0 +1,41 @@
+---
+- name: Check whether image is present for {{ podman_service_name }}
+  ansible.builtin.command: podman image exists {{ podman_service_image }}
+  register: podman_service_image_exists
+  changed_when: false
+  failed_when: podman_service_image_exists.rc not in [0, 1]
+
+# Pull ahead of starting the unit, so that a slow pull of a large image does
+# not count against the systemd start timeout.
+- name: Pull image for {{ podman_service_name }}
+  ansible.builtin.command: podman pull {{ podman_service_image }}
+  register: podman_service_pull
+  changed_when: true
+  until: podman_service_pull is succeeded
+  retries: 3
+  delay: 10
+  when: podman_service_image_exists.rc == 1
+
+- name: Install quadlet for {{ podman_service_name }}
+  ansible.builtin.template:
+    src: container.j2
+    dest: /etc/containers/systemd/{{ podman_service_name }}.container
+    owner: root
+    group: root
+    mode: "0644"
+  register: podman_service_quadlet
+
+- name: Reload systemd for {{ podman_service_name }}
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+  when: podman_service_quadlet is changed
+
+# Units generated from quadlets cannot be enabled; the [Install] section of
+# the quadlet takes care of starting them at boot.
+- name: Ensure service is running for {{ podman_service_name }}
+  ansible.builtin.systemd_service:
+    name: "{{ podman_service_name }}.service"
+    state: "{{ 'restarted' if podman_service_quadlet is changed else 'started' }}"
+  when:
+    - podman_service_start | bool
+    - not (ansible_check_mode and podman_service_quadlet is changed)

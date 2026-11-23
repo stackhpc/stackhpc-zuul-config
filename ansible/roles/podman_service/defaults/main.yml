@@ -1,0 +1,42 @@
+---
+# Name of the container and of the generated systemd unit
+# (<name>.service). Required.
+# podman_service_name:
+
+# Fully qualified image reference. Required.
+# podman_service_image:
+
+podman_service_description: "{{ podman_service_name }}"
+
+# List of "host:container[:options]" bind mounts.
+podman_service_volumes: []
+
+# Environment variables passed to the container.
+podman_service_environment: {}
+
+# Path to an environment file on the host (for secrets).
+podman_service_environment_file: ""
+
+# User (and optionally group) to run the container as.
+podman_service_user: ""
+
+podman_service_privileged: false
+
+# Override the image command.
+podman_service_exec: ""
+
+# Extra arguments passed to podman run.
+podman_service_podman_args: []
+
+# Seconds to wait for the container to stop before killing it.
+podman_service_stop_timeout: 60
+
+podman_service_restart: always
+
+# Opaque string written into the quadlet. Pass a hash of the service's
+# configuration files so that a configuration change restarts the service.
+podman_service_config_hash: ""
+
+# Whether to start the service. If false the quadlet is installed but the
+# service is left alone.
+podman_service_start: true

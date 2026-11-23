@@ -1,0 +1,50 @@
+---
+# Secrets (CA, passwords, SSH key) come from generated.yml, written by
+# test-prepare.yml.
+
+zuul_fqdn: localhost
+zuul_web_root: http://localhost:9000
+
+# Directory holding the test config project, bind mounted into every Zuul
+# container as part of /var/lib/zuul.
+zuul_test_repos: /var/lib/zuul/test-repos
+
+zuul_connections:
+  test-git:
+    driver: git
+    baseurl: "file://{{ zuul_test_repos }}"
+    canonical_hostname: test.local
+    poll_delay: 30
+
+zuul_tenant_config:
+  - tenant:
+      name: test
+      source:
+        test-git:
+          config-projects:
+            - test-config
+
+zuul_clouds_yaml:
+  clouds: {}
+
+# A static node pointing back at the runner, so jobs run end to end.
+nodepool_config:
+  labels:
+    - name: test-node
+  providers:
+    - name: static
+      driver: static
+      pools:
+        - name: main
+          nodes:
+            - name: 127.0.0.1
+              labels:
+                - test-node
+              username: zuul-worker
+
+# Throwaway secrets. The password lookups create their files on first use;
+# test-prepare.yml generates the CA (generated-ca.yml) and the SSH key.
+zuul_keystore_password: "{{ lookup('ansible.builtin.password', inventory_dir ~ '/generated/keystore_password', chars=['ascii_letters', 'digits'], length=32) }}"
+zuul_db_password: "{{ lookup('ansible.builtin.password', inventory_dir ~ '/generated/db_password', chars=['ascii_letters', 'digits'], length=32) }}"
+zuul_db_root_password: "{{ lookup('ansible.builtin.password', inventory_dir ~ '/generated/db_root_password', chars=['ascii_letters', 'digits'], length=32) }}"
+zuul_executor_ssh_key: "{{ lookup('ansible.builtin.file', inventory_dir ~ '/generated/worker_key') }}"

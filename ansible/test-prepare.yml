@@ -1,0 +1,94 @@
+---
+# Prepare the machine for a test deployment with inventory-test: generate
+# throwaway secrets, create the user the static test node logs in as, and
+# create the test config project.
+- name: Prepare the test environment
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Install packages
+      become: true
+      ansible.builtin.apt:
+        name:
+          - git
+          - openssh-server
+          - python3-cryptography
+        state: present
+        update_cache: true
+
+    - name: Ensure generated directory exists
+      ansible.builtin.file:
+        path: "{{ inventory_dir }}/generated"
+        state: directory
+        mode: "0700"
+
+    - name: Check for test CA
+      ansible.builtin.stat:
+        path: "{{ inventory_dir }}/group_vars/all/generated-ca.yml"
+      register: test_ca
+
+    - name: Generate test CA
+      ansible.builtin.include_role:
+        name: zk_ca
+      vars:
+        zk_ca_output: "{{ inventory_dir }}/group_vars/all/generated-ca.yml"
+      when: not test_ca.stat.exists
+
+    - name: Generate SSH key for the test node
+      community.crypto.openssh_keypair:
+        path: "{{ inventory_dir }}/generated/worker_key"
+        type: ed25519
+      register: test_worker_key
+
+    - name: Create test node user
+      become: true
+      ansible.builtin.user:
+        name: zuul-worker
+        shell: /bin/bash
+
+    - name: Authorize the executor on the test node
+      become: true
+      ansible.posix.authorized_key:
+        user: zuul-worker
+        key: "{{ test_worker_key.public_key }}"
+
+    - name: Start sshd
+      become: true
+      ansible.builtin.systemd_service:
+        name: ssh
+        state: started
+
+    - name: Ensure test config project directory exists
+      become: true
+      ansible.builtin.file:
+        path: "{{ zuul_test_repos }}/test-config"
+        state: directory
+        owner: 10001
+        group: 10001
+        mode: "0755"
+
+    - name: Copy test config project
+      become: true
+      ansible.builtin.copy:
+        src: test/config/
+        dest: "{{ zuul_test_repos }}/test-config/"
+        owner: 10001
+        group: 10001
+        mode: "0644"
+        directory_mode: "0755"
+      register: test_config
+
+    - name: Commit test config project  # noqa: no-handler
+      become: true
+      ansible.builtin.shell: |
+        set -e
+        git="git -c safe.directory=* -c user.name=Test -c user.email=test@test.local"
+        $git init -q -b master
+        $git add -A
+        $git diff --cached --quiet || $git commit -q -m "Test configuration"
+        chown -R 10001:10001 .
+      args:
+        chdir: "{{ zuul_test_repos }}/test-config"
+      when: test_config is changed
+      changed_when: true

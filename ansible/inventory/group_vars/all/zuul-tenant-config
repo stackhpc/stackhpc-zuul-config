@@ -1,0 +1,315 @@
+---
+zuul_tenant_config:
+  # Authorization rules for administrators
+  - authorization-rule:
+      name: stackhpc_admin
+      conditions:
+        - hd: "stackhpc.com"
+
+  # Tenant config
+  - tenant:
+      name: stackhpc
+      admin-rules:
+        - stackhpc_admin
+      exclude-unprotected-branches: true
+      source:
+        stackhpc:
+          config-projects:
+            - stackhpc-zuul-config
+        github-git:
+          untrusted-projects:
+            # Additional project deps from github.com
+            - include: []
+              projects:
+                - ansible/ansible
+                - novnc/novnc
+                - sqlalchemy/alembic
+                - sqlalchemy/sqlalchemy
+                - svinota/pyroute2
+        opendev:
+          untrusted-projects:
+            - opendev/base-jobs:
+                include: []
+            - zuul/zuul-jobs:
+                shadow:
+                  - stackhpc-zuul-config
+                include:
+                  - job
+            - include:
+                - job
+                - nodeset
+                - project-template
+              projects:
+                - opendev/grafyaml
+                - openstack/project-config
+                - openstack/barbican-tempest-plugin:
+                    include-branches: &upstream_branches
+                      - master
+                      - stable/2025.1
+                      - stable/2026.1
+                - openstack/castellan:
+                    include-branches: *upstream_branches
+                - openstack/cyborg:
+                    include-branches: *upstream_branches
+                - openstack/cyborg-tempest-plugin
+                - openstack/devstack
+                - openstack/devstack-plugin-ceph:
+                    include-branches: *upstream_branches
+                - openstack/devstack-plugin-nfs:
+                    include-branches: *upstream_branches
+                - openstack/grenade
+                - openstack/horizon:
+                    include-branches: *upstream_branches
+                - openstack/ironic:
+                    include-branches:
+                      - master
+                      - stable/2025.1
+                      - stable/2025.2
+                      - stable/2026.1
+                - openstack/ironic-inspector:
+                    include-branches:
+                      - stable/2025.1
+                - openstack/ironic-tempest-plugin:
+                    include-branches: *upstream_branches
+                - openstack/kayobe:
+                    include-branches: *upstream_branches
+                - openstack/kayobe-config:
+                    include-branches: *upstream_branches
+                - openstack/kayobe-config-dev:
+                    include-branches: *upstream_branches
+                - openstack/kolla:
+                    include-branches: *upstream_branches
+                - openstack/kolla-ansible:
+                    include-branches: *upstream_branches
+                - openstack/manila-tempest-plugin:
+                    include-branches: *upstream_branches
+                - openstack/neutron-tempest-plugin:
+                    include-branches: *upstream_branches
+                - openstack/nova:
+                    include-branches: *upstream_branches
+                    shadow:
+                      - stackhpc/nova
+                - openstack/openstack-zuul-jobs:
+                    shadow:
+                      - stackhpc-zuul-config
+                - openstack/openstacksdk:
+                    include-branches: *upstream_branches
+                - openstack/os-vif:
+                    include-branches: *upstream_branches
+                - openstack/osprofiler
+                - openstack/python-cyborgclient:
+                    include-branches: *upstream_branches
+                - openstack/rally-openstack
+                - openstack/requirements:
+                    include-branches: *upstream_branches
+                - openstack/tempest:
+                    include-branches: *upstream_branches
+                # only master branch
+                - openstack/whitebox-tempest-plugin
+                - x/cursive
+                - x/devstack-plugin-tobiko
+                - x/devstack-plugin-glusterfs
+            - include: []
+              projects:
+                - airship/airshipctl
+                - airship/airshipui
+                - airship/armada
+                - airship/charts
+                - airship/deckhand
+                - airship/divingbell
+                - airship/docs
+                - airship/drydock
+                - airship/election
+                - airship/governance
+                - airship/pegleg
+                - airship/porthole
+                - airship/promenade
+                - airship/shipyard
+                - airship/specs
+                - airship/spyglass
+                - airship/spyglass-plugin-xls
+                - airship/treasuremap
+                - opendev/irc-meetings
+                - opendev/publications
+                - opendev/system-config
+                - openstack/ansible-collection-kolla
+                - openstack/ansible-collections-openstack
+                - openstack/aodh
+                - openstack/api-site
+                - openstack/automaton
+                - openstack/barbican
+                - openstack/ceilometer
+                - openstack/ceilometermiddleware
+                - openstack/cinder
+                - openstack/cinder-tempest-plugin
+                - openstack/codegenerator
+                - openstack/contributor-guide
+                - openstack/debtcollector
+                - openstack/designate
+                - openstack/designate-dashboard
+                - openstack/designate-tempest-plugin
+                - openstack/diskimage-builder
+                - openstack/election
+                - openstack/futurist
+                - openstack/glance
+                - openstack/glance_store
+                - openstack/governance
+                - openstack/governance-sigs
+                - openstack/governance-website
+                - openstack/heat
+                - openstack/heat-cfntools
+                - openstack/heat-dashboard
+                - openstack/heat-templates
+                - openstack/ideas
+                - openstack/ironic-python-agent
+                - openstack/ironic-python-agent-builder
+                - openstack/ironic-ui
+                - openstack/keystone
+                - openstack/keystoneauth
+                - openstack/keystonemiddleware
+                - openstack/kuryr-kubernetes
+                - openstack/magnum
+                - openstack/magnum-ui
+                - openstack/manila
+                - openstack/manila-ui
+                - openstack/masakari
+                - openstack/masakari-monitors
+                - openstack/mistral
+                - openstack/monasca-agent
+                - openstack/monasca-api
+                - openstack/monasca-common
+                - openstack/monasca-grafana-datasource
+                - openstack/monasca-notification
+                - openstack/monasca-persister
+                - openstack/monasca-statsd
+                - openstack/monasca-thresh
+                - openstack/monasca-transform
+                - openstack/monasca-ui
+                - openstack/networking-bagpipe
+                - openstack/networking-bgpvpn
+                - openstack/networking-generic-switch
+                - openstack/networking-sfc
+                - openstack/neutron
+                - openstack/neutron-dynamic-routing
+                - openstack/neutron-fwaas
+                - openstack/neutron-lib
+                - openstack/neutron-vpnaas
+                - openstack/octavia
+                - openstack/octavia-dashboard
+                - openstack/octavia-lib
+                - openstack/os-apply-config
+                - openstack/os-brick
+                - openstack/os-client-config
+                - openstack/os-collect-config
+                - openstack/os-ken
+                - openstack/os-refresh-config
+                - openstack/os-test-images
+                - openstack/osc-lib
+                - openstack/openstack-manuals
+                - openstack/ossa
+                - openstack/oslo.cache
+                - openstack/oslo.concurrency
+                - openstack/oslo.config
+                - openstack/oslo.context
+                - openstack/oslo.db
+                - openstack/oslo.i18n
+                - openstack/oslo.log
+                - openstack/oslo.messaging
+                - openstack/oslo.middleware
+                - openstack/oslo.policy
+                - openstack/oslo.privsep
+                - openstack/oslo.reports
+                - openstack/oslo.rootwrap
+                - openstack/oslo.serialization
+                - openstack/oslo.service
+                - openstack/oslo.utils
+                - openstack/oslo.versionedobjects
+                - openstack/oslo.vmware
+                - openstack/oslotest
+                - openstack/ovn-octavia-provider
+                - openstack/ovsdbapp
+                - openstack/pbr
+                - openstack/placement
+                - openstack/pycadf
+                - openstack/python-barbicanclient
+                - openstack/python-designateclient
+                - openstack/python-ironicclient
+                - openstack/python-magnumclient
+                - openstack/python-manilaclient
+                - openstack/python-mistralclient
+                - openstack/python-monascaclient
+                - openstack/python-octaviaclient
+                - openstack/python-openstackclient
+                - openstack/python-watcherclient
+                - openstack/python-zaqarclient
+                - openstack/rally
+                - openstack/releases
+                - openstack/security-doc
+                - openstack/service-types-authority
+                - openstack/stackviz
+                - openstack/stevedore
+                - openstack/swift
+                - openstack/sushy
+                - openstack/sushy-tools
+                - openstack/tap-as-a-service
+                - openstack/taskflow
+                - openstack/tenks
+                - openstack/tooz
+                - openstack/training-guides
+                - openstack/tripleo-ci
+                - openstack/virtualbmc
+                - openstack/watcher
+                - openstack/watcher-tempest-plugin
+                - openstack/xstatic-angular
+                - openstack/xstatic-angular-bootstrap
+                - openstack/xstatic-angular-fileupload
+                - openstack/xstatic-angular-gettext
+                - openstack/xstatic-angular-lrdragndrop
+                - openstack/xstatic-angular-smart-table
+                - openstack/xstatic-bootstrap-datepicker
+                - openstack/xstatic-bootstrap-scss
+                - openstack/xstatic-bootswatch
+                - openstack/xstatic-d3
+                - openstack/xstatic-hogan
+                - openstack/xstatic-jasmine
+                - openstack/xstatic-jquery-migrate
+                - openstack/xstatic-jquery.quicksearch
+                - openstack/xstatic-jquery.tablesorter
+                - openstack/xstatic-jsencrypt
+                - openstack/xstatic-mdi
+                - openstack/xstatic-rickshaw
+                - openstack/xstatic-roboto-fontface
+                - openstack/xstatic-spin
+                - openstack/zaqar
+                - starlingx/docs
+                - starlingx/election
+                - starlingx/governance
+                - starlingx/specs
+                - zuul/nodepool
+                - x/group-based-policy
+                - x/group-based-policy-automation
+                - x/group-based-policy-ui
+                - x/python-group-based-policy-client
+                - x/tobiko
+        github:
+          untrusted-projects:
+            - stackhpc/ansible-collection-cephadm
+            - stackhpc/ansible-collection-hashicorp
+            - stackhpc/manila:
+                include-branches:
+                  - stackhpc/2025.1
+            - stackhpc/neutron:
+                include-branches:
+                  - stackhpc/2025.1
+                  - stackhpc/2026.1
+            - stackhpc/nova:
+                include-branches:
+                  - stackhpc/2026.1
+            - stackhpc/stackhpc-kayobe-config:
+                include-branches:
+                  - stackhpc/2024.1
+                  - stackhpc/2025.1
+                  - stackhpc/2026.1
+            - stackhpc/zuul-operator:
+                include-branches:
+                  - stackhpc

@@ -1,0 +1,7 @@
+---
+- name: Run on the test node
+  hosts: all
+  tasks:
+    - name: Run a command over SSH
+      ansible.builtin.command: uname -a
+      changed_when: false

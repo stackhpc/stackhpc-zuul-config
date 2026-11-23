@@ -1,0 +1,9 @@
+#!/bin/bash
+# {{ ansible_managed }}
+# Export the project secret keys from ZooKeeper. The export is encrypted
+# with the keystore password.
+set -euo pipefail
+
+name=zuul-keys-$(date +%F).json
+podman exec zuul-scheduler zuul-admin export-keys {{ zuul_keys_backup_dir }}/${name}
+find {{ zuul_keys_backup_dir }} -name 'zuul-keys-*.json' -mtime +{{ zuul_keys_backup_retention_days }} -delete

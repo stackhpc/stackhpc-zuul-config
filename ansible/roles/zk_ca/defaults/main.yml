@@ -1,0 +1,8 @@
+---
+# File to write the generated CA to, as Ansible variables
+# (zuul_zk_ca_key and zuul_zk_ca_cert). Required. Encrypt it with
+# ansible-vault before committing it anywhere.
+# zk_ca_output:
+
+zk_ca_common_name: Zuul ZooKeeper CA
+zk_ca_valid_days: 3650

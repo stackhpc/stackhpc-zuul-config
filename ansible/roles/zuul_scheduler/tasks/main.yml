@@ -1,0 +1,89 @@
+---
+- name: Check whether the scheduler is running
+  ansible.builtin.systemd_service:
+    name: zuul-scheduler.service
+  register: zuul_scheduler_unit
+
+- name: Write tenant configuration
+  ansible.builtin.copy:
+    content: "{{ zuul_tenant_config | to_nice_yaml(indent=2, width=120) }}"
+    dest: /etc/zuul/main.yaml
+    owner: zuul
+    group: zuul
+    mode: "0640"
+  register: zuul_scheduler_tenant_config
+
+# The tenant configuration is deliberately not part of the restart hash: a
+# change only needs a smart-reconfigure, below.
+- name: Run zuul-scheduler
+  ansible.builtin.include_role:
+    name: zuul_service
+  vars:
+    zuul_service_component: scheduler
+    zuul_service_start: "{{ zuul_scheduler_start }}"
+
+- name: Reconfigure the scheduler
+  ansible.builtin.command: podman exec zuul-scheduler zuul-scheduler smart-reconfigure
+  changed_when: true
+  when:
+    - zuul_scheduler_tenant_config is changed
+    - zuul_scheduler_unit.status.ActiveState == 'active'
+    - podman_service_quadlet is not changed
+    - inventory_hostname == groups['zuul_scheduler'][0]
+
+- name: Ensure key backup directory exists
+  ansible.builtin.file:
+    path: "{{ zuul_keys_backup_dir }}"
+    state: directory
+    owner: zuul
+    group: zuul
+    mode: "0700"
+
+- name: Install key backup script
+  ansible.builtin.template:
+    src: zuul-keys-backup.j2
+    dest: /usr/local/sbin/zuul-keys-backup
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Install key backup units
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: /etc/systemd/system/{{ item.name }}
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - name: zuul-keys-backup.service
+      content: |
+        [Unit]
+        Description=Export Zuul project keys
+        Requisite=zuul-scheduler.service
+        After=zuul-scheduler.service
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/local/sbin/zuul-keys-backup
+    - name: zuul-keys-backup.timer
+      content: |
+        [Unit]
+        Description=Daily export of Zuul project keys
+
+        [Timer]
+        OnCalendar={{ zuul_keys_backup_schedule }}
+        Persistent=true
+
+        [Install]
+        WantedBy=timers.target
+  loop_control:
+    label: "{{ item.name }}"
+  register: zuul_keys_backup_units
+
+- name: Enable key backup timer
+  ansible.builtin.systemd_service:
+    name: zuul-keys-backup.timer
+    state: started
+    enabled: true
+    daemon_reload: "{{ zuul_keys_backup_units is changed }}"
+  when: inventory_hostname == groups['zuul_scheduler'][0]

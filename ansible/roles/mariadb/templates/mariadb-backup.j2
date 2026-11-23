@@ -1,0 +1,10 @@
+#!/bin/bash
+# {{ ansible_managed }}
+set -euo pipefail
+
+dest={{ mariadb_backup_dir }}/{{ mariadb_database }}-$(date +%F).sql.gz
+podman exec mariadb sh -c \
+    'exec mariadb-dump --single-transaction -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE"' \
+    | gzip > "${dest}.tmp"
+mv "${dest}.tmp" "${dest}"
+find {{ mariadb_backup_dir }} -name '*.sql.gz' -mtime +{{ mariadb_backup_retention_days }} -delete

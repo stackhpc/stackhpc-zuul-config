@@ -1,0 +1,9 @@
+---
+zuul_proxy_image: docker.io/library/caddy:2.11.9
+
+# Address for the ACME account.
+zuul_proxy_acme_email: ""
+
+# ACME directory. Leave empty for Let's Encrypt production; use
+# https://acme-staging-v02.api.letsencrypt.org/directory for testing.
+zuul_proxy_acme_ca: ""

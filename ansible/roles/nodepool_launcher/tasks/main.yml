@@ -1,0 +1,43 @@
+---
+# The Nodepool image runs as uid 10001, like Zuul.
+- name: Ensure Nodepool configuration directory exists
+  ansible.builtin.file:
+    path: /etc/nodepool
+    state: directory
+    owner: 10001
+    group: 10001
+    mode: "0750"
+
+- name: Generate ZooKeeper client certificate
+  ansible.builtin.include_role:
+    name: zk_tls
+  vars:
+    zk_tls_dir: /etc/nodepool/tls
+    zk_tls_owner: 10001
+    zk_tls_group: 10001
+
+- name: Install clouds.yaml
+  ansible.builtin.include_role:
+    name: openstack_clouds
+
+- name: Write nodepool.yaml
+  ansible.builtin.template:
+    src: nodepool.yaml.j2
+    dest: /etc/nodepool/nodepool.yaml
+    owner: 10001
+    group: 10001
+    mode: "0640"
+  register: nodepool_launcher_config
+
+- name: Run nodepool-launcher
+  ansible.builtin.include_role:
+    name: podman_service
+  vars:
+    podman_service_name: nodepool-launcher
+    podman_service_image: "{{ nodepool_image }}"
+    podman_service_user: "10001:10001"
+    podman_service_volumes:
+      - /etc/nodepool:/etc/nodepool:ro
+      - /etc/openstack:/etc/openstack:ro
+    podman_service_config_hash: >-
+      {{ (nodepool_launcher_config.checksum | default('') ~ zk_tls_hash ~ openstack_clouds_hash) | hash('sha1') }}
