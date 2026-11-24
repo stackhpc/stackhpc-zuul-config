@@ -1,6 +1,5 @@
 ---
-# Secrets (CA, passwords, SSH key) come from generated.yml, written by
-# test-prepare.yml.
+# Secrets (CA, passwords, SSH key) are generated; see the end of this file.
 
 zuul_fqdn: localhost
 zuul_web_root: http://localhost:9000
@@ -44,7 +43,10 @@ nodepool_config:
 
 # Throwaway secrets. The password lookups create their files on first use;
 # test-prepare.yml generates the CA (generated-ca.yml) and the SSH key.
-zuul_keystore_password: "{{ lookup('ansible.builtin.password', inventory_dir ~ '/generated/keystore_password', chars=['ascii_letters', 'digits'], length=32) }}"
-zuul_db_password: "{{ lookup('ansible.builtin.password', inventory_dir ~ '/generated/db_password', chars=['ascii_letters', 'digits'], length=32) }}"
-zuul_db_root_password: "{{ lookup('ansible.builtin.password', inventory_dir ~ '/generated/db_root_password', chars=['ascii_letters', 'digits'], length=32) }}"
-zuul_executor_ssh_key: "{{ lookup('ansible.builtin.file', inventory_dir ~ '/generated/worker_key') }}"
+# They live outside this directory, which Ansible would otherwise parse as
+# inventory.
+zuul_test_generated: "{{ playbook_dir }}/test/generated"
+zuul_keystore_password: "{{ lookup('ansible.builtin.password', zuul_test_generated ~ '/keystore_password', chars=['ascii_letters', 'digits'], length=32) }}"
+zuul_db_password: "{{ lookup('ansible.builtin.password', zuul_test_generated ~ '/db_password', chars=['ascii_letters', 'digits'], length=32) }}"
+zuul_db_root_password: "{{ lookup('ansible.builtin.password', zuul_test_generated ~ '/db_root_password', chars=['ascii_letters', 'digits'], length=32) }}"
+zuul_executor_ssh_key: "{{ lookup('ansible.builtin.file', zuul_test_generated ~ '/worker_key') }}"

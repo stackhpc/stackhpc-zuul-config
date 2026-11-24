@@ -41,6 +41,9 @@
       - serverAuth
       - clientAuth
   register: zk_tls_csr
+  # Without an existing CSR to compare against this always reports a
+  # change; x509_certificate decides whether to reissue.
+  changed_when: false
 
 - name: Sign certificate
   community.crypto.x509_certificate:

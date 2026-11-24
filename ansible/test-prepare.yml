@@ -19,7 +19,7 @@
 
     - name: Ensure generated directory exists
       ansible.builtin.file:
-        path: "{{ inventory_dir }}/generated"
+        path: "{{ zuul_test_generated }}"
         state: directory
         mode: "0700"
 
@@ -37,7 +37,7 @@
 
     - name: Generate SSH key for the test node
       community.crypto.openssh_keypair:
-        path: "{{ inventory_dir }}/generated/worker_key"
+        path: "{{ zuul_test_generated }}/worker_key"
         type: ed25519
       register: test_worker_key
 
