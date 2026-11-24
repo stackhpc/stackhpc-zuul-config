@@ -91,7 +91,7 @@ Copy both off the VM.
 
 Restarting `zuul-executor` (on a configuration or version change, or with
 `systemctl restart`) drains it: it takes no new builds and waits for running
-ones to finish, for up to `zuul_executor_stop_timeout` (3 hours by default).
+ones to finish, for up to `zuul_executor_stop_timeout` (4 hours by default: the longest job timeout of 3 hours plus post-run time).
 Builds still running after that are killed and retried. Deployments don't
 wait for the drain. A reboot of the VM waits for it too, so to skip it, stop
 the executor first with `podman stop -t 0 zuul-executor`.

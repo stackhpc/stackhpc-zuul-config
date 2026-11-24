@@ -4,6 +4,8 @@
 
 # On stop the executor takes no new builds and waits for running ones to
 # finish (sigterm_method=graceful). After this many seconds, any builds
-# still running are killed and Zuul retries them. Set it above the longest
-# job timeout.
-zuul_executor_stop_timeout: 10800
+# still running are killed and Zuul retries them. A job's timeout only
+# covers pre-run and run; post-run playbooks each get post-timeout on top.
+# The longest jobs have a 3 hour timeout and the base job's post-timeout
+# is 30 minutes, so allow 4 hours.
+zuul_executor_stop_timeout: 14400
