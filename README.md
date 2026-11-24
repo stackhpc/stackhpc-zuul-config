@@ -89,6 +89,13 @@ Backups, as systemd timers:
 
 Copy both off the VM.
 
+Restarting `zuul-executor` (on a configuration or version change, or with
+`systemctl restart`) drains it: it takes no new builds and waits for running
+ones to finish, for up to `zuul_executor_stop_timeout` (3 hours by default).
+Builds still running after that are killed and retried. Deployments don't
+wait for the drain. A reboot of the VM waits for it too, so to skip it, stop
+the executor first with `podman stop -t 0 zuul-executor`.
+
 ### Testing
 
 Pull requests run `.github/workflows/pr.yml` on GitHub-hosted `ubuntu-26.04`

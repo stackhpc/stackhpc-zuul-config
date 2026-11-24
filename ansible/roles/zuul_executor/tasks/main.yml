@@ -26,4 +26,6 @@
     # bubblewrap needs to set up namespaces and mounts.
     zuul_service_privileged: true
     zuul_service_stop_timeout: "{{ zuul_executor_stop_timeout }}"
+    # Don't wait for the drain; the restart completes in the background.
+    zuul_service_no_block: true
     zuul_service_config_hash: "{{ zuul_executor_key.checksum | default('') }}"

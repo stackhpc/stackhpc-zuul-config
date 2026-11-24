@@ -10,4 +10,5 @@
     podman_service_volumes: "{{ zuul_service_volumes + zuul_service_extra_volumes }}"
     podman_service_stop_timeout: "{{ zuul_service_stop_timeout }}"
     podman_service_start: "{{ zuul_service_start }}"
+    podman_service_no_block: "{{ zuul_service_no_block }}"
     podman_service_config_hash: "{{ (zuul_conf_hash ~ zuul_service_config_hash) | hash('sha1') }}"

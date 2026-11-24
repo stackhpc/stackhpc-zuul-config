@@ -10,6 +10,7 @@ zuul_service_user: "10001:10001"
 zuul_service_privileged: false
 zuul_service_stop_timeout: 60
 zuul_service_start: true
+zuul_service_no_block: false
 
 zuul_service_volumes:
   - /etc/zuul:/etc/zuul:ro

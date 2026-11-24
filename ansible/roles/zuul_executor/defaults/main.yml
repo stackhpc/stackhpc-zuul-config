@@ -2,6 +2,8 @@
 # Private SSH key the executor uses to log in to test nodes. Required.
 # zuul_executor_ssh_key:
 
-# Running builds are aborted on stop and Zuul retries them, so restarts are
-# quick.
-zuul_executor_stop_timeout: 120
+# On stop the executor takes no new builds and waits for running ones to
+# finish (sigterm_method=graceful). After this many seconds, any builds
+# still running are killed and Zuul retries them. Set it above the longest
+# job timeout.
+zuul_executor_stop_timeout: 10800

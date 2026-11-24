@@ -40,3 +40,7 @@ podman_service_config_hash: ""
 # Whether to start the service. If false the quadlet is installed but the
 # service is left alone.
 podman_service_start: true
+
+# Queue the start or restart without waiting for it, e.g. for a service that
+# takes a long time to stop.
+podman_service_no_block: false

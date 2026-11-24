@@ -27,7 +27,7 @@ state_dir=/var/lib/zuul
 private_key_file=/etc/zuul/ssh/id_rsa
 hostname={{ zuul_internal_address }}
 manage_ansible=false
-sigterm_method=stop
+sigterm_method=graceful
 {{ options(zuul_executor_config) }}
 [web]
 listen_address={{ zuul_web_listen_address }}
