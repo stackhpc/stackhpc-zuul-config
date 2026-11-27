@@ -34,6 +34,11 @@ zuul_operator_cr: |
       smslab:
         driver: openstack
         cloud: smslab
+    database:
+      secretName: zuul-db
+    zookeeper:
+      hosts: zookeeper.zuul:2281
+      secretName: zookeeper-client-tls
     executor:
       count: 6
       disk_limit_per_job: 5000

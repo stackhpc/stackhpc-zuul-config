@@ -1,3 +1,91 @@
 ---
 zuul_operator_pxc_crd_url: "https://raw.githubusercontent.com/percona/percona-xtradb-cluster-operator/refs/tags/v1.18.0/deploy/crd.yaml"
 zuul_operator_pxc_bundle_url: "https://raw.githubusercontent.com/percona/percona-xtradb-cluster-operator/refs/tags/v1.18.0/deploy/bundle.yaml"
+
+# Adapted from https://raw.githubusercontent.com/percona/percona-xtradb-cluster-operator/refs/tags/v1.18.0/deploy/cr.yaml
+zuul_pxc_cluster: |
+  apiVersion: pxc.percona.com/v1
+  kind: PerconaXtraDBCluster
+  metadata:
+    name: db-cluster
+    finalizers:
+      - percona.com/delete-pxc-pods-in-order
+  spec:
+    crVersion: 1.18.0
+    secretsName: db-cluster-secrets
+    updateStrategy: SmartUpdate
+    upgradeOptions:
+      apply: disabled
+    pxc:
+      size: 3
+      image: percona/percona-xtradb-cluster:8.0.42-33.1
+      autoRecovery: true
+      resources:
+        requests:
+          memory: 1G
+          cpu: 600m
+      affinity:
+        antiAffinityTopologyKey: kubernetes.io/hostname
+      podDisruptionBudget:
+        maxUnavailable: 1
+      volumeSpec:
+        persistentVolumeClaim:
+          storageClassName: "{{ zuul_storage_class }}"
+          resources:
+            requests:
+              storage: 6G
+      gracePeriod: 600
+    haproxy:
+      enabled: true
+      size: 3
+      image: percona/haproxy:2.8.15
+      resources:
+        requests:
+          memory: 1G
+          cpu: 600m
+      affinity:
+        antiAffinityTopologyKey: kubernetes.io/hostname
+      podDisruptionBudget:
+        maxUnavailable: 1
+      gracePeriod: 30
+    proxysql:
+      enabled: false
+    logcollector:
+      enabled: true
+      image: percona/fluentbit:4.0.1
+      resources:
+        requests:
+          memory: 100M
+          cpu: 200m
+    pmm:
+      enabled: false
+    users:
+      - name: zuul
+        dbs:
+          - zuul
+        hosts:
+          - "%"
+        grants:
+          - ALL
+        passwordSecretRef:
+          name: zuul-db-user
+          key: password
+    backup:
+      image: percona/percona-xtrabackup:8.0.35-34.1
+      pitr:
+        enabled: false
+      storages:
+        fs-pvc:
+          type: filesystem
+          volume:
+            persistentVolumeClaim:
+              storageClassName: "{{ zuul_storage_class }}"
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 6G
+      schedule:
+        - name: daily-backup
+          schedule: "0 0 * * *"
+          keep: 5
+          storageName: fs-pvc

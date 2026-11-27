@@ -1,0 +1,2 @@
+---
+zuul_cert_manager_url: "https://github.com/cert-manager/cert-manager/releases/download/v1.21.3/cert-manager.yaml"

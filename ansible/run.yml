@@ -11,6 +11,25 @@
         kind: Namespace
         state: present
 
+    - name: Ensure cert-manager
+      kubernetes.core.k8s:
+        src: "{{ zuul_cert_manager_url }}"
+        state: present
+      tags: cert-manager
+
+    - name: Wait for cert-manager webhook
+      kubernetes.core.k8s_info:
+        kind: Deployment
+        name: cert-manager-webhook
+        namespace: cert-manager
+        wait: true
+        wait_condition:
+          type: Available
+          status: "True"
+        wait_timeout: 300
+      when: not ansible_check_mode
+      tags: cert-manager
+
     - name: Ensure PXC CRDs
       kubernetes.core.k8s:
         namespace: zuul
@@ -25,6 +44,60 @@
         src: "{{ zuul_operator_pxc_bundle_url }}"
         state: present
       when: zuul_operator_pxc_bundle_url | length > 0
+      tags: pxc
+
+    - name: Ensure Secrets
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: v1
+          kind: Secret
+          type: "{{ item.type | default('Opaque') }}"
+          metadata:
+            name: "{{ item.name }}"
+            namespace: "{{ item.namespace | default('zuul') }}"
+          data: "{{ item.data }}"
+        state: present
+      loop: "{{ zuul_operator_secrets + zuul_external_secrets }}"
+      loop_control:
+        label: "{{ item.name }}"
+      no_log: true
+
+    - name: Ensure ZooKeeper CA
+      kubernetes.core.k8s:
+        definition: "{{ zuul_zookeeper_ca }}"
+        namespace: "zuul"
+        state: present
+      tags: zookeeper
+
+    - name: Ensure ZooKeeper
+      kubernetes.core.k8s:
+        definition: "{{ zuul_zookeeper }}"
+        namespace: "zuul"
+        state: present
+        wait: true
+        wait_timeout: 600
+      tags: zookeeper
+
+    - name: Ensure PXC cluster
+      kubernetes.core.k8s:
+        definition: "{{ zuul_pxc_cluster }}"
+        namespace: "zuul"
+        state: present
+      tags: pxc
+
+    - name: Wait for PXC cluster
+      kubernetes.core.k8s_info:
+        api_version: pxc.percona.com/v1
+        kind: PerconaXtraDBCluster
+        name: db-cluster
+        namespace: zuul
+      register: zuul_pxc_status
+      until: >-
+        zuul_pxc_status.resources | length > 0 and
+        zuul_pxc_status.resources[0].status.state | default('') == 'ready'
+      retries: 60
+      delay: 10
+      when: not ansible_check_mode
       tags: pxc
 
     - name: Ensure CRDs
@@ -45,22 +118,6 @@
         namespace: "zuul"
         state: present
 
-    - name: Ensure Secrets
-      kubernetes.core.k8s:
-        definition:
-          apiVersion: v1
-          kind: Secret
-          type: "{{ item.type | default('Opaque') }}"
-          metadata:
-            name: "{{ item.name }}"
-            namespace: "{{ item.namespace | default('zuul') }}"
-          data: "{{ item.data }}"
-        state: present
-      loop: "{{ zuul_operator_secrets }}"
-      loop_control:
-        label: "{{ item.name }}"
-      no_log: true
-
     - name: Ensure additional config
       kubernetes.core.k8s:
         definition: "{{ item }}"
@@ -73,6 +130,7 @@
         definition: "{{ zuul_operator_cr }}"
         namespace: "zuul"
         state: present
+      tags: zuul-cr
 
     - name: Ensure Contour namespace
       kubernetes.core.k8s:
