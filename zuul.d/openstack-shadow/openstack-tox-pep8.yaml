@@ -1,0 +1,13 @@
+---
+- job:
+    name: openstack-tox-pep8
+    parent: openstack-tox
+    description: |
+      Runs code pep8 tests.
+
+      Uses tox with the ``pep8`` environment.
+    timeout: 3600
+    vars:
+      tox_envlist: pep8
+      bindep_profile: test pep8
+      test_setup_skip: true
