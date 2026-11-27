@@ -30,6 +30,7 @@ zuul_operator_cr: |
         driver: git
         baseurl: https://github.com/stackhpc
         canonical_hostname: github.stackhpc.com
+        poll_delay: 60
       smslab:
         driver: openstack
         cloud: smslab
